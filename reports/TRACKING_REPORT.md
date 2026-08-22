@@ -1,6 +1,6 @@
 # OneTap — Wasted-Slot Report
 
-_Generated 2026-08-22 18:24 AEST._
+_Generated 2026-08-22 18:29 AEST._
 
 Tracking window: 2026-08-22 18:23 AEST → 2026-08-22 18:23 AEST (1 polls, 0 errors).
 
@@ -9,12 +9,7 @@ For **slot venues**, a slot is **wasted** when the last check before its start s
 | Venue | Type | Utilisation | Wasted / idle | Future |
 |-------|------|-------------|---------------|--------|
 | Kiss My Axe | binary | 0% | 0 slots / 0 hrs | 734 |
-| Moore Park Driving Range | binary | 0% | 0 slots / 0 hrs | 64 |
 
 ## Kiss My Axe
 
 No slots have completed within the tracking window yet (734 future being watched, 0 began before tracking). Leave the tracker running and re-run this report.
-
-## Moore Park Driving Range
-
-No slots have completed within the tracking window yet (64 future being watched, 12 began before tracking). Leave the tracker running and re-run this report.

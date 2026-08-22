@@ -23,7 +23,7 @@
     "slug": "moore-park-golf",
     "api_base": "https://api.yourgolfbooking.com",
     "timezone": "Australia/Sydney",
-    "enabled": true,
+    "enabled": false,
     "lookahead_days": 5,
     "hours": {
       "default": [6, 22],

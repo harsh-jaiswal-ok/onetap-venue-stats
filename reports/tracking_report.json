@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-22 18:24 AEST",
+  "generated_at": "2026-08-22 18:29 AEST",
   "tracking_window": {
     "first": "2026-08-22 18:23 AEST",
     "last": "2026-08-22 18:23 AEST",
@@ -15,23 +15,6 @@
       "wasted": 0,
       "unobserved": 0,
       "pending": 734,
-      "utilisation_pct": 0.0,
-      "wasted_hours": 0.0,
-      "total_units": 0,
-      "idle_unit_hours": 0.0,
-      "busy_unit_hours": 0.0,
-      "deadest_windows": [],
-      "by_item": {},
-      "wasted_timeline": []
-    },
-    {
-      "venue_id": "moore-park-range",
-      "venue_name": "Moore Park Driving Range",
-      "kind": "binary",
-      "sold": 0,
-      "wasted": 0,
-      "unobserved": 12,
-      "pending": 64,
       "utilisation_pct": 0.0,
       "wasted_hours": 0.0,
       "total_units": 0,
