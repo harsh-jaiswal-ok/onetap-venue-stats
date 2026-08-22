@@ -76,7 +76,7 @@ tells Pages to serve the files untouched.)
 | Venue | Platform | Status |
 |-------|----------|--------|
 | **Kiss My Axe** (Alexandria) | FareHarbor | ✅ **On** — public JSON API, no login |
-| Moore Park Driving Range | YourGolfBooking | ⚙️ Off — outside Alexandria; adapter works, flip `enabled` to re-enable (tracked as idle bays per hour) |
+| **Moore Park Driving Range** | YourGolfBooking | ✅ **On** — public API; tracked as idle bays per hour (capacity venue) |
 | Camperdown Tennis | Intrac | ⚙️ Off — needs a member login (best court story once enabled) |
 | City Community Tennis | Intrac | ⚙️ Off — needs a member login |
 | Cipher Room | Bookeo | ❌ reCAPTCHA-gated |
