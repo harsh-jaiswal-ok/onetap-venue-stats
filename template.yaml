@@ -1,0 +1,54 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: OneTap venue intelligence reports - weekly crawl of target venues, reports to S3.
+
+Parameters:
+  Schedule:
+    Type: String
+    Default: cron(0 21 ? * SUN *)   # 21:00 UTC Sunday = 7/8am Monday Sydney time
+    Description: EventBridge schedule expression for the crawl.
+
+Resources:
+  ReportBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub onetap-venue-reports-${AWS::AccountId}
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      LifecycleConfiguration:
+        Rules:
+          - Id: ExpireOldReports
+            Status: Enabled
+            Prefix: reports/
+            ExpirationInDays: 180
+
+  VenueReportFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: onetap-venue-report
+      Handler: lambda_handler.handler
+      Runtime: python3.12
+      CodeUri: .
+      MemorySize: 512
+      Timeout: 600            # 10 sites x up to 8 pages each, polite crawl delay
+      Environment:
+        Variables:
+          REPORT_BUCKET: !Ref ReportBucket
+      Policies:
+        - S3CrudPolicy:
+            BucketName: !Sub onetap-venue-reports-${AWS::AccountId}
+      Events:
+        WeeklyCrawl:
+          Type: Schedule
+          Properties:
+            Schedule: !Ref Schedule
+            Description: Weekly venue booking-intelligence crawl
+
+Outputs:
+  BucketName:
+    Value: !Ref ReportBucket
+  FunctionName:
+    Value: !Ref VenueReportFunction

@@ -1,0 +1,41 @@
+[
+  {
+    "venue_id": "kiss-my-axe",
+    "venue_name": "Kiss My Axe",
+    "platform": "fareharbor",
+    "shortname": "kissmyaxe",
+    "timezone": "Australia/Sydney",
+    "enabled": true,
+    "items": [
+      {"id": "278080", "name": "Axe Throwing - 2-7 People"},
+      {"id": "250776", "name": "Axe Throwing - 8+ People"},
+      {"id": "250781", "name": "Axe Throwing - Two for Tuesday"},
+      {"id": "265350", "name": "Axe Throwing Date Night - For Two"},
+      {"id": "435685", "name": "Glow Darts - 2-12 people"},
+      {"id": "686668", "name": "Axe Throwing & Glow Darts - 6-12 People"},
+      {"id": "680256", "name": "Ultimate Party Package - 6+ People"}
+    ]
+  },
+  {
+    "venue_id": "camperdown-tennis",
+    "venue_name": "Camperdown Tennis",
+    "platform": "intrac",
+    "host": "camperdowntennis.intrac.com.au",
+    "timezone": "Australia/Sydney",
+    "enabled": false,
+    "username_env": "CAMPERDOWN_INTRAC_USER",
+    "password_env": "CAMPERDOWN_INTRAC_PASS",
+    "note": "Requires an Intrac member login. Set the env vars, verify grid markup, then flip enabled to true."
+  },
+  {
+    "venue_id": "city-community-tennis",
+    "venue_name": "City Community Tennis",
+    "platform": "intrac",
+    "host": "jensenstennis.intrac.com.au",
+    "timezone": "Australia/Sydney",
+    "enabled": false,
+    "username_env": "CCT_INTRAC_USER",
+    "password_env": "CCT_INTRAC_PASS",
+    "note": "Same Intrac platform as Camperdown; the public site links to jensenstennis.intrac.com.au. Requires a login."
+  }
+]

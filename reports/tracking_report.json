@@ -1,0 +1,23 @@
+{
+  "generated_at": "2026-08-21 09:43 UTC",
+  "tracking_window": {
+    "first": "2026-08-21T09:37:45Z",
+    "last": "2026-08-21T09:42:48Z",
+    "polls": 2,
+    "errors": 0
+  },
+  "venues": [
+    {
+      "venue_id": "kiss-my-axe",
+      "venue_name": "Kiss My Axe",
+      "sold": 0,
+      "wasted": 0,
+      "unobserved": 0,
+      "pending": 722,
+      "utilisation_pct": 0.0,
+      "wasted_hours": 0.0,
+      "deadest_windows": [],
+      "by_item": {}
+    }
+  ]
+}

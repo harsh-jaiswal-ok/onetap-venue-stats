@@ -1,0 +1,6 @@
+.venv/
+__pycache__/
+*.pyc
+docs/_artifact_preview.html
+.aws-sam/
+.DS_Store

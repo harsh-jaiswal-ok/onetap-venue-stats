@@ -1,0 +1,829 @@
+{
+  "generated_at": "2026-08-21 09:19 UTC",
+  "venues": [
+    {
+      "venue": {
+        "id": "camperdown-tennis",
+        "name": "Camperdown Tennis",
+        "suburb": "Camperdown",
+        "activity": "Tennis + multi-sport courts",
+        "what_gets_booked": "Court hire by the hour, 7 days",
+        "url": "https://camperdowntennis.com.au",
+        "walk": "Camperdown and Newtown",
+        "first_visit": true
+      },
+      "status": "ok",
+      "error": null,
+      "final_url": "https://www.camperdowntennis.com.au/",
+      "pages_crawled": [
+        "https://www.camperdowntennis.com.au/",
+        "https://www.camperdowntennis.com.au/contact",
+        "https://www.camperdowntennis.com.au/courtpricing",
+        "https://www.camperdowntennis.com.au/lessonpricing",
+        "https://www.camperdowntennis.com.au/Intrac",
+        "https://www.camperdowntennis.com.au/HowToBook+FAQs+TermsConditions",
+        "https://www.camperdowntennis.com.au/courses/vacation+care",
+        "https://www.camperdowntennis.com.au/HowToBook+FAQs+TermsConditions"
+      ],
+      "booking_platforms": [
+        "Intrac (court booking)"
+      ],
+      "cms": [],
+      "booking_links": [
+        {
+          "label": "Cancel a tennis court",
+          "url": "https://camperdowntennis.intrac.com.au/tennis/login.cfm?return=booking.cfm"
+        }
+      ],
+      "price_mentions": [
+        "6am to 3pm | $34 per hour per court",
+        "3pm to 11pm | $40 per hour per court",
+        "6am to 11pm | $40 per hour per court",
+        "6am to 11pm | $44 per hour per court",
+        "6am to 2pm | $22 per hour per court, please email for booking requests, block bookings only, Monday to Friday only.",
+        "6am to 11pm | $100 per hour per court",
+        "6am to 11pm | $300 for 3 hours",
+        "$60/hour per tennis court for external 1 on 1 tennis lessons",
+        "$60/hour per court for external tennis events \u2013 social programs, tennis competitions, functions, events",
+        "$90/hour per tennis court for external group tennis lessons & birthdays",
+        "$120/hour per court for external futsal events \u2013 competitions",
+        "Adults 60 minutes = $130",
+        "Adults 30 minutes = $85",
+        "Kids 60 minutes = $120",
+        "Kids 30 minutes = $75",
+        "Adults 60 minutes = $600 ($120 per session)",
+        "Adults 30 minutes = $375 ($75 per session)",
+        "Kids 60 minutes = $550 ($110 per session)",
+        "Kids 30 minutes = $325 ($65 per session)",
+        "Adults 60 minutes = $150",
+        "Adults 30 minutes = $110",
+        "Kids 60 minutes = $140",
+        "Kids 30 minutes = $100",
+        "Adults 60 minutes = $700 ($140 per session)",
+        "Adults 30 minutes = $500 ($100 per session)"
+      ],
+      "hours_mentions": [
+        "\u2022 Monday: 7am to 10pm.",
+        "\u2022 Tuesday: 7am to 10pm.",
+        "\u2022 Wednesday: 7am to 10pm.",
+        "\u2022 Thursday: 7am to 10pm.",
+        "\u2022 Friday: 7am to 9pm.",
+        "\u2022 Saturday: 7am to 6pm.",
+        "\u2022 Sunday: 7am to 7pm.",
+        "\u2022 Monday: 10am to 7pm.",
+        "\u2022 Tuesday: 9am to 4pm.",
+        "\u2022 Wednesday: 10am to 7pm.",
+        "\u2022 Thursday: 9am to 4pm.",
+        "\u2022 Friday: 9am to 7pm."
+      ],
+      "phones": [],
+      "emails": [
+        "play@camperdowntennis.com.au",
+        "play@camperdwontennis.com.au"
+      ],
+      "socials": [
+        "http://www.facebook.com/2008"
+      ],
+      "page_titles": [
+        "Home page Camperdown Tennis",
+        "Contact Us Camperdown Tennis",
+        "Court Pricing Camperdown Tennis",
+        "Lesson Pricing Camperdown Tennis",
+        "Intrac Camperdown Tennis",
+        "How to Book- FAQs-TC's Camperdown Tennis",
+        "Vacation Care - Camperdown Tennis"
+      ],
+      "offerings": [
+        "more than tennis !",
+        "book a court",
+        "Please Email us for all enquiries : play@camperdowntennis.com.au",
+        "August Court Hire Availability Hours :",
+        "Court Pricing",
+        "COURT HIRE PRICING",
+        "2026 Tennis Casual Court Hire",
+        "Futsal or Hockey court hire",
+        "TENNIS LESSON & HITTING PARTNER PRICING",
+        "1 on 1 private tennis lessons \u2013 1 lesson only",
+        "1 on 1 private tennis lessons \u2013 block of 5 sessions",
+        "1 on 2 semi-private tennis lessons \u2013 1 lesson only",
+        "1 on 2 semi-private tennis lessons \u2013 block of 5 sessions",
+        "1 on 3 semi-private tennis lessons \u2013 1 lesson only",
+        "1 on 3 semi-private tennis lessons \u2013 block of 5 sessions",
+        "Private group tennis lessons \u2013 1 lesson or multiple sessions up to 5 or 10",
+        "Hitting partner tennis | play 1 on 1 with one of our coaches",
+        "Casual Tennis Court Hire \u2013 August 2026",
+        "Kids in Common Vacation Care and Tennis Camps at Camperdown",
+        "Tennis Camp"
+      ]
+    },
+    {
+      "venue": {
+        "id": "cipher-room",
+        "name": "The Cipher Room",
+        "suburb": "Newtown",
+        "activity": "Escape rooms",
+        "what_gets_booked": "Hourly sessions, groups of 2 to 8",
+        "url": "https://cipherroom.com.au",
+        "walk": "Camperdown and Newtown",
+        "first_visit": true
+      },
+      "status": "ok",
+      "error": null,
+      "final_url": "https://www.cipherroom.com.au/",
+      "pages_crawled": [
+        "https://www.cipherroom.com.au/",
+        "https://www.cipherroom.com.au/ourgames",
+        "https://www.cipherroom.com.au/bookhere",
+        "https://www.cipherroom.com.au/gift-vouchers",
+        "https://www.cipherroom.com.au/store",
+        "https://www.cipherroom.com.au/about-us",
+        "https://www.cipherroom.com.au/faq",
+        "https://www.cipherroom.com.au/contact"
+      ],
+      "booking_platforms": [
+        "Bookeo"
+      ],
+      "cms": [
+        "Squarespace"
+      ],
+      "booking_links": [
+        {
+          "label": "(no label)",
+          "url": "https://bookeo.com/cipherroom/buyvoucher"
+        },
+        {
+          "label": "REDEEM GIFT VOUCHERS",
+          "url": "https://bookeo.com/cipherroom/voucher"
+        },
+        {
+          "label": "(no label)",
+          "url": "https://www.facebook.com/CipherRoomSydney/"
+        },
+        {
+          "label": "\" Sydney\u2019s most immersive escape room challenges \"",
+          "url": "https://www.timeout.com/sydney/attractions/the-cipher-room-la-rebellion?cid=~sydney~natsoc~facebook~echobox&fbclid=IwAR0DQ93ME1sDXQi2JCAmg9sJ4lysYjzq5Kin-xWtTLK9j416mXuFph6HCeY&utm_mediaum=Social&utm_source=Facebook"
+        },
+        {
+          "label": "\u201cBrilliant\u201d, \u201cJaw-dropping, cinematic reveals and special effects\u201d",
+          "url": "https://www.timeout.com/sydney/attractions/the-cipher-room-la-rebellion?cid=~sydney~natsoc~facebook~echobox&fbclid=IwAR0DQ93ME1sDXQi2JCAmg9sJ4lysYjzq5Kin-xWtTLK9j416mXuFph6HCeY&utm_mediaum=Social&utm_source=Facebook"
+        },
+        {
+          "label": "Time Out Sydney - 50 things to do in Sydney at least once in your life",
+          "url": "https://www.timeout.com/sydney/things-to-do/things-to-do-in-sydney-at-least-once-in-your-life?cid=~sydney~natsoc~facebook~echobox&fbclid=IwAR0je5aJF_XKW9Tuic1VsQRs4vYDpCh5w66-4IG1BEpBrlkWUCCe7EgBPXs&utm_medium=Social&utm_source=Facebook"
+        },
+        {
+          "label": "Time Out Sydney - New Venue Announcement",
+          "url": "https://www.timeout.com/sydney/news/the-cipher-room-is-launching-a-new-super-creepy-escape-room-in-a-new-location-031621?cid=~sydney~natsoc~facebook~echobox&fbclid=IwAR3WTu2nP7QMOyMnMZYRC6zfa3ERdqsbb8Yo26dTJDaWbevbR0k4e98tFo0&utm_medium=Social&utm_source=Facebook"
+        },
+        {
+          "label": "Concrete Playground - New Venue Announcement",
+          "url": "https://concreteplayground.com/sydney/arts-entertainment/the-cipher-room-is-expanding-its-eerie-escape-games-and-puzzles-to-a-second-sydney-location?fbclid=IwAR1QcIXB4r_Vt6xaWb-Rku3N17v7-ZXj-XhBNIGkw8cCeQMgth4xtx4FPJ8&utm_medium=Social&utm_source=Facebook"
+        }
+      ],
+      "price_mentions": [
+        "2 people - $79/pp 3 people - $75/pp 4-6 people - $70/pp 7-8 people - $65/pp",
+        "A$30.00",
+        "A$45.00"
+      ],
+      "hours_mentions": [
+        "Opening Hours: Monday 5pm-10pm ; Tuesday-Sunday 10am-10pm (Please book ahead online , as we cannot guarantee walk-in availability.)"
+      ],
+      "phones": [
+        "0484 244 346"
+      ],
+      "emails": [
+        "info@cipherroom.com.au",
+        "user@domain.com"
+      ],
+      "socials": [
+        "http://instagram.com/cipherroom",
+        "http://www.facebook.com/2008",
+        "https://www.facebook.com/CipherRoomSydney"
+      ],
+      "page_titles": [
+        "The Cipher Room",
+        "Our Games \u2014 The Cipher Room",
+        "Book Here \u2014 The Cipher Room",
+        "Gift Vouchers \u2014 The Cipher Room",
+        "The Cipher Room - T-shirt \u2014 The Cipher Room",
+        "About Us/Reviews \u2014 The Cipher Room",
+        "FAQ \u2014 The Cipher Room",
+        "Contact \u2014 The Cipher Room"
+      ],
+      "offerings": [
+        "The Cipher Room",
+        "IMMERSIVE & AWARD-WINNING Escape rooms",
+        "Winner of aN INTERNATIONAL TERPECA TOP ROOM AWARD",
+        "OUR GAMES - ST PETERS",
+        "OUR GAMES - NEWTOWN",
+        "IMMERSIVE ROOMS",
+        "FOLLOW THE CIPHER ROOM",
+        "Our Games",
+        "FOR CORPORATE TEAMS OR LARGE GROUPS:",
+        "+ WHO WOULD LIKE THESE GAMES?",
+        "+ ARE YOUR GAMES GOOD FOR TEAM BUILDING EXERCISES?",
+        "+ WE HAVE A LARGE GROUP - CAN WE BOOK 2 GAMES AT THE SAME TIME?",
+        "+ HOW LONG IS A GAME?",
+        "+ ARE THE GAMES SCARY?",
+        "+ ARE YOUR GAMES WHEELCHAIR ACCESSIBLE? WHAT IF I HAVE SPECIAL REQUIREMENTS?",
+        "+ HOW MANY GAMES DO YOU HAVE?"
+      ]
+    },
+    {
+      "venue": {
+        "id": "city-community-tennis",
+        "name": "City Community Tennis",
+        "suburb": "Glebe / Surry Hills / Alexandria",
+        "activity": "Tennis",
+        "what_gets_booked": "Hourly court hire, online booking",
+        "url": "https://citycommunitytennis.com.au",
+        "walk": "Alexandria and Redfern",
+        "first_visit": false
+      },
+      "status": "ok",
+      "error": null,
+      "final_url": "https://www.citycommunitytennis.com.au/",
+      "pages_crawled": [
+        "https://www.citycommunitytennis.com.au/",
+        "https://www.citycommunitytennis.com.au/locations",
+        "https://www.citycommunitytennis.com.au/table-tennis",
+        "https://www.citycommunitytennis.com.au/community-room-hire",
+        "https://www.citycommunitytennis.com.au/contact",
+        "https://www.citycommunitytennis.com.au/events",
+        "https://www.citycommunitytennis.com.au/gift-certificates/about",
+        "https://www.citycommunitytennis.com.au/court-hire-rates"
+      ],
+      "booking_platforms": [
+        "Intrac (court booking)"
+      ],
+      "cms": [
+        "Webflow"
+      ],
+      "booking_links": [
+        {
+          "label": "(no label)",
+          "url": "https://www.facebook.com/jensenstennis/"
+        },
+        {
+          "label": "(no label)",
+          "url": "https://www.facebook.com/CityCommunityTennis"
+        },
+        {
+          "label": "my bookings",
+          "url": "https://jensenstennis.intrac.com.au/tennis/login.cfm?return=booking.cfm"
+        },
+        {
+          "label": "cancel a booking",
+          "url": "https://jensenstennis.intrac.com.au/tennis/login.cfm?return=booking.cfm"
+        },
+        {
+          "label": "Book",
+          "url": "https://jensenstennis.intrac.com.au/tennis/book.cfm?facility=1"
+        },
+        {
+          "label": "Book",
+          "url": "https://jensenstennis.intrac.com.au/tennis/book.cfm?facility=2"
+        },
+        {
+          "label": "Book",
+          "url": "https://jensenstennis.intrac.com.au/tennis/book.cfm?facility=3"
+        },
+        {
+          "label": "Book",
+          "url": "https://jensenstennis.intrac.com.au/tennis/book.cfm?facility=4"
+        },
+        {
+          "label": "Book",
+          "url": "https://jensenstennis.intrac.com.au/tennis/book.cfm?location=6&court=283"
+        },
+        {
+          "label": "Book",
+          "url": "https://jensenstennis.intrac.com.au/tennis/book.cfm?location=6&court=284"
+        }
+      ],
+      "price_mentions": [
+        "Room Hire Non-Commercial (community use) $30.20 per hour (minimum 2 hour booking) \u200d",
+        "Artistic Rehearsal Rate Individual Weekday $16 Individual Evening/Weekend/Public Holiday $19 (bookings on request only) Group of Artists Weekday $21 Group of Artists Evening/Weekend/Public Holiday $23 (bookings on request only) \u200d",
+        "Cleaning Fee $50 per booking (cleaning fee is mandatory for birthdays/catered events) \u200d",
+        "Limited recycling and general waste removal (paper, plastic and glass bottles and cans) CCT provides two small bins (one for general waste and one for recycling). Additional waste will be charged at $35 per bin. Alternatively please take yo",
+        "Tennis Court Hire (Commercial Use): $39.00 per hour / per court",
+        "Community Room Hire (Commercial Use): $55.90 per hour (Minimum 2-hour booking)",
+        "Community Room Cleaning Fee: $50.00 flat fee per active booking day (Mandatory for catered events or productions)",
+        "Professional Coaching Support: $168.00 per hour / per coach (minimum 2 hours per coach)",
+        "Standard Weekday After-Hours surcharge: $95 per hour",
+        "Standard Weekend After-Hours surcahrge: $126.00 per hour",
+        "Public Holidays surcharge: $168.00 per hour (Applies before 10:00 AM / after 5:00 PM)",
+        "$0.00",
+        "$31.20",
+        "$23.40",
+        "$38.30",
+        "$28.70",
+        "$1.50",
+        "*Hire a demo racquet 3 times and receive a $30 credit discount off a new racquet retail purchase. Note: Unstaffed parks (Alexandria, Beaconsfield, Glebe, Rosebery) do not have on-site equipment kiosks; please bring your own gear if playing ",
+        "$5 per racquet",
+        "$10 per racquet",
+        "$1.25",
+        "*Hire a demo 3 times and receive a $21 discount off a new retail racquet purchase. *Tennis balls, snacks, grips, and new/ex-demo racquets are available directly at the pro shop."
+      ],
+      "hours_mentions": [
+        "Monday to Friday (8am - 5pm)",
+        "Monday to Friday (5pm - 8pm)",
+        "Weekends (8am - 6pm)",
+        "The room is available for hire Monday to Friday from 9am to 5pm , W eekends from 9am to 4pm and P ublic Holidays on request.",
+        "Our standard operating facility hours are 8:00 AM to 8:00 PM on weekdays , and 8:00 AM to 5:00 PM on weekends . For bookings requesting access outside of these core windows, a staff surcharge applies:",
+        "Mon - Fri (Before 5pm)",
+        "Mon - Fri (5pm - 10pm)",
+        "Monday to Friday (7am - 5pm)",
+        "Monday to Friday (5pm - 10pm)",
+        "Weekends (7am - 10pm)",
+        "Monday to Friday (6am - 5pm)",
+        "Monday to Friday (5pm - 11pm)"
+      ],
+      "phones": [
+        "+61 433 899 644",
+        "0433 899 644",
+        "0433899644"
+      ],
+      "emails": [
+        "info@citycommunitytennis.com.au"
+      ],
+      "socials": [
+        "https://www.facebook.com/CityCommunityTennis",
+        "https://www.facebook.com/jensenstennis",
+        "https://www.facebook.com/tr",
+        "https://www.instagram.com/CityCommunityTennis",
+        "https://www.instagram.com/jensenstennis"
+      ],
+      "page_titles": [
+        "City Community Tennis Sydney | 12 courts 5 locations",
+        "Tennis court hire Sydney | Find your nearest court location",
+        "Where to play table tennis Sydney | Table tennis table hire",
+        "Community Room hire Sydney | Prince Alfred Park, Surry Hills",
+        "Contact City Community Tennis Sydney | +61 433 899 644",
+        "Events",
+        "Gift Certificates",
+        "Tennis court rates, access & facilities | City Community Tennis"
+      ],
+      "offerings": [
+        "Book A Tennis Court Online",
+        "Tennis Coaching",
+        "Junior Hot Shots Tennis",
+        "Tennis Court Hire in the City of Sydney",
+        "Hire Rates and Tennis Court Access",
+        "Hot Shots - Court",
+        "Table Tennis",
+        "Table Tennis Sydney",
+        "Table Tennis Rates - Prince Alfred Park",
+        "Community Room Hire",
+        "Booking the Room",
+        "The Community Room features:",
+        "Contact City Community Tennis",
+        "Open Court Sessions",
+        "Wheelchair Tennis Open NSW",
+        "Halloween wheelchair tennis social",
+        "Tennis Court Hire Rates",
+        "Standard Tennis Court Hire Rates",
+        "Tennis Court Hire - Alexandria Park",
+        "Tennis Court Hire - Beaconsfield Park"
+      ]
+    },
+    {
+      "venue": {
+        "id": "kiss-my-axe",
+        "name": "Kiss My Axe",
+        "suburb": "Alexandria",
+        "activity": "Axe throwing, glow darts",
+        "what_gets_booked": "Hourly sessions, group packages",
+        "url": "https://kissmyaxe.com.au",
+        "walk": "Alexandria and Redfern",
+        "first_visit": true
+      },
+      "status": "ok",
+      "error": null,
+      "final_url": "https://www.kissmyaxe.com.au/",
+      "pages_crawled": [
+        "https://www.kissmyaxe.com.au/",
+        "https://www.kissmyaxe.com.au/corporate/",
+        "https://www.kissmyaxe.com.au/corporate/axe-throwing-private-room-hire/",
+        "https://www.kissmyaxe.com.au/bucks-hens-party/",
+        "https://www.kissmyaxe.com.au/birthday-parties/",
+        "https://www.kissmyaxe.com.au/gift-card/",
+        "https://www.kissmyaxe.com.au/faqs/",
+        "https://www.kissmyaxe.com.au/food-and-bar-packages/"
+      ],
+      "booking_platforms": [
+        "FareHarbor",
+        "Bookable"
+      ],
+      "cms": [
+        "WordPress"
+      ],
+      "booking_links": [
+        {
+          "label": "CHRISTMAS PARTIES BOOKING NOW \u2022 CORPORATE EVENTS \u2022 DATE NIGHTS \u2022 SOCIAL EVENTS \u2022",
+          "url": "https://fareharbor.com/embeds/book/kissmyaxe/?full-items=yes&flow=651979"
+        },
+        {
+          "label": "Axe Book Now",
+          "url": "https://fareharbor.com/embeds/book/kissmyaxe/?full-items=yes&flow=651979"
+        },
+        {
+          "label": "Axe BOOK NOW",
+          "url": "https://fareharbor.com/embeds/book/kissmyaxe/?full-items=yes&flow=651979"
+        },
+        {
+          "label": "Gift Cards",
+          "url": "https://fareharbor.com/embeds/book/kissmyaxe/?full-items=yes&flow=1191341&u=f91e5458-9960-40aa-91a7-b6373a5615bc&from-ssl=yes&ga4t=&g4=yes&cp=yes&csp=yes&back=https%3A%2F%2Fwww.kissmyaxe.com.au%2F&language=en-gb"
+        },
+        {
+          "label": "Facebook",
+          "url": "https://www.facebook.com/kissmyaxe.au"
+        },
+        {
+          "label": "CHRISTMAS EVENTS ARE BOOKING NOW \u2022 NO ONLINE BOOKING FEES \u2022 AFTERPAY AVAILABLE",
+          "url": "https://fareharbor.com/embeds/book/kissmyaxe/?full-items=yes&flow=651979"
+        },
+        {
+          "label": "Axe BOOK NOW",
+          "url": "https://fareharbor.com/embeds/book/kissmyaxe/?full-items=yes&ref=https%3A%2F%2Fwww.kissmyaxe.com.au&flow=651979"
+        },
+        {
+          "label": "SMALL GROUPS Map Marker Alexandria , Brookvale , Blacktown",
+          "url": "https://fareharbor.com/embeds/book/kissmyaxe/?full-items=yes&ref=https%3A%2F%2Fwww.kissmyaxe.com.au&branding=yes&bookable-only=yes&flow=no&package=no"
+        },
+        {
+          "label": "SMALL GROUPS",
+          "url": "https://fareharbor.com/embeds/book/kissmyaxe/?full-items=yes&ref=https%3A%2F%2Fwww.kissmyaxe.com.au&branding=yes&bookable-only=yes&flow=no&package=no"
+        },
+        {
+          "label": "Book Alexandria",
+          "url": "https://fareharbor.com/embeds/book/kissmyaxe/items/278080/?full-items=yes&amp;ref=small_groups_page"
+        }
+      ],
+      "price_mentions": [
+        "From $59 per person",
+        "From $69 per person",
+        "From $109 per person",
+        "For large group at our Blacktown and Brookvale venues, a deposit from $30 per person is required to secure your spot. The final balance will be charged within 14 days of your booking date.",
+        "Yes. For Brookvale and Blacktown bookings made more than 14 days in advance, a $30 per person deposit option is available.",
+        "Glow Darts: from $15 per person",
+        "Glow Golf: from $20 per person",
+        "Axe Throwing: from $45 per person (Most experiences require a minimum of 2 people.)",
+        "With 48 hours or more notice, a $50 staff fee will be charged to the card used at booking.",
+        "We offer a $30 per person deposit option for Axe Throwing Large Group and Ultimate Party Package bookings made 14 days or more in advance.",
+        "Large and Small Groups $35.00 per person",
+        "Two for Tuesday and Date Night $39.00 per couple",
+        "Feeds up to 10 \u2013 $200 per board",
+        "Feeds approx. 10 people \u2013 $220 per board",
+        "Large and Small Groups $29.00 pp 3 drink vouchers for each person",
+        "Two for Tuesday and Date Nights $38.00 per couple 2 drink vouchers for each person"
+      ],
+      "hours_mentions": [],
+      "phones": [],
+      "emails": [
+        "hello@kissmyaxe.com.au"
+      ],
+      "socials": [
+        "https://www.facebook.com/kissmyaxe.au",
+        "https://www.facebook.com/tr",
+        "https://www.instagram.com/kissmyaxe.au"
+      ],
+      "page_titles": [
+        "Kiss My Axe | Axe Throwing Sydney Indoor Activities",
+        "Function Room for Team Building Activities Sydney | Kiss My Axe",
+        "Team Building Activities Sydney | Kiss My Axe",
+        "Sydney Bucks & Hens Party Ideas | Axe Throwing | Kiss My Axe",
+        "Birthday Parties | Axe Throwing | Kiss My Axe",
+        "Gift Card | Kiss My Axe",
+        "Sydney Axe Throwing Frequently Asked Questions | Kiss My Axe",
+        "Axe Throwing Sydney Food and Bar Menu | Kiss My Axe"
+      ],
+      "offerings": [
+        "KISS MY AXE",
+        "SYDNEY\u2019S MOST LOVED AXE THROWING VENUES",
+        "SELECT YOUR SYDNEY AXE THROWING LOCATION",
+        "MORE THAN JUST AN AXE THROWING VENUE, WE ARE AN EXPERIENCE!",
+        "CORPORATE EVENTS",
+        "UNFORGETTABLE TEAM-BUILDING EXPERIENCES FOR SYDNEY WORKPLACES",
+        "CHOOSE YOUR GROUP PACKAGE",
+        "ULTIMATE PARTY PACKAGE",
+        "HAVE QUESTIONS OR PREFER OUR TEAM TO RECOMMEND THE RIGHT PACKAGE?",
+        "FREE FUNCTION ROOM HIRE SYDNEY",
+        "THE PERFECT CORPORATE EVENT VENUE IN SYDNEY",
+        "UNBEATABLE INDOOR BIRTHDAY PARTY VENUE IN SYDNEY",
+        "WHY CHOOSE KISS MY AXE",
+        "BIRTHDAY PARTIES",
+        "\ud83c\udfaf Fully Hosted, So You Can Enjoy the Party",
+        "\ud83e\ude93 No Experience Needed",
+        "\ud83c\udf55 Easy to Turn Into a Full Birthday Celebration",
+        "REAL BIRTHDAY PARTIES",
+        "Give the gift of an experience at Alexandria, Brookvale or Blacktown",
+        "PRE BOOK YOUR FOOD AND BAR PACKAGE WHEN YOU BOOK ONLINE!"
+      ]
+    },
+    {
+      "venue": {
+        "id": "maze-karaoke",
+        "name": "Maze Karaoke",
+        "suburb": "Chinatown",
+        "activity": "Karaoke rooms",
+        "what_gets_booked": "Rooms by the hour",
+        "url": "https://mazekaraoke.com.au",
+        "walk": "Chinatown",
+        "first_visit": true,
+        "notes": "Level 2, 31-37 Dixon St, Haymarket. Phone 0415 909 888. Open 2pm-4am, 7 days. Happy hour $13 pp/hr or $25 pp for 2 hrs; VIP room $15 pp/hr or $28 pp for 2 hrs (Sun-Thu, and Fri/Sat before 8pm). Site serves a broken SSL chain."
+      },
+      "status": "unreachable",
+      "error": "Could not fetch https://mazekaraoke.com.au",
+      "final_url": null,
+      "pages_crawled": [],
+      "booking_platforms": [],
+      "cms": [],
+      "booking_links": [],
+      "price_mentions": [],
+      "hours_mentions": [],
+      "phones": [],
+      "emails": [],
+      "socials": [],
+      "page_titles": [],
+      "offerings": []
+    },
+    {
+      "venue": {
+        "id": "dynasty-karaoke",
+        "name": "Dynasty Karaoke",
+        "suburb": "Haymarket",
+        "activity": "Karaoke rooms",
+        "what_gets_booked": "Rooms by the hour, ~$10 pp/hr",
+        "url": "https://dynastykaraoke.com.au",
+        "walk": "Chinatown",
+        "first_visit": false
+      },
+      "status": "ok",
+      "error": null,
+      "final_url": "https://www.dynastykaraoke.com.au/",
+      "pages_crawled": [
+        "https://www.dynastykaraoke.com.au/",
+        "https://www.dynastykaraoke.com.au/pricing",
+        "https://www.dynastykaraoke.com.au/contact",
+        "https://www.dynastykaraoke.com.au/experiences"
+      ],
+      "booking_platforms": [
+        "Bookable"
+      ],
+      "cms": [
+        "Wix"
+      ],
+      "booking_links": [
+        {
+          "label": "Bookings@dynastyclub.com.au",
+          "url": "mailto:Bookings@dynastyclub.com.au"
+        },
+        {
+          "label": "Booking@dynastyclub.com.au",
+          "url": "mailto:Booking@dynastyclub.com.au"
+        },
+        {
+          "label": "(no label)",
+          "url": "https://www.facebook.com/DynastyKaraokeClub"
+        }
+      ],
+      "price_mentions": [
+        "Free Entry all day all night ($20 per person minmum spend required) Walk-in Available For private lounge functions bookings, please contact us for a quote.",
+        "Free Entry all day all night ($20 per person minmum spend required) Walk-in Available"
+      ],
+      "hours_mentions": [
+        "Monday - Thursday 8pm - 4am",
+        "Friday - Sunday 5pm - 4am",
+        "Mon to Thu 8pm - 4am",
+        "Fri to Sun 5pm - 4am",
+        "Operating Hours: Dynasty Karaoke is open 7 days a week, with different operating hours on different days: Monday to Thursday: 8:00 PM to 4:00 AM Friday to Sunday: 5:00 PM to 4:00 AM Please note that operating hours on Public Holidays are su"
+      ],
+      "phones": [
+        "(02) 9281 9006",
+        "02 9281 9006",
+        "0452 539 281"
+      ],
+      "emails": [
+        "booking@dynastyclub.com.au",
+        "bookings@dynastyclub.com.au"
+      ],
+      "socials": [
+        "https://www.facebook.com/DynastyKaraokeClub",
+        "https://www.instagram.com/dynasty_karaoke"
+      ],
+      "page_titles": [
+        "Sydney's Premium Karaoke Experience | Dynasty Karaoke Haymarket",
+        "Sydney's Premium Karaoke Experience | Dynasty Karaoke | About Us",
+        "Sydney's Premium Karaoke Experience | Dynasty Karaoke | Contact Us",
+        "Experiences | dynastykaraoke"
+      ],
+      "offerings": [
+        "Welcome to Dynasty Karaoke, Australia's premier karaoke destination!",
+        "Experiences"
+      ]
+    },
+    {
+      "venue": {
+        "id": "great-escape-au",
+        "name": "The Great Escape AU",
+        "suburb": "Redfern",
+        "activity": "Escape rooms",
+        "what_gets_booked": "Hourly sessions",
+        "url": "https://greatescapeau.com",
+        "walk": "Alexandria and Redfern",
+        "first_visit": false
+      },
+      "status": "ok",
+      "error": null,
+      "final_url": "https://greatescapeau.com/",
+      "pages_crawled": [
+        "https://greatescapeau.com/"
+      ],
+      "booking_platforms": [],
+      "cms": [
+        "WordPress"
+      ],
+      "booking_links": [],
+      "price_mentions": [],
+      "hours_mentions": [],
+      "phones": [],
+      "emails": [],
+      "socials": [
+        "https://www.instagram.com/thegreatescape_au"
+      ],
+      "page_titles": [
+        "The Great Escape | Best Escape rooms in Australia - Best Escape Rooms in Australia"
+      ],
+      "offerings": []
+    },
+    {
+      "venue": {
+        "id": "maniax",
+        "name": "Maniax",
+        "suburb": "St Peters",
+        "activity": "Axe throwing",
+        "what_gets_booked": "Two-hour group sessions",
+        "url": "https://maniax.com.au",
+        "walk": "Alexandria and Redfern",
+        "first_visit": false
+      },
+      "status": "ok",
+      "error": null,
+      "final_url": "https://www.maniax.com.au/",
+      "pages_crawled": [
+        "https://www.maniax.com.au/",
+        "https://www.maniax.com.au/groups-parties",
+        "https://www.maniax.com.au/group-parties/corporate-events",
+        "https://www.maniax.com.au/group-parties/team-building",
+        "https://www.maniax.com.au/group-parties/axemas",
+        "https://www.maniax.com.au/group-parties/hens-parties",
+        "https://www.maniax.com.au/group-parties/bucks-parties",
+        "https://www.maniax.com.au/group-parties/birthday-parties"
+      ],
+      "booking_platforms": [
+        "Bookable"
+      ],
+      "cms": [
+        "Webflow"
+      ],
+      "booking_links": [
+        {
+          "label": "(no label)",
+          "url": "https://www.facebook.com/MANIAX.AU"
+        },
+        {
+          "label": "View Info Pack",
+          "url": "https://cdn.prod.website-files.com/6513b7d5de4651881731de18/69c1bd81c0f30665c8ad6070_50bb2dc41a7ca8cfa59bbb775532f981_MANIAX-GroupBookings-2026.pdf"
+        },
+        {
+          "label": "View Info Pack",
+          "url": "https://cdn.prod.website-files.com/6513b7d5de4651881731de18/6a740aa689c2e9e617c1ed88_MANIAX_Group_Bookings_2026.pdf"
+        }
+      ],
+      "price_mentions": [
+        "from $ 39 per person",
+        "from $ 55 per person",
+        "from $ 63 per person",
+        "from $ 65 per person",
+        "from $ 59 per person",
+        "from $ 25 per person",
+        "Say hello to the Urban Viking Special Offer, your weekday excuse to sling axes, skol some drinks, and shake off the mid-year slump. $79 for 2 hours of axe slingin' and 2 drinks per person. Now that's a reason to celebrate! Limited time only",
+        "$79 per person",
+        "$25 PER STUDENT",
+        "$139 PER PERSON",
+        "$149 PER PERSON",
+        "$89 PER PERSON",
+        "$99 PER PERSON",
+        "$105 PER PERSON",
+        "$63 PER PERSON",
+        "$65 PER PERSON",
+        "$59 PER PERSON",
+        "Immerse yourself in an hour of exhilarating axe throwing challenges and moments! Upgrade to 2 hours for only $10 extra per person!"
+      ],
+      "hours_mentions": [
+        "Got questions? Call our AXE-pert team on 1300 217 583 (Monday to Friday 9am\u20135pm AEDT) COPYRIGHT \u00a9 2026 MANIAX",
+        "Available Monday to Friday 9am\u20135pm"
+      ],
+      "phones": [
+        "1300 217 583"
+      ],
+      "emails": [
+        "supportcrew@maniax.com.au"
+      ],
+      "socials": [
+        "https://www.facebook.com/MANIAX.AU",
+        "https://www.instagram.com/maniax.au"
+      ],
+      "page_titles": [
+        "Axe Throwing Australia - Book Events & Parties | MANIAX",
+        "Axe Throwing Groups & Parties Packages | MANIAX Axe Throwing",
+        "Corporate Events & Christmas Parties | MANIAX Axe Throwing",
+        "Team Building Activity & Experience | MANIAX Axe Throwing",
+        "Christmas Parties | MANIAX - Axe Throwing",
+        "Bachelorette & Hens Party Packages I MANIAX - Axe Throwing",
+        "Bachelor & Bucks Party Packages | MANIAX Axe Throwing",
+        "Celebrate Your Birthday Axe Throwing | MANIAX Axe Throwing"
+      ],
+      "offerings": [
+        "Birthday Parties",
+        "All Packages",
+        "hosted sessions",
+        "Book Your Christmas Party",
+        "Axe throwing for groups & parties",
+        "AXE-citing Group Events!",
+        "Group Axe Throwing Packages",
+        "Corporate Events",
+        "how to plan a cOrporate Event",
+        "how to plan a Team Building Session",
+        "The UltimaTe AXE-mas Party!",
+        "how to plan a christmas party",
+        "hens PARTY",
+        "MANIAX hens PARTY PACKAGES",
+        "Here's What to Axe-Pect",
+        "1HR session",
+        "different axes",
+        "games & tournaments",
+        "how to plan a hens party",
+        "axe throwing BUCKS PARTY"
+      ]
+    },
+    {
+      "venue": {
+        "id": "the-soccer-club",
+        "name": "The Soccer Club",
+        "suburb": "Zetland",
+        "activity": "Indoor soccer courts",
+        "what_gets_booked": "Court slots by the hour",
+        "url": "https://www.thesoccerclub.com.au",
+        "walk": "Alexandria and Redfern",
+        "first_visit": false,
+        "notes": "Website appears offline (404 on all pages as of Aug 2026) \u2014 bookings likely phone-only. Unit 8, 890 Bourke Street, Zetland. Phone 0406 336 471. Offers pitch hire, kids classes (Cubs, ages 2-6), coaching, birthday parties."
+      },
+      "status": "unreachable",
+      "error": "Could not fetch https://www.thesoccerclub.com.au",
+      "final_url": null,
+      "pages_crawled": [],
+      "booking_platforms": [],
+      "cms": [],
+      "booking_links": [],
+      "price_mentions": [],
+      "hours_mentions": [],
+      "phones": [],
+      "emails": [],
+      "socials": [],
+      "page_titles": [],
+      "offerings": []
+    },
+    {
+      "venue": {
+        "id": "zero-latency",
+        "name": "Zero Latency",
+        "suburb": "Alexandria",
+        "activity": "Free-roam VR",
+        "what_gets_booked": "Timed sessions, priced per group of 8",
+        "url": "https://zerolatencyvr.com/sydney",
+        "walk": "Alexandria and Redfern",
+        "first_visit": false
+      },
+      "status": "ok",
+      "error": null,
+      "final_url": "https://zerolatencyvr.com/sydney",
+      "pages_crawled": [
+        "https://zerolatencyvr.com/sydney"
+      ],
+      "booking_platforms": [],
+      "cms": [],
+      "booking_links": [],
+      "price_mentions": [],
+      "hours_mentions": [],
+      "phones": [],
+      "emails": [],
+      "socials": [],
+      "page_titles": [
+        "Global Virtual Reality Experience Provider - Zero Latency VR"
+      ],
+      "offerings": []
+    }
+  ]
+}

@@ -1,0 +1,84 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: OneTap wasted-slot tracker - scheduled availability polling to S3-hosted SQLite, plus an on-demand report.
+
+Parameters:
+  PollSchedule:
+    Type: String
+    Default: rate(30 minutes)
+    Description: How often to poll venue availability.
+  ReportSchedule:
+    Type: String
+    Default: cron(0 22 ? * * *)   # 22:00 UTC daily = ~8am Sydney; rebuilds the report each morning
+    Description: When to rebuild the wasted-slot report.
+  PollMinutes:
+    Type: String
+    Default: "30"
+    Description: Passed to the tracker so lookahead/labelling matches the poll cadence.
+
+Resources:
+  DataBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub onetap-tracker-${AWS::AccountId}
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+
+  TrackerFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: onetap-tracker-poll
+      Handler: tracker_lambda.handler
+      Runtime: python3.12
+      CodeUri: .
+      MemorySize: 512
+      Timeout: 300
+      Environment:
+        Variables:
+          REPORT_BUCKET: !Sub onetap-tracker-${AWS::AccountId}
+          DB_KEY: state/tracking.db
+          POLL_MINUTES: !Ref PollMinutes
+          # Add Intrac creds here (or in SSM/Secrets Manager) to enable tennis venues:
+          # CAMPERDOWN_INTRAC_USER: ...
+          # CAMPERDOWN_INTRAC_PASS: ...
+      Policies:
+        - S3CrudPolicy:
+            BucketName: !Sub onetap-tracker-${AWS::AccountId}
+      Events:
+        Poll:
+          Type: Schedule
+          Properties:
+            Schedule: !Ref PollSchedule
+
+  ReportFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: onetap-tracker-report
+      Handler: report_lambda.handler
+      Runtime: python3.12
+      CodeUri: .
+      MemorySize: 512
+      Timeout: 120
+      Environment:
+        Variables:
+          REPORT_BUCKET: !Sub onetap-tracker-${AWS::AccountId}
+          DB_KEY: state/tracking.db
+      Policies:
+        - S3CrudPolicy:
+            BucketName: !Sub onetap-tracker-${AWS::AccountId}
+      Events:
+        DailyReport:
+          Type: Schedule
+          Properties:
+            Schedule: !Ref ReportSchedule
+
+Outputs:
+  DataBucket:
+    Value: !Ref DataBucket
+  TrackerFunction:
+    Value: !Ref TrackerFunction
+  ReportFunction:
+    Value: !Ref ReportFunction

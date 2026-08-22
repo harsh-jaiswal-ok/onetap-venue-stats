@@ -1,0 +1,104 @@
+[
+  {
+    "id": "camperdown-tennis",
+    "name": "Camperdown Tennis",
+    "suburb": "Camperdown",
+    "activity": "Tennis + multi-sport courts",
+    "what_gets_booked": "Court hire by the hour, 7 days",
+    "url": "https://camperdowntennis.com.au",
+    "walk": "Camperdown and Newtown",
+    "first_visit": true
+  },
+  {
+    "id": "cipher-room",
+    "name": "The Cipher Room",
+    "suburb": "Newtown",
+    "activity": "Escape rooms",
+    "what_gets_booked": "Hourly sessions, groups of 2 to 8",
+    "url": "https://cipherroom.com.au",
+    "walk": "Camperdown and Newtown",
+    "first_visit": true
+  },
+  {
+    "id": "city-community-tennis",
+    "name": "City Community Tennis",
+    "suburb": "Glebe / Surry Hills / Alexandria",
+    "activity": "Tennis",
+    "what_gets_booked": "Hourly court hire, online booking",
+    "url": "https://citycommunitytennis.com.au",
+    "walk": "Alexandria and Redfern",
+    "first_visit": false
+  },
+  {
+    "id": "kiss-my-axe",
+    "name": "Kiss My Axe",
+    "suburb": "Alexandria",
+    "activity": "Axe throwing, glow darts",
+    "what_gets_booked": "Hourly sessions, group packages",
+    "url": "https://kissmyaxe.com.au",
+    "walk": "Alexandria and Redfern",
+    "first_visit": true
+  },
+  {
+    "id": "maze-karaoke",
+    "name": "Maze Karaoke",
+    "suburb": "Chinatown",
+    "activity": "Karaoke rooms",
+    "what_gets_booked": "Rooms by the hour",
+    "url": "https://mazekaraoke.com.au",
+    "walk": "Chinatown",
+    "first_visit": true,
+    "notes": "Level 2, 31-37 Dixon St, Haymarket. Phone 0415 909 888. Open 2pm-4am, 7 days. Happy hour $13 pp/hr or $25 pp for 2 hrs; VIP room $15 pp/hr or $28 pp for 2 hrs (Sun-Thu, and Fri/Sat before 8pm). Site serves a broken SSL chain."
+  },
+  {
+    "id": "dynasty-karaoke",
+    "name": "Dynasty Karaoke",
+    "suburb": "Haymarket",
+    "activity": "Karaoke rooms",
+    "what_gets_booked": "Rooms by the hour, ~$10 pp/hr",
+    "url": "https://dynastykaraoke.com.au",
+    "walk": "Chinatown",
+    "first_visit": false
+  },
+  {
+    "id": "great-escape-au",
+    "name": "The Great Escape AU",
+    "suburb": "Redfern",
+    "activity": "Escape rooms",
+    "what_gets_booked": "Hourly sessions",
+    "url": "https://greatescapeau.com",
+    "walk": "Alexandria and Redfern",
+    "first_visit": false
+  },
+  {
+    "id": "maniax",
+    "name": "Maniax",
+    "suburb": "St Peters",
+    "activity": "Axe throwing",
+    "what_gets_booked": "Two-hour group sessions",
+    "url": "https://maniax.com.au",
+    "walk": "Alexandria and Redfern",
+    "first_visit": false
+  },
+  {
+    "id": "the-soccer-club",
+    "name": "The Soccer Club",
+    "suburb": "Zetland",
+    "activity": "Indoor soccer courts",
+    "what_gets_booked": "Court slots by the hour",
+    "url": "https://www.thesoccerclub.com.au",
+    "walk": "Alexandria and Redfern",
+    "first_visit": false,
+    "notes": "Website appears offline (404 on all pages as of Aug 2026) — bookings likely phone-only. Unit 8, 890 Bourke Street, Zetland. Phone 0406 336 471. Offers pitch hire, kids classes (Cubs, ages 2-6), coaching, birthday parties."
+  },
+  {
+    "id": "zero-latency",
+    "name": "Zero Latency",
+    "suburb": "Alexandria",
+    "activity": "Free-roam VR",
+    "what_gets_booked": "Timed sessions, priced per group of 8",
+    "url": "https://zerolatencyvr.com/sydney",
+    "walk": "Alexandria and Redfern",
+    "first_visit": false
+  }
+]
