@@ -127,6 +127,12 @@ details ul{margin:.4rem 0 0;padding-left:1.1rem}details a{word-break:break-all}
 .item{display:grid;grid-template-columns:1fr auto;gap:.4rem .5rem;align-items:center;font-size:.84rem}
 .item .bar{grid-column:1/-1;height:6px;background:var(--bar-bg);position:relative;overflow:hidden}
 .item .bar i{position:absolute;inset:0 auto 0 0;background:var(--green)}
+.timeline{max-height:20rem;overflow-y:auto;border:1px solid var(--line)}
+.timeline table{min-width:0;width:100%;font-size:.82rem}
+.timeline td{padding:.35rem .7rem;border-top:1px solid var(--line)}
+.timeline tr:first-child td{border-top:none}
+.timeline tr:nth-child(even){background:var(--row)}
+.timeline td:first-child{white-space:nowrap;color:var(--muted)}
 .rule{background:var(--green-bright);color:#0B2417;padding:.8rem 1rem;font-size:.85rem;margin:1.5rem 0}
 .rule strong{font-weight:800}
 footer{margin-top:3rem;border-top:1px solid var(--line);padding-top:1rem;display:flex;justify-content:space-between;
@@ -165,6 +171,20 @@ def render_heatmap(windows):
             f'<tbody>{"".join(rows)}</tbody></table></div>')
 
 
+def render_timeline(v):
+    """Chronological list of every wasted slot with its Sydney time."""
+    tl = v.get("wasted_timeline") or []
+    if not tl:
+        return ""
+    noun = "idle-bay hours" if v.get("kind") == "capacity" else "wasted slots"
+    rows = []
+    for e in tl:
+        detail = f'{e["idle"]} bays idle' if e.get("idle") is not None else esc(e["item"])
+        rows.append(f'<tr><td class="mono">{esc(e["when"])}</td><td>{detail}</td></tr>')
+    return (f'<div class="block"><h4>Every wasted slot, in order ({len(tl)} {noun})</h4>'
+            f'<div class="timeline"><table><tbody>{"".join(rows)}</tbody></table></div></div>')
+
+
 def render_tracking_venue(v):
     kind = v.get("kind", "binary")
     util = v["utilisation_pct"]
@@ -186,7 +206,7 @@ def render_tracking_venue(v):
                       if heat else "")
         return f"""<div class="card"><h2>{esc(v['venue_name'])}</h2>
           <div class="suburb">{v['total_units']} bays · idle-inventory tracking</div>
-          <div class="statrow">{stats}</div>{heat_block}</div>"""
+          <div class="statrow">{stats}</div>{heat_block}{render_timeline(v)}</div>"""
 
     decided = v["sold"] + v["wasted"]
     if decided == 0:
@@ -216,7 +236,7 @@ def render_tracking_venue(v):
         items_block = f'<div class="block"><h4>By offering</h4><div class="itemgrid">{"".join(rows)}</div></div>'
     return f"""<div class="card"><h2>{esc(v['venue_name'])}</h2>
       <div class="suburb">{decided} decided slots tracked</div>
-      <div class="statrow">{stats}</div>{heat_block}{items_block}</div>"""
+      <div class="statrow">{stats}</div>{heat_block}{items_block}{render_timeline(v)}</div>"""
 
 
 def render_tracking_panel(tracking):

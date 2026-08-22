@@ -140,6 +140,7 @@ class VenueStats:
     total_units: int = 0
     heatmap: dict = field(default_factory=lambda: defaultdict(float))  # (weekday,hour) -> waste weight
     by_item: dict = field(default_factory=lambda: defaultdict(lambda: [0, 0]))  # item -> [wasted, sold]
+    wasted_events: list = field(default_factory=list)  # chronological wasted slots
 
     @property
     def decided(self) -> int:
@@ -173,8 +174,8 @@ def aggregate(outcomes: list[SlotOutcome]) -> dict[str, VenueStats]:
             s.wasted += 1
             s.wasted_hours += o.duration_h
             s.by_item[o.item_name][0] += 1
+            free = o.free_units or 0
             if is_capacity:
-                free = o.free_units or 0
                 busy = (o.total_units or 0) - free
                 s.idle_unit_hours += free * o.duration_h
                 s.busy_unit_hours += busy * o.duration_h
@@ -182,6 +183,12 @@ def aggregate(outcomes: list[SlotOutcome]) -> dict[str, VenueStats]:
                     s.heatmap[(o.weekday, o.hour)] += free      # weight by idle units
             elif o.weekday >= 0:
                 s.heatmap[(o.weekday, o.hour)] += 1
+            s.wasted_events.append({
+                "sort": o.start_utc.isoformat(),
+                "when": o.slot_local,          # Sydney wall-clock "YYYY-MM-DD HH:MM"
+                "item": o.item_name,
+                "idle": free if is_capacity else None,
+            })
         elif o.status == "unobserved":
             s.unobserved += 1
         else:
@@ -192,6 +199,22 @@ def aggregate(outcomes: list[SlotOutcome]) -> dict[str, VenueStats]:
 def deadest_windows(s: VenueStats, top=5):
     ranked = sorted(s.heatmap.items(), key=lambda kv: kv[1], reverse=True)[:top]
     return [(WEEKDAYS[wd], hr, round(n)) for (wd, hr), n in ranked if wd >= 0]
+
+
+def fmt_when(slot_local: str) -> str:
+    """'2026-08-22 18:00' -> 'Sat 22 Aug, 6:00pm' (Sydney)."""
+    try:
+        dt = datetime.strptime(slot_local, "%Y-%m-%d %H:%M")
+    except ValueError:
+        return slot_local
+    h12 = (dt.hour - 1) % 12 + 1
+    ampm = "am" if dt.hour < 12 else "pm"
+    return f"{dt.strftime('%a %d %b')}, {h12}:{dt.minute:02d}{ampm}"
+
+
+def wasted_timeline(s: VenueStats, limit: int = 200) -> list[dict]:
+    events = sorted(s.wasted_events, key=lambda e: e["sort"])[:limit]
+    return [{"when": fmt_when(e["when"]), "item": e["item"], "idle": e["idle"]} for e in events]
 
 
 # ---------------------------------------------------------------------------
@@ -258,6 +281,15 @@ def render_markdown(stats: dict[str, VenueStats], meta: dict, generated: str) ->
                     util = (sold / dec * 100) if dec else 0
                     L.append(f"- {name}: {w} wasted / {sold} sold ({util:.0f}% utilised)")
                 L.append("")
+
+        timeline = wasted_timeline(s)
+        if timeline:
+            noun = "idle-bay hours" if s.kind == "capacity" else "wasted slots"
+            L += [f"**Every wasted slot, in order ({len(timeline)} {noun}):**"]
+            for e in timeline:
+                tail = f" — {e['idle']} bays idle" if e["idle"] is not None else f" — {e['item']}"
+                L.append(f"- {e['when']}{tail}")
+            L.append("")
     return "\n".join(L)
 
 
@@ -276,6 +308,7 @@ def to_json(stats: dict[str, VenueStats], meta: dict, generated: str) -> dict:
             "busy_unit_hours": round(s.busy_unit_hours, 1),
             "deadest_windows": [{"day": d, "hour": h, "wasted": n} for d, h, n in deadest_windows(s)],
             "by_item": {k: {"wasted": v[0], "sold": v[1]} for k, v in s.by_item.items()},
+            "wasted_timeline": wasted_timeline(s),
         } for s in stats.values()],
     }
 

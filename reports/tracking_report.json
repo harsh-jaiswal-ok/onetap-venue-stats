@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-22 18:14 AEST",
+  "generated_at": "2026-08-22 18:19 AEST",
   "tracking_window": {
     "first": "2026-08-21 19:37 AEST",
     "last": "2026-08-22 18:05 AEST",
@@ -72,7 +72,229 @@
           "wasted": 3,
           "sold": 1
         }
-      }
+      },
+      "wasted_timeline": [
+        {
+          "when": "Fri 21 Aug, 8:00pm",
+          "item": "Axe Throwing - 2-7 People",
+          "idle": null
+        },
+        {
+          "when": "Fri 21 Aug, 8:00pm",
+          "item": "Axe Throwing Date Night - For Two",
+          "idle": null
+        },
+        {
+          "when": "Fri 21 Aug, 8:00pm",
+          "item": "Glow Darts - 2-12 people",
+          "idle": null
+        },
+        {
+          "when": "Fri 21 Aug, 8:30pm",
+          "item": "Glow Darts - 2-12 people",
+          "idle": null
+        },
+        {
+          "when": "Fri 21 Aug, 9:00pm",
+          "item": "Axe Throwing - 2-7 People",
+          "idle": null
+        },
+        {
+          "when": "Fri 21 Aug, 9:00pm",
+          "item": "Axe Throwing Date Night - For Two",
+          "idle": null
+        },
+        {
+          "when": "Fri 21 Aug, 9:00pm",
+          "item": "Glow Darts - 2-12 people",
+          "idle": null
+        },
+        {
+          "when": "Fri 21 Aug, 9:30pm",
+          "item": "Glow Darts - 2-12 people",
+          "idle": null
+        },
+        {
+          "when": "Sat 22 Aug, 10:00am",
+          "item": "Axe Throwing - 2-7 People",
+          "idle": null
+        },
+        {
+          "when": "Sat 22 Aug, 10:00am",
+          "item": "Axe Throwing - 8+ People",
+          "idle": null
+        },
+        {
+          "when": "Sat 22 Aug, 10:00am",
+          "item": "Glow Darts - 2-12 people",
+          "idle": null
+        },
+        {
+          "when": "Sat 22 Aug, 10:00am",
+          "item": "Axe Throwing & Glow Darts - 6-12 People",
+          "idle": null
+        },
+        {
+          "when": "Sat 22 Aug, 10:00am",
+          "item": "Ultimate Party Package - 6+ People",
+          "idle": null
+        },
+        {
+          "when": "Sat 22 Aug, 10:30am",
+          "item": "Glow Darts - 2-12 people",
+          "idle": null
+        },
+        {
+          "when": "Sat 22 Aug, 11:00am",
+          "item": "Axe Throwing - 2-7 People",
+          "idle": null
+        },
+        {
+          "when": "Sat 22 Aug, 11:00am",
+          "item": "Glow Darts - 2-12 people",
+          "idle": null
+        },
+        {
+          "when": "Sat 22 Aug, 11:00am",
+          "item": "Axe Throwing & Glow Darts - 6-12 People",
+          "idle": null
+        },
+        {
+          "when": "Sat 22 Aug, 11:30am",
+          "item": "Glow Darts - 2-12 people",
+          "idle": null
+        },
+        {
+          "when": "Sat 22 Aug, 12:00pm",
+          "item": "Glow Darts - 2-12 people",
+          "idle": null
+        },
+        {
+          "when": "Sat 22 Aug, 12:30pm",
+          "item": "Glow Darts - 2-12 people",
+          "idle": null
+        },
+        {
+          "when": "Sat 22 Aug, 1:00pm",
+          "item": "Axe Throwing - 2-7 People",
+          "idle": null
+        },
+        {
+          "when": "Sat 22 Aug, 1:00pm",
+          "item": "Glow Darts - 2-12 people",
+          "idle": null
+        },
+        {
+          "when": "Sat 22 Aug, 1:00pm",
+          "item": "Axe Throwing & Glow Darts - 6-12 People",
+          "idle": null
+        },
+        {
+          "when": "Sat 22 Aug, 1:30pm",
+          "item": "Glow Darts - 2-12 people",
+          "idle": null
+        },
+        {
+          "when": "Sat 22 Aug, 2:00pm",
+          "item": "Axe Throwing - 2-7 People",
+          "idle": null
+        },
+        {
+          "when": "Sat 22 Aug, 2:00pm",
+          "item": "Axe Throwing - 8+ People",
+          "idle": null
+        },
+        {
+          "when": "Sat 22 Aug, 2:00pm",
+          "item": "Glow Darts - 2-12 people",
+          "idle": null
+        },
+        {
+          "when": "Sat 22 Aug, 2:00pm",
+          "item": "Axe Throwing & Glow Darts - 6-12 People",
+          "idle": null
+        },
+        {
+          "when": "Sat 22 Aug, 2:00pm",
+          "item": "Ultimate Party Package - 6+ People",
+          "idle": null
+        },
+        {
+          "when": "Sat 22 Aug, 2:30pm",
+          "item": "Glow Darts - 2-12 people",
+          "idle": null
+        },
+        {
+          "when": "Sat 22 Aug, 3:00pm",
+          "item": "Axe Throwing - 2-7 People",
+          "idle": null
+        },
+        {
+          "when": "Sat 22 Aug, 3:00pm",
+          "item": "Glow Darts - 2-12 people",
+          "idle": null
+        },
+        {
+          "when": "Sat 22 Aug, 3:00pm",
+          "item": "Axe Throwing & Glow Darts - 6-12 People",
+          "idle": null
+        },
+        {
+          "when": "Sat 22 Aug, 3:30pm",
+          "item": "Glow Darts - 2-12 people",
+          "idle": null
+        },
+        {
+          "when": "Sat 22 Aug, 4:00pm",
+          "item": "Axe Throwing - 2-7 People",
+          "idle": null
+        },
+        {
+          "when": "Sat 22 Aug, 4:00pm",
+          "item": "Axe Throwing - 8+ People",
+          "idle": null
+        },
+        {
+          "when": "Sat 22 Aug, 4:00pm",
+          "item": "Glow Darts - 2-12 people",
+          "idle": null
+        },
+        {
+          "when": "Sat 22 Aug, 4:00pm",
+          "item": "Axe Throwing & Glow Darts - 6-12 People",
+          "idle": null
+        },
+        {
+          "when": "Sat 22 Aug, 4:00pm",
+          "item": "Ultimate Party Package - 6+ People",
+          "idle": null
+        },
+        {
+          "when": "Sat 22 Aug, 4:30pm",
+          "item": "Glow Darts - 2-12 people",
+          "idle": null
+        },
+        {
+          "when": "Sat 22 Aug, 5:00pm",
+          "item": "Axe Throwing - 2-7 People",
+          "idle": null
+        },
+        {
+          "when": "Sat 22 Aug, 5:00pm",
+          "item": "Glow Darts - 2-12 people",
+          "idle": null
+        },
+        {
+          "when": "Sat 22 Aug, 5:30pm",
+          "item": "Glow Darts - 2-12 people",
+          "idle": null
+        },
+        {
+          "when": "Sat 22 Aug, 6:00pm",
+          "item": "Glow Darts - 2-12 people",
+          "idle": null
+        }
+      ]
     },
     {
       "venue_id": "moore-park-range",
@@ -88,7 +310,8 @@
       "idle_unit_hours": 0.0,
       "busy_unit_hours": 0.0,
       "deadest_windows": [],
-      "by_item": {}
+      "by_item": {},
+      "wasted_timeline": []
     }
   ]
 }
