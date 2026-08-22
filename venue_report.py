@@ -16,6 +16,7 @@ import sys
 import time
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
+from zoneinfo import ZoneInfo
 from pathlib import Path
 from urllib.parse import urljoin, urlparse
 
@@ -439,7 +440,7 @@ def run(venues_path: str | Path, out_dir: str | Path) -> dict:
               f"platforms={f.booking_platforms}, prices={len(f.price_mentions)}", flush=True)
         findings.append(f)
 
-    generated_at = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+    generated_at = datetime.now(ZoneInfo("Australia/Sydney")).strftime("%Y-%m-%d %H:%M %Z")
     summary_md = render_summary_markdown(findings, generated_at)
     (out / "REPORT.md").write_text(summary_md)
     (out / "report_data.json").write_text(

@@ -1,14 +1,17 @@
 """Wasted-slot report.
 
 Reads the snapshots the tracker has collected and works out, for every slot
-whose start time has passed, whether it sold or went to waste. A slot counts as
-WASTED when the last observation before its start time still showed it open.
+whose time has fully passed (its end time is in the past), whether it sold or
+went to waste. A slot counts as WASTED when the last observation before its
+start time still showed it open.
 
 Run any time:
     python report.py
 
 Writes reports/TRACKING_REPORT.md, reports/TRACKING_REPORT.html and a
 machine-readable reports/tracking_report.json, and prints a summary.
+
+All human-facing timestamps are shown in Sydney time.
 """
 
 from __future__ import annotations
@@ -18,14 +21,31 @@ from collections import defaultdict
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 import store
 
 WEEKDAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+SYDNEY = ZoneInfo("Australia/Sydney")
 
 
 def _parse_utc(s: str) -> datetime:
     return datetime.strptime(s, "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=timezone.utc)
+
+
+def now_sydney_str() -> str:
+    return datetime.now(SYDNEY).strftime("%Y-%m-%d %H:%M %Z")
+
+
+def to_sydney_str(iso_utc: str | None) -> str | None:
+    """Convert a stored UTC ISO timestamp to a Sydney-time display string."""
+    if not iso_utc:
+        return iso_utc
+    try:
+        dt = datetime.strptime(iso_utc, "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=timezone.utc)
+    except ValueError:
+        return iso_utc
+    return dt.astimezone(SYDNEY).strftime("%Y-%m-%d %H:%M %Z")
 
 
 @dataclass
@@ -83,7 +103,8 @@ def load_outcomes(db_path=store.DEFAULT_DB, now: datetime | None = None) -> tupl
             weekday, hour = -1, -1
 
         free_units = total_units = None
-        if start_utc > now:
+        # Only score a slot once its time has fully passed (end time in the past).
+        if end_utc > now:
             status = "pending"
         else:
             before = [o for o in obs if _parse_utc(o["observed_at"]) <= start_utc]
@@ -182,7 +203,8 @@ def render_markdown(stats: dict[str, VenueStats], meta: dict, generated: str) ->
          f"_Generated {generated}._", ""]
     window = ""
     if meta.get("first_observed"):
-        window = (f"Tracking window: {meta['first_observed']} → {meta['last_observed']} "
+        window = (f"Tracking window: {to_sydney_str(meta['first_observed'])} → "
+                  f"{to_sydney_str(meta['last_observed'])} "
                   f"({meta.get('poll_count', 0)} polls, {meta.get('poll_errors', 0)} errors).")
     L += [window, "",
           "For **slot venues**, a slot is **wasted** when the last check before its start still "
@@ -242,7 +264,8 @@ def render_markdown(stats: dict[str, VenueStats], meta: dict, generated: str) ->
 def to_json(stats: dict[str, VenueStats], meta: dict, generated: str) -> dict:
     return {
         "generated_at": generated,
-        "tracking_window": {"first": meta.get("first_observed"), "last": meta.get("last_observed"),
+        "tracking_window": {"first": to_sydney_str(meta.get("first_observed")),
+                            "last": to_sydney_str(meta.get("last_observed")),
                             "polls": meta.get("poll_count", 0), "errors": meta.get("poll_errors", 0)},
         "venues": [{
             "venue_id": s.venue_id, "venue_name": s.venue_name, "kind": s.kind,
@@ -260,7 +283,7 @@ def to_json(stats: dict[str, VenueStats], meta: dict, generated: str) -> dict:
 def main():
     out = Path(__file__).parent / "reports"
     out.mkdir(exist_ok=True)
-    generated = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+    generated = now_sydney_str()
 
     outcomes, meta = load_outcomes()
     stats = aggregate(outcomes)

@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-08-22 08:07 UTC",
+  "generated_at": "2026-08-22 18:14 AEST",
   "tracking_window": {
-    "first": "2026-08-21T09:37:45Z",
-    "last": "2026-08-22T08:05:01Z",
+    "first": "2026-08-21 19:37 AEST",
+    "last": "2026-08-22 18:05 AEST",
     "polls": 3,
     "errors": 0
   },
@@ -12,11 +12,11 @@
       "venue_name": "Kiss My Axe",
       "kind": "binary",
       "sold": 3,
-      "wasted": 49,
+      "wasted": 44,
       "unobserved": 0,
-      "pending": 734,
-      "utilisation_pct": 5.8,
-      "wasted_hours": 38.0,
+      "pending": 739,
+      "utilisation_pct": 6.4,
+      "wasted_hours": 30.5,
       "total_units": 0,
       "idle_unit_hours": 0.0,
       "busy_unit_hours": 0.0,
@@ -37,23 +37,23 @@
           "wasted": 6
         },
         {
-          "day": "Sat",
-          "hour": 18,
-          "wasted": 5
+          "day": "Fri",
+          "hour": 20,
+          "wasted": 4
         },
         {
           "day": "Fri",
-          "hour": 20,
+          "hour": 21,
           "wasted": 4
         }
       ],
       "by_item": {
         "Axe Throwing - 2-7 People": {
-          "wasted": 10,
+          "wasted": 9,
           "sold": 0
         },
         "Axe Throwing - 8+ People": {
-          "wasted": 4,
+          "wasted": 3,
           "sold": 1
         },
         "Axe Throwing Date Night - For Two": {
@@ -65,11 +65,11 @@
           "sold": 0
         },
         "Axe Throwing & Glow Darts - 6-12 People": {
-          "wasted": 8,
+          "wasted": 6,
           "sold": 1
         },
         "Ultimate Party Package - 6+ People": {
-          "wasted": 4,
+          "wasted": 3,
           "sold": 1
         }
       }
@@ -80,8 +80,8 @@
       "kind": "binary",
       "sold": 0,
       "wasted": 0,
-      "unobserved": 13,
-      "pending": 63,
+      "unobserved": 12,
+      "pending": 64,
       "utilisation_pct": 0.0,
       "wasted_hours": 0.0,
       "total_units": 0,

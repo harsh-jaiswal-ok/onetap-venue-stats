@@ -23,7 +23,7 @@ s3 = boto3.client("s3")
 
 def handler(event, context):
     from datetime import datetime, timezone
-    generated = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+    generated = report.now_sydney_str()
     out = Path("/tmp/reports")
     out.mkdir(parents=True, exist_ok=True)
 
