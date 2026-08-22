@@ -1,8 +1,8 @@
 # OneTap — Wasted-Slot Report
 
-_Generated 2026-08-22 19:02 AEST._
+_Generated 2026-08-22 19:07 AEST._
 
-Tracking window: 2026-08-22 18:43 AEST → 2026-08-22 19:01 AEST (2 polls, 0 errors).
+Tracking window: 2026-08-22 18:43 AEST → 2026-08-22 19:06 AEST (3 polls, 0 errors).
 
 ## 💸 Total wasted so far: **$30 AUD**  *(estimated lost revenue)*
 

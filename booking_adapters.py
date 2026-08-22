@@ -48,6 +48,7 @@ def fareharbor(target: dict, session: requests.Session) -> list[Slot]:
     # Resolve the items to track. If the target names items explicitly use those,
     # otherwise auto-discover and skip obvious non-slot products.
     default_price = target.get("default_price")
+    lookahead = int(target.get("lookahead_days", LOOKAHEAD_DAYS))
     items = target.get("items")
     if not items:
         r = session.get(f"{base}/items/", timeout=REQUEST_TIMEOUT)
@@ -62,7 +63,7 @@ def fareharbor(target: dict, session: requests.Session) -> list[Slot]:
     for item in items:
         item_id, item_name = str(item["id"]), item["name"]
         item_price = item.get("price", default_price)
-        for offset in range(LOOKAHEAD_DAYS):
+        for offset in range(lookahead):
             day = today + timedelta(days=offset)
             url = f"{base}/items/{item_id}/availabilities/date/{day.isoformat()}/"
             try:

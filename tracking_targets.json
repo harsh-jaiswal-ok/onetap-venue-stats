@@ -6,6 +6,7 @@
     "shortname": "kissmyaxe",
     "timezone": "Australia/Sydney",
     "enabled": true,
+    "lookahead_days": 3,
     "items": [
       {"id": "278080", "name": "Axe Throwing - 2-7 People", "price": 90},
       {"id": "250776", "name": "Axe Throwing - 8+ People", "price": 360},

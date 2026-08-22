@@ -97,12 +97,19 @@ python report.py
 open reports/TRACKING_REPORT.html
 ```
 
-- `tracker.py` polls every 30 min by default (`POLL_MINUTES=20 python tracker.py`
-  to change) and appends to `tracking.db` (SQLite).
+- `tracker.py` appends to `tracking.db` (SQLite). In the continuous local loop
+  it polls every `POLL_MINUTES` (default 30). On GitHub Actions it instead polls
+  at **:20, :25, :50, :55** each hour — i.e. **10 and 5 minutes before every :00
+  and :30 slot start** — so the "last check before start" is always ~5 min out.
 - A slot is **wasted** when the last check before its start time still showed it
   open. **Utilisation** = sold ÷ (sold + wasted). The report also ranks the
   "deadest windows" (weekday × hour) — the concrete idle-inventory pitch.
-- Stop the tracker with `kill %1` (or find it with `pgrep -f tracker.py`).
+- To reproduce the 10/5-min-before cadence locally, run `tracker.py --once` from
+  cron/launchd at `20,25,50,55 * * * *` instead of the continuous loop.
+- FareHarbor lookahead is 3 days (set per-target in `tracking_targets.json`) to
+  keep the 4×/hour polling light on the API; that's plenty to catch every slot
+  well before it starts.
+- Stop the continuous tracker with `kill %1` (or `pgrep -f tracker.py`).
 
 ### Enabling the two tennis venues (Intrac)
 
@@ -129,7 +136,7 @@ sam deploy --guided --stack-name onetap-tracker -t template-tracker.yaml
 
 Creates two Lambdas and a private S3 bucket:
 
-- **`onetap-tracker-poll`** — runs every 30 min (EventBridge), pulls the SQLite
+- **`onetap-tracker-poll`** — runs on a schedule (EventBridge), pulls the SQLite
   DB from `s3://onetap-tracker-<account-id>/state/tracking.db`, polls, pushes it
   back. Single scheduled writer, so no VPC/EFS needed.
 - **`onetap-tracker-report`** — runs daily (default 22:00 UTC ≈ 8am Sydney),

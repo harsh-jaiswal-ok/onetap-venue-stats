@@ -5,7 +5,11 @@ name: Track venue availability
 # the updated data back to the repo.
 on:
   schedule:
-    - cron: "0 * * * *"      # hourly, on the hour (UTC)
+    # Slots start on the :00 and :30 marks, so poll 10 and 5 minutes before each:
+    #   :20 & :25  -> 10/5 min before the :30 slots
+    #   :50 & :55  -> 10/5 min before the :00 slots
+    # This makes the "last check before start" always ~5 min before the slot begins.
+    - cron: "20,25,50,55 * * * *"
   workflow_dispatch: {}       # ...and a manual "Run workflow" button
 
 permissions:
