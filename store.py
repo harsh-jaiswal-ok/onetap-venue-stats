@@ -29,6 +29,7 @@ CREATE TABLE IF NOT EXISTS snapshots (
     is_available  INTEGER NOT NULL,-- 1 = open/bookable, 0 = sold/taken
     capacity      INTEGER,         -- capacity-based venues: free units (e.g. free bays) this hour; else NULL
     capacity_total INTEGER,        -- capacity-based venues: total units (e.g. total bays); else NULL
+    price         REAL,            -- unit price: booking value (slot venues) or per-unit-hour (capacity)
     PRIMARY KEY (venue_id, item_id, slot_start, observed_at)
 );
 CREATE INDEX IF NOT EXISTS idx_slot ON snapshots (venue_id, item_id, slot_start);
@@ -55,6 +56,7 @@ class Slot:
     is_available: bool
     capacity: int | None = None        # capacity venues: free units this slot
     capacity_total: int | None = None  # capacity venues: total units
+    price: float | None = None         # unit price (booking value or per-unit-hour)
 
 
 def _migrate(conn):
@@ -62,6 +64,8 @@ def _migrate(conn):
     cols = {r["name"] for r in conn.execute("PRAGMA table_info(snapshots)")}
     if "capacity_total" not in cols:
         conn.execute("ALTER TABLE snapshots ADD COLUMN capacity_total INTEGER")
+    if "price" not in cols:
+        conn.execute("ALTER TABLE snapshots ADD COLUMN price REAL")
 
 
 @contextmanager
@@ -80,13 +84,13 @@ def connect(db_path: str | Path = DEFAULT_DB):
 def record_snapshot(conn, venue_id: str, venue_name: str, observed_at: str, slots: list[Slot]) -> int:
     rows = [
         (venue_id, venue_name, s.item_id, s.item_name, s.slot_start_utc, s.slot_end_utc,
-         s.slot_local, observed_at, 1 if s.is_available else 0, s.capacity, s.capacity_total)
+         s.slot_local, observed_at, 1 if s.is_available else 0, s.capacity, s.capacity_total, s.price)
         for s in slots
     ]
     conn.executemany(
         "INSERT OR REPLACE INTO snapshots "
         "(venue_id, venue_name, item_id, item_name, slot_start, slot_end, slot_local, "
-        " observed_at, is_available, capacity, capacity_total) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
+        " observed_at, is_available, capacity, capacity_total, price) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
         rows,
     )
     return len(rows)

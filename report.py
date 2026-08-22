@@ -63,6 +63,7 @@ class SlotOutcome:
     status: str              # 'wasted' | 'sold' | 'unobserved' | 'pending'
     free_units: int | None = None    # capacity venues: free units at the last obs before start
     total_units: int | None = None   # capacity venues: total units
+    price: float | None = None       # unit price (booking value or per-unit-hour)
 
 
 def load_outcomes(db_path=store.DEFAULT_DB, now: datetime | None = None) -> tuple[list[SlotOutcome], dict]:
@@ -73,7 +74,7 @@ def load_outcomes(db_path=store.DEFAULT_DB, now: datetime | None = None) -> tupl
     with store.connect(db_path) as conn:
         rows = conn.execute(
             "SELECT venue_id, venue_name, item_id, item_name, slot_start, slot_end, "
-            "slot_local, observed_at, is_available, capacity, capacity_total FROM snapshots").fetchall()
+            "slot_local, observed_at, is_available, capacity, capacity_total, price FROM snapshots").fetchall()
         polls = conn.execute(
             "SELECT MIN(observed_at) a, MAX(observed_at) b, COUNT(DISTINCT observed_at) n, "
             "SUM(status='error') errs FROM poll_log").fetchone()
@@ -119,7 +120,7 @@ def load_outcomes(db_path=store.DEFAULT_DB, now: datetime | None = None) -> tupl
         outcomes.append(SlotOutcome(
             venue_id, first["venue_name"], item_id, first["item_name"],
             first["slot_local"], start_utc, end_utc, weekday, hour, duration_h, status,
-            free_units, total_units))
+            free_units, total_units, first["price"]))
 
     return outcomes, meta
 
@@ -138,6 +139,7 @@ class VenueStats:
     idle_unit_hours: float = 0.0     # e.g. idle bay-hours
     busy_unit_hours: float = 0.0     # e.g. booked bay-hours
     total_units: int = 0
+    wasted_money: float = 0.0        # estimated lost revenue from wasted slots
     heatmap: dict = field(default_factory=lambda: defaultdict(float))  # (weekday,hour) -> waste weight
     by_item: dict = field(default_factory=lambda: defaultdict(lambda: [0, 0]))  # item -> [wasted, sold]
     wasted_events: list = field(default_factory=list)  # chronological wasted slots
@@ -179,15 +181,20 @@ def aggregate(outcomes: list[SlotOutcome]) -> dict[str, VenueStats]:
                 busy = (o.total_units or 0) - free
                 s.idle_unit_hours += free * o.duration_h
                 s.busy_unit_hours += busy * o.duration_h
+                cost = free * (o.price or 0) * o.duration_h   # idle bays x per-bay-hour rate
                 if o.weekday >= 0:
                     s.heatmap[(o.weekday, o.hour)] += free      # weight by idle units
-            elif o.weekday >= 0:
-                s.heatmap[(o.weekday, o.hour)] += 1
+            else:
+                cost = o.price or 0
+                if o.weekday >= 0:
+                    s.heatmap[(o.weekday, o.hour)] += 1
+            s.wasted_money += cost
             s.wasted_events.append({
                 "sort": o.start_utc.isoformat(),
                 "when": o.slot_local,          # Sydney wall-clock "YYYY-MM-DD HH:MM"
                 "item": o.item_name,
                 "idle": free if is_capacity else None,
+                "cost": round(cost, 2),
             })
         elif o.status == "unobserved":
             s.unobserved += 1
@@ -214,7 +221,8 @@ def fmt_when(slot_local: str) -> str:
 
 def wasted_timeline(s: VenueStats, limit: int = 200) -> list[dict]:
     events = sorted(s.wasted_events, key=lambda e: e["sort"])[:limit]
-    return [{"when": fmt_when(e["when"]), "item": e["item"], "idle": e["idle"]} for e in events]
+    return [{"when": fmt_when(e["when"]), "item": e["item"], "idle": e["idle"],
+             "cost": e["cost"]} for e in events]
 
 
 # ---------------------------------------------------------------------------
@@ -229,19 +237,23 @@ def render_markdown(stats: dict[str, VenueStats], meta: dict, generated: str) ->
         window = (f"Tracking window: {to_sydney_str(meta['first_observed'])} → "
                   f"{to_sydney_str(meta['last_observed'])} "
                   f"({meta.get('poll_count', 0)} polls, {meta.get('poll_errors', 0)} errors).")
+    total_money = sum(s.wasted_money for s in stats.values())
     L += [window, "",
+          f"## 💸 Total wasted so far: **${total_money:,.0f} AUD**  *(estimated lost revenue)*", "",
           "For **slot venues**, a slot is **wasted** when the last check before its start still "
           "showed it open. For **capacity venues** (e.g. the driving range), we track **idle units** "
-          "(free bays) per operating hour. **Utilisation** = booked ÷ total.", ""]
+          "(free bays) per operating hour. **Utilisation** = booked ÷ total. Dollar figures are "
+          "estimated lost revenue from configurable per-slot / per-bay-hour prices.", ""]
 
-    L += ["| Venue | Type | Utilisation | Wasted / idle | Future |",
-          "|-------|------|-------------|---------------|--------|"]
+    L += ["| Venue | Type | Utilisation | Wasted / idle | Lost revenue | Future |",
+          "|-------|------|-------------|---------------|--------------|--------|"]
     for s in stats.values():
         if s.kind == "capacity":
             waste = f"{s.idle_unit_hours:.0f} idle bay-hrs"
         else:
             waste = f"{s.wasted} slots / {s.wasted_hours:.0f} hrs"
-        L.append(f"| {s.venue_name} | {s.kind} | {s.utilization:.0f}% | {waste} | {s.pending} |")
+        L.append(f"| {s.venue_name} | {s.kind} | {s.utilization:.0f}% | {waste} | "
+                 f"${s.wasted_money:,.0f} | {s.pending} |")
     L.append("")
 
     for s in stats.values():
@@ -256,6 +268,7 @@ def render_markdown(stats: dict[str, VenueStats], meta: dict, generated: str) ->
             L += [f"- **Total bays:** {s.total_units}",
                   f"- **Occupancy:** {s.utilization:.0f}%  (booked bay-hours ÷ total bay-hours)",
                   f"- **Idle bay-hours:** {s.idle_unit_hours:.0f}  (booked: {s.busy_unit_hours:.0f})",
+                  f"- **Estimated lost revenue:** ${s.wasted_money:,.0f}",
                   f"- **Future hours still watched:** {s.pending}", ""]
             dw = deadest_windows(s)
             if dw:
@@ -267,6 +280,7 @@ def render_markdown(stats: dict[str, VenueStats], meta: dict, generated: str) ->
             L += [f"- **Decided slots:** {s.decided}  ({s.sold} sold, {s.wasted} wasted)",
                   f"- **Utilisation:** {s.utilization:.0f}%",
                   f"- **Wasted session-hours:** {s.wasted_hours:.0f}",
+                  f"- **Estimated lost revenue:** ${s.wasted_money:,.0f}",
                   f"- **Future slots still open:** {s.pending}", ""]
             dw = deadest_windows(s)
             if dw:
@@ -285,24 +299,29 @@ def render_markdown(stats: dict[str, VenueStats], meta: dict, generated: str) ->
         timeline = wasted_timeline(s)
         if timeline:
             noun = "idle-bay hours" if s.kind == "capacity" else "wasted slots"
-            L += [f"**Every wasted slot, in order ({len(timeline)} {noun}):**"]
+            L += [f"**Every wasted slot, in order ({len(timeline)} {noun}, "
+                  f"${s.wasted_money:,.0f} lost):**"]
             for e in timeline:
-                tail = f" — {e['idle']} bays idle" if e["idle"] is not None else f" — {e['item']}"
-                L.append(f"- {e['when']}{tail}")
+                what = f"{e['idle']} bays idle" if e["idle"] is not None else e["item"]
+                L.append(f"- {e['when']} — {what} — **${e['cost']:,.0f}**")
             L.append("")
     return "\n".join(L)
 
 
 def to_json(stats: dict[str, VenueStats], meta: dict, generated: str) -> dict:
+    total_wasted_money = round(sum(s.wasted_money for s in stats.values()), 2)
     return {
         "generated_at": generated,
         "tracking_window": {"first": to_sydney_str(meta.get("first_observed")),
                             "last": to_sydney_str(meta.get("last_observed")),
                             "polls": meta.get("poll_count", 0), "errors": meta.get("poll_errors", 0)},
+        "total_wasted_money": total_wasted_money,
+        "currency": "AUD",
         "venues": [{
             "venue_id": s.venue_id, "venue_name": s.venue_name, "kind": s.kind,
             "sold": s.sold, "wasted": s.wasted, "unobserved": s.unobserved, "pending": s.pending,
             "utilisation_pct": round(s.utilization, 1), "wasted_hours": round(s.wasted_hours, 1),
+            "wasted_money": round(s.wasted_money, 2),
             "total_units": s.total_units,
             "idle_unit_hours": round(s.idle_unit_hours, 1),
             "busy_unit_hours": round(s.busy_unit_hours, 1),

@@ -1,45 +1,31 @@
 {
-  "generated_at": "2026-08-22 18:31 AEST",
+  "generated_at": "2026-08-22 18:44 AEST",
   "tracking_window": {
-    "first": "2026-08-22 18:23 AEST",
-    "last": "2026-08-22 18:30 AEST",
-    "polls": 2,
+    "first": "2026-08-22 18:43 AEST",
+    "last": "2026-08-22 18:43 AEST",
+    "polls": 1,
     "errors": 0
   },
+  "total_wasted_money": 0.0,
+  "currency": "AUD",
   "venues": [
     {
       "venue_id": "kiss-my-axe",
       "venue_name": "Kiss My Axe",
       "kind": "binary",
       "sold": 0,
-      "wasted": 1,
+      "wasted": 0,
       "unobserved": 0,
       "pending": 733,
       "utilisation_pct": 0.0,
       "wasted_hours": 0.0,
+      "wasted_money": 0.0,
       "total_units": 0,
       "idle_unit_hours": 0.0,
       "busy_unit_hours": 0.0,
-      "deadest_windows": [
-        {
-          "day": "Sat",
-          "hour": 18,
-          "wasted": 1
-        }
-      ],
-      "by_item": {
-        "Glow Darts - 2-12 people": {
-          "wasted": 1,
-          "sold": 0
-        }
-      },
-      "wasted_timeline": [
-        {
-          "when": "Sat 22 Aug, 6:30pm",
-          "item": "Glow Darts - 2-12 people",
-          "idle": null
-        }
-      ]
+      "deadest_windows": [],
+      "by_item": {},
+      "wasted_timeline": []
     },
     {
       "venue_id": "moore-park-range",
@@ -51,6 +37,7 @@
       "pending": 64,
       "utilisation_pct": 0.0,
       "wasted_hours": 0.0,
+      "wasted_money": 0.0,
       "total_units": 0,
       "idle_unit_hours": 0.0,
       "busy_unit_hours": 0.0,

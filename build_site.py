@@ -74,6 +74,15 @@ h1{font-size:clamp(1.9rem,5vw,2.9rem);font-weight:800;letter-spacing:-.025em;mar
 .tile .n.warn{color:var(--warn)}.tile .n.good{color:var(--green)}
 .tile .k{font-family:'IBM Plex Mono',monospace;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;
   color:var(--muted);margin-top:.4rem}
+.moneybar{background:var(--deep);color:var(--deep-ink);padding:1.5rem 1.75rem;margin:1.5rem 0 0;
+  border-radius:2px}
+.moneybar .ml{font-family:'IBM Plex Mono',monospace;font-size:.68rem;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--green-bright);margin-bottom:.3rem}
+.moneybar .mv{font-size:clamp(2.4rem,7vw,3.8rem);font-weight:800;line-height:1;letter-spacing:-.02em;
+  font-variant-numeric:tabular-nums}
+.moneybar .mc{font-size:1rem;font-weight:600;color:var(--green-bright)}
+.moneybar .mn{font-size:.82rem;color:var(--deep-ink);opacity:.7;margin-top:.5rem}
+.money,td.money{color:var(--warn);font-weight:600}
 /* tabs */
 .tabs{display:flex;gap:.25rem;border-bottom:1px solid var(--line);margin:2rem 0 1.5rem;flex-wrap:wrap}
 .tab{font-family:'IBM Plex Mono',monospace;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;
@@ -180,8 +189,12 @@ def render_timeline(v):
     rows = []
     for e in tl:
         detail = f'{e["idle"]} bays idle' if e.get("idle") is not None else esc(e["item"])
-        rows.append(f'<tr><td class="mono">{esc(e["when"])}</td><td>{detail}</td></tr>')
-    return (f'<div class="block"><h4>Every wasted slot, in order ({len(tl)} {noun})</h4>'
+        cost = e.get("cost")
+        cost_cell = f'<td class="num money">${cost:,.0f}</td>' if cost is not None else '<td></td>'
+        rows.append(f'<tr><td class="mono">{esc(e["when"])}</td><td>{detail}</td>{cost_cell}</tr>')
+    lost = v.get("wasted_money", 0)
+    return (f'<div class="block"><h4>Every wasted slot, in order ({len(tl)} {noun} · '
+            f'${lost:,.0f} lost)</h4>'
             f'<div class="timeline"><table><tbody>{"".join(rows)}</tbody></table></div></div>')
 
 
@@ -196,10 +209,10 @@ def render_tracking_venue(v):
                     f'<p class="empty">No operating hours have completed within the tracking window yet — '
                     f'{v["pending"]} future hours are being watched. Leave the tracker running and rebuild.</p></div>')
         stats = f"""
+          <div class="stat"><div class="n warn num">${v['wasted_money']:,.0f}</div><div class="k">Lost revenue</div></div>
           <div class="stat"><div class="n warn num">{v['idle_unit_hours']:.0f}</div><div class="k">Idle bay-hours</div></div>
           <div class="stat"><div class="n num">{util:.0f}%</div><div class="k">Occupancy</div></div>
           <div class="stat"><div class="n good num">{v['busy_unit_hours']:.0f}</div><div class="k">Booked bay-hours</div></div>
-          <div class="stat"><div class="n num">{v['total_units']}</div><div class="k">Total bays</div></div>
           <div class="stat"><div class="n num">{v['pending']}</div><div class="k">Hours ahead</div></div>"""
         heat = render_heatmap(v["deadest_windows"])
         heat_block = (f'<div class="block"><h4>Deadest windows · idle bays by day &amp; hour</h4>{heat}</div>'
@@ -214,10 +227,10 @@ def render_tracking_venue(v):
                 f'<p class="empty">No slots have finished within the tracking window yet — '
                 f'{v["pending"]} future slots are being watched. Leave the tracker running and rebuild.</p></div>')
     stats = f"""
+      <div class="stat"><div class="n warn num">${v['wasted_money']:,.0f}</div><div class="k">Lost revenue</div></div>
       <div class="stat"><div class="n warn num">{v['wasted']}</div><div class="k">Wasted slots</div></div>
       <div class="stat"><div class="n good num">{v['sold']}</div><div class="k">Sold slots</div></div>
       <div class="stat"><div class="n num">{util:.0f}%</div><div class="k">Utilisation</div></div>
-      <div class="stat"><div class="n num">{v['wasted_hours']:.0f}</div><div class="k">Wasted hours</div></div>
       <div class="stat"><div class="n num">{v['pending']}</div><div class="k">Open (future)</div></div>"""
     heat = render_heatmap(v["deadest_windows"])
     heat_block = f'<div class="block"><h4>Deadest windows · wasted slots by day &amp; hour</h4>{heat}</div>' if heat else ""
@@ -256,6 +269,7 @@ def render_tracking_panel(tracking):
             util_label = "utilisation"
         rows.append(
             f'<tr><td><b>{esc(v["venue_name"])}</b></td>'
+            f'<td class="num money">${v.get("wasted_money",0):,.0f}</td>'
             f'<td class="num">{util:.0f}%<br><span class="suburb">{util_label}</span></td>'
             f'<td><div class="util-cell"><span class="util-track">'
             f'<span class="util-fill" style="width:{util:.0f}%"></span></span></div></td>'
@@ -266,9 +280,10 @@ def render_tracking_panel(tracking):
                   f'{tw.get("polls",0)} polls · {tw.get("errors",0)} errors.</p>')
     intro = ('<p class="lede">For <b>slot venues</b>, a slot is <b>wasted</b> when the last check before '
              'its start still showed it open. For <b>capacity venues</b> like the driving range, we track '
-             '<b>idle bays</b> per operating hour. <b>Utilisation / occupancy</b> = booked ÷ total.</p>')
-    table = (f'<div class="tablebox"><table><thead><tr><th>Venue</th><th>Utilisation</th>'
-             f'<th></th><th>Wasted / idle</th><th>Future</th></tr></thead>'
+             '<b>idle bays</b> per operating hour. <b>Lost revenue</b> is estimated from configurable '
+             'per-slot / per-bay-hour prices.</p>')
+    table = (f'<div class="tablebox"><table><thead><tr><th>Venue</th><th>Lost revenue</th>'
+             f'<th>Utilisation</th><th></th><th>Wasted / idle</th><th>Future</th></tr></thead>'
              f'<tbody>{"".join(rows)}</tbody></table></div>')
     cards = "".join(render_tracking_venue(v) for v in venues)
     return intro + window + table + cards
@@ -374,6 +389,7 @@ def build():
     total_sold = sum(v["sold"] for v in tracking["venues"]) if tracking else 0
     total_wasted = sum(v["wasted"] for v in tracking["venues"]) if tracking else 0
     total_open = sum(v["pending"] for v in tracking["venues"]) if tracking else 0
+    total_money = tracking.get("total_wasted_money", 0) if tracking else 0
     decided = total_sold + total_wasted
     util = (total_sold / decided * 100) if decided else 0
     tracked_venues = sum(1 for v in (tracking["venues"] if tracking else []))
@@ -387,6 +403,13 @@ def build():
     tiles_html = "".join(
         f'<div class="tile"><div class="n {cls}">{esc(n)}</div><div class="k">{esc(k)}</div></div>'
         for n, k, cls in tiles)
+
+    # headline lost-revenue banner
+    money_banner = (
+        f'<div class="moneybar"><div class="ml">Estimated revenue wasted so far</div>'
+        f'<div class="mv">${total_money:,.0f}<span class="mc"> AUD</span></div>'
+        f'<div class="mn">across {tracked_venues} tracked venue(s) · estimated lost revenue from '
+        f'unsold slots &amp; idle bays</div></div>')
 
     generated = (tracking or intel or {}).get("generated_at", "")
 
@@ -414,6 +437,8 @@ def build():
     </div>
     <button class="themebtn" id="themebtn" type="button">◐ Theme</button>
   </header>
+
+  {money_banner}
 
   <div class="tiles">{tiles_html}</div>
 

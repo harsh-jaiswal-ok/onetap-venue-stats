@@ -112,10 +112,10 @@ def render_venue(v):
                     f'{v["pending"]} future hours are being watched. Leave the tracker running.</p>')
             return f'<section class="venue"><h2>{esc(v["venue_name"])}</h2>{body}</section>'
         stats = f"""
+          <div class="stat"><div class="n warn num">${v['wasted_money']:,.0f}</div><div class="k">Lost revenue</div></div>
           <div class="stat"><div class="n warn num">{v['idle_unit_hours']:.0f}</div><div class="k">Idle bay-hours</div></div>
           <div class="stat"><div class="n num">{util:.0f}%</div><div class="k">Occupancy</div></div>
           <div class="stat"><div class="n good num">{v['busy_unit_hours']:.0f}</div><div class="k">Booked bay-hours</div></div>
-          <div class="stat"><div class="n num">{v['total_units']}</div><div class="k">Total bays</div></div>
           <div class="stat"><div class="n num">{v['pending']}</div><div class="k">Hours ahead</div></div>"""
         heat = render_heatmap(v["deadest_windows"])
         heat_block = (f'<div class="block"><h3>Deadest windows · idle bays by day &amp; hour</h3>{heat}</div>'
@@ -133,10 +133,10 @@ def render_venue(v):
         return f'<section class="venue"><h2>{esc(v["venue_name"])}</h2>{body}</section>'
 
     stats = f"""
+      <div class="stat"><div class="n warn num">${v['wasted_money']:,.0f}</div><div class="k">Lost revenue</div></div>
       <div class="stat"><div class="n warn num">{v['wasted']}</div><div class="k">Wasted slots</div></div>
       <div class="stat"><div class="n good num">{v['sold']}</div><div class="k">Sold slots</div></div>
       <div class="stat"><div class="n num">{util:.0f}%</div><div class="k">Utilisation</div></div>
-      <div class="stat"><div class="n num">{v['wasted_hours']:.0f}</div><div class="k">Wasted hours</div></div>
       <div class="stat"><div class="n num">{v['pending']}</div><div class="k">Open (future)</div></div>"""
 
     heat = render_heatmap(v["deadest_windows"])
@@ -205,8 +205,9 @@ def render(data):
     time has passed is scored sold or wasted. {esc(window)} Generated {esc(data['generated_at'])}.</p>
   </header>
 
-  <div class="defn"><b>Wasted</b> = the last check before a slot's start still showed it open (slot venues);
-  for capacity venues we count <b>idle bays</b> per operating hour. <b>Utilisation / occupancy</b> = booked ÷ total.</div>
+  <div class="defn" style="font-size:1rem"><b>Estimated revenue wasted so far: ${data.get('total_wasted_money',0):,.0f} AUD.</b>
+  <b>Wasted</b> = the last check before a slot's start still showed it open (slot venues);
+  for capacity venues we count <b>idle bays</b> per operating hour. Dollar figures are estimated lost revenue.</div>
 
   <div class="tablebox"><table>
     <thead><tr><th>Venue</th><th>Utilisation</th><th></th>

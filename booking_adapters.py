@@ -47,6 +47,7 @@ def fareharbor(target: dict, session: requests.Session) -> list[Slot]:
 
     # Resolve the items to track. If the target names items explicitly use those,
     # otherwise auto-discover and skip obvious non-slot products.
+    default_price = target.get("default_price")
     items = target.get("items")
     if not items:
         r = session.get(f"{base}/items/", timeout=REQUEST_TIMEOUT)
@@ -60,6 +61,7 @@ def fareharbor(target: dict, session: requests.Session) -> list[Slot]:
     slots: list[Slot] = []
     for item in items:
         item_id, item_name = str(item["id"]), item["name"]
+        item_price = item.get("price", default_price)
         for offset in range(LOOKAHEAD_DAYS):
             day = today + timedelta(days=offset)
             url = f"{base}/items/{item_id}/availabilities/date/{day.isoformat()}/"
@@ -83,6 +85,7 @@ def fareharbor(target: dict, session: requests.Session) -> list[Slot]:
                     slot_local=start.strftime("%Y-%m-%d %H:%M"),
                     is_available=available,
                     capacity=None,  # FareHarbor's approximate_available_capacity is unreliable (often 0)
+                    price=item_price,
                 ))
     return slots
 
@@ -105,6 +108,7 @@ def yourgolfbooking(target: dict, session: requests.Session) -> list[Slot]:
     default_open, default_close = hours.get("default", [6, 22])
     dead_statuses = {"cancelled", "canceled", "no-show", "noshow", "refunded", "abandoned"}
 
+    price_per_unit_hour = target.get("price_per_unit_hour")
     r = session.get(f"{base}/venue/{slug}/bays", timeout=REQUEST_TIMEOUT)
     r.raise_for_status()
     total_bays = sum(1 for b in r.json() if b.get("bookable"))
@@ -162,6 +166,7 @@ def yourgolfbooking(target: dict, session: requests.Session) -> list[Slot]:
                 is_available=free > 0,
                 capacity=free,
                 capacity_total=total_bays,
+                price=price_per_unit_hour,   # per idle bay-hour
             ))
     return slots
 
