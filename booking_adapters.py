@@ -76,8 +76,11 @@ def fareharbor(target: dict, session: requests.Session) -> list[Slot]:
             for a in data.get("availabilities", []):
                 start = _parse_local(a["start_at"], tz)
                 end = _parse_local(a["end_at"], tz)
-                # Available == the platform still lets you book it and it isn't sold out.
-                available = bool(a.get("is_bookable")) and not a.get("is_sold_out", False)
+                # A slot is "wasted" only if it got ZERO bookings by its start time.
+                # has_customers is the reliable signal here: is_bookable just tracks the
+                # ~1h online booking cutoff (not sales), and is_sold_out never trips
+                # because capacity is high; capacity numbers are hidden. So available==empty.
+                available = not bool(a.get("has_customers"))
                 slots.append(Slot(
                     item_id=item_id,
                     item_name=item_name,

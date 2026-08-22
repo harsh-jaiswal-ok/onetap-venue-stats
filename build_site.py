@@ -278,10 +278,10 @@ def render_tracking_panel(tracking):
     if tw.get("first"):
         window = (f'<p class="lede">Tracking window {esc(tw["first"])} → {esc(tw["last"])} · '
                   f'{tw.get("polls",0)} polls · {tw.get("errors",0)} errors.</p>')
-    intro = ('<p class="lede">For <b>slot venues</b>, a slot is <b>wasted</b> when the last check before '
-             'its start still showed it open. For <b>capacity venues</b> like the driving range, we track '
-             '<b>idle bays</b> per operating hour. <b>Lost revenue</b> is estimated from configurable '
-             'per-slot / per-bay-hour prices.</p>')
+    intro = ('<p class="lede">For <b>slot venues</b> (Kiss My Axe), a slot is <b>wasted</b> when it had '
+             '<b>zero bookings</b> by its start time — a session that ran empty. For <b>capacity venues</b> '
+             '(the driving range) we read the <b>actual bookings</b> and count <b>idle bays</b> per '
+             'operating hour. <b>Lost revenue</b> is estimated from configurable prices.</p>')
     table = (f'<div class="tablebox"><table><thead><tr><th>Venue</th><th>Lost revenue</th>'
              f'<th>Utilisation</th><th></th><th>Wasted / idle</th><th>Future</th></tr></thead>'
              f'<tbody>{"".join(rows)}</tbody></table></div>')

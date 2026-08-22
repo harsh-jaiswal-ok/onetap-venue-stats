@@ -104,18 +104,27 @@ def load_outcomes(db_path=store.DEFAULT_DB, now: datetime | None = None) -> tupl
             weekday, hour = -1, -1
 
         free_units = total_units = None
+        is_capacity = first.get("capacity_total") is not None
         # Only score a slot once its time has fully passed (end time in the past).
         if end_utc > now:
             status = "pending"
+        elif is_capacity:
+            # Capacity venues (e.g. the range) expose ACTUAL bookings, including for
+            # hours already finished, so the latest observation is the true final count.
+            final = obs[-1]
+            status = "wasted" if final["is_available"] else "sold"
+            free_units = final["capacity"]
+            total_units = final["capacity_total"]
         else:
+            # Slot venues: use the last check before start. With the near-start poll
+            # schedule this is ~5 min out, and the signal (has_customers) is unaffected
+            # by the booking cutoff, so it reflects whether the slot got any bookings.
             before = [o for o in obs if _parse_utc(o["observed_at"]) <= start_utc]
             if not before:
                 status = "unobserved"
             else:
                 final = before[-1]
                 status = "wasted" if final["is_available"] else "sold"
-                free_units = final["capacity"]
-                total_units = final["capacity_total"]
 
         outcomes.append(SlotOutcome(
             venue_id, first["venue_name"], item_id, first["item_name"],

@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-08-22 19:07 AEST",
+  "generated_at": "2026-08-22 19:21 AEST",
   "tracking_window": {
-    "first": "2026-08-22 18:43 AEST",
-    "last": "2026-08-22 19:06 AEST",
-    "polls": 3,
+    "first": "2026-08-22 19:21 AEST",
+    "last": "2026-08-22 19:21 AEST",
+    "polls": 1,
     "errors": 0
   },
-  "total_wasted_money": 30.0,
+  "total_wasted_money": 7752.0,
   "currency": "AUD",
   "venues": [
     {
@@ -14,45 +14,9 @@
       "venue_name": "Kiss My Axe",
       "kind": "binary",
       "sold": 0,
-      "wasted": 1,
-      "unobserved": 0,
-      "pending": 732,
-      "utilisation_pct": 0.0,
-      "wasted_hours": 0.0,
-      "wasted_money": 30.0,
-      "total_units": 0,
-      "idle_unit_hours": 0.0,
-      "busy_unit_hours": 0.0,
-      "deadest_windows": [
-        {
-          "day": "Sat",
-          "hour": 19,
-          "wasted": 1
-        }
-      ],
-      "by_item": {
-        "Glow Darts - 2-12 people": {
-          "wasted": 1,
-          "sold": 0
-        }
-      },
-      "wasted_timeline": [
-        {
-          "when": "Sat 22 Aug, 7:00pm",
-          "item": "Glow Darts - 2-12 people",
-          "idle": null,
-          "cost": 30.0
-        }
-      ]
-    },
-    {
-      "venue_id": "moore-park-range",
-      "venue_name": "Moore Park Driving Range",
-      "kind": "binary",
-      "sold": 0,
       "wasted": 0,
-      "unobserved": 13,
-      "pending": 63,
+      "unobserved": 0,
+      "pending": 99,
       "utilisation_pct": 0.0,
       "wasted_hours": 0.0,
       "wasted_money": 0.0,
@@ -62,6 +26,128 @@
       "deadest_windows": [],
       "by_item": {},
       "wasted_timeline": []
+    },
+    {
+      "venue_id": "moore-park-range",
+      "venue_name": "Moore Park Driving Range",
+      "kind": "capacity",
+      "sold": 1,
+      "wasted": 12,
+      "unobserved": 0,
+      "pending": 63,
+      "utilisation_pct": 72.9,
+      "wasted_hours": 12.0,
+      "wasted_money": 7752.0,
+      "total_units": 58,
+      "idle_unit_hours": 204.0,
+      "busy_unit_hours": 550.0,
+      "deadest_windows": [
+        {
+          "day": "Sat",
+          "hour": 6,
+          "wasted": 48
+        },
+        {
+          "day": "Sat",
+          "hour": 7,
+          "wasted": 37
+        },
+        {
+          "day": "Sat",
+          "hour": 8,
+          "wasted": 25
+        },
+        {
+          "day": "Sat",
+          "hour": 9,
+          "wasted": 12
+        },
+        {
+          "day": "Sat",
+          "hour": 10,
+          "wasted": 11
+        }
+      ],
+      "by_item": {
+        "Driving Range bays": {
+          "wasted": 12,
+          "sold": 1
+        }
+      },
+      "wasted_timeline": [
+        {
+          "when": "Sat 22 Aug, 6:00am",
+          "item": "Driving Range bays",
+          "idle": 48,
+          "cost": 1824.0
+        },
+        {
+          "when": "Sat 22 Aug, 7:00am",
+          "item": "Driving Range bays",
+          "idle": 37,
+          "cost": 1406.0
+        },
+        {
+          "when": "Sat 22 Aug, 8:00am",
+          "item": "Driving Range bays",
+          "idle": 25,
+          "cost": 950.0
+        },
+        {
+          "when": "Sat 22 Aug, 9:00am",
+          "item": "Driving Range bays",
+          "idle": 12,
+          "cost": 456.0
+        },
+        {
+          "when": "Sat 22 Aug, 10:00am",
+          "item": "Driving Range bays",
+          "idle": 11,
+          "cost": 418.0
+        },
+        {
+          "when": "Sat 22 Aug, 11:00am",
+          "item": "Driving Range bays",
+          "idle": 10,
+          "cost": 380.0
+        },
+        {
+          "when": "Sat 22 Aug, 12:00pm",
+          "item": "Driving Range bays",
+          "idle": 11,
+          "cost": 418.0
+        },
+        {
+          "when": "Sat 22 Aug, 1:00pm",
+          "item": "Driving Range bays",
+          "idle": 10,
+          "cost": 380.0
+        },
+        {
+          "when": "Sat 22 Aug, 2:00pm",
+          "item": "Driving Range bays",
+          "idle": 10,
+          "cost": 380.0
+        },
+        {
+          "when": "Sat 22 Aug, 3:00pm",
+          "item": "Driving Range bays",
+          "idle": 10,
+          "cost": 380.0
+        },
+        {
+          "when": "Sat 22 Aug, 4:00pm",
+          "item": "Driving Range bays",
+          "idle": 10,
+          "cost": 380.0
+        },
+        {
+          "when": "Sat 22 Aug, 5:00pm",
+          "item": "Driving Range bays",
+          "idle": 10,
+          "cost": 380.0
+        }
+      ]
     }
   ]
 }

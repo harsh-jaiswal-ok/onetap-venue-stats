@@ -206,8 +206,8 @@ def render(data):
   </header>
 
   <div class="defn" style="font-size:1rem"><b>Estimated revenue wasted so far: ${data.get('total_wasted_money',0):,.0f} AUD.</b>
-  <b>Wasted</b> = the last check before a slot's start still showed it open (slot venues);
-  for capacity venues we count <b>idle bays</b> per operating hour. Dollar figures are estimated lost revenue.</div>
+  <b>Wasted</b> = a slot that got zero bookings by its start time (slot venues);
+  for capacity venues we read actual bookings and count <b>idle bays</b> per operating hour. Dollar figures are estimated lost revenue.</div>
 
   <div class="tablebox"><table>
     <thead><tr><th>Venue</th><th>Utilisation</th><th></th>
