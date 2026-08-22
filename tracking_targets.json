@@ -17,6 +17,21 @@
     ]
   },
   {
+    "venue_id": "moore-park-range",
+    "venue_name": "Moore Park Driving Range",
+    "platform": "yourgolfbooking",
+    "slug": "moore-park-golf",
+    "api_base": "https://api.yourgolfbooking.com",
+    "timezone": "Australia/Sydney",
+    "enabled": true,
+    "lookahead_days": 5,
+    "hours": {
+      "default": [6, 22],
+      "MON": [10, 22]
+    },
+    "note": "Capacity venue: 58 bays booked by the half-hour via YourGolfBooking (venue slug moore-park-golf). We track idle bays per operating hour. Hours approximate published times (6am-10pm; Mon from 10am)."
+  },
+  {
     "venue_id": "camperdown-tennis",
     "venue_name": "Camperdown Tennis",
     "platform": "intrac",

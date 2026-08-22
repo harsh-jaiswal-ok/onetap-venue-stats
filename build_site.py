@@ -166,12 +166,33 @@ def render_heatmap(windows):
 
 
 def render_tracking_venue(v):
+    kind = v.get("kind", "binary")
+    util = v["utilisation_pct"]
+
+    if kind == "capacity":
+        decided = v["idle_unit_hours"] + v["busy_unit_hours"]
+        if decided == 0:
+            return (f'<div class="card"><h2>{esc(v["venue_name"])}</h2>'
+                    f'<p class="empty">No operating hours have completed within the tracking window yet — '
+                    f'{v["pending"]} future hours are being watched. Leave the tracker running and rebuild.</p></div>')
+        stats = f"""
+          <div class="stat"><div class="n warn num">{v['idle_unit_hours']:.0f}</div><div class="k">Idle bay-hours</div></div>
+          <div class="stat"><div class="n num">{util:.0f}%</div><div class="k">Occupancy</div></div>
+          <div class="stat"><div class="n good num">{v['busy_unit_hours']:.0f}</div><div class="k">Booked bay-hours</div></div>
+          <div class="stat"><div class="n num">{v['total_units']}</div><div class="k">Total bays</div></div>
+          <div class="stat"><div class="n num">{v['pending']}</div><div class="k">Hours ahead</div></div>"""
+        heat = render_heatmap(v["deadest_windows"])
+        heat_block = (f'<div class="block"><h4>Deadest windows · idle bays by day &amp; hour</h4>{heat}</div>'
+                      if heat else "")
+        return f"""<div class="card"><h2>{esc(v['venue_name'])}</h2>
+          <div class="suburb">{v['total_units']} bays · idle-inventory tracking</div>
+          <div class="statrow">{stats}</div>{heat_block}</div>"""
+
     decided = v["sold"] + v["wasted"]
     if decided == 0:
         return (f'<div class="card"><h2>{esc(v["venue_name"])}</h2>'
                 f'<p class="empty">No slots have finished within the tracking window yet — '
                 f'{v["pending"]} future slots are being watched. Leave the tracker running and rebuild.</p></div>')
-    util = v["utilisation_pct"]
     stats = f"""
       <div class="stat"><div class="n warn num">{v['wasted']}</div><div class="k">Wasted slots</div></div>
       <div class="stat"><div class="n good num">{v['sold']}</div><div class="k">Sold slots</div></div>
@@ -207,21 +228,27 @@ def render_tracking_panel(tracking):
     rows = []
     for v in venues:
         util = v["utilisation_pct"]
+        if v.get("kind") == "capacity":
+            waste_cell = f'{v["idle_unit_hours"]:.0f} idle bay-hrs'
+            util_label = "occupancy"
+        else:
+            waste_cell = f'{v["wasted"]} / {v["wasted_hours"]:.0f} hrs'
+            util_label = "utilisation"
         rows.append(
             f'<tr><td><b>{esc(v["venue_name"])}</b></td>'
-            f'<td class="num">{v["sold"]}</td><td class="num">{v["wasted"]}</td>'
-            f'<td><div class="util-cell"><span class="num mono">{util:.0f}%</span>'
-            f'<span class="util-track"><span class="util-fill" style="width:{util:.0f}%"></span></span></div></td>'
-            f'<td class="num">{v["wasted_hours"]:.0f}</td><td class="num">{v["pending"]}</td></tr>')
+            f'<td class="num">{util:.0f}%<br><span class="suburb">{util_label}</span></td>'
+            f'<td><div class="util-cell"><span class="util-track">'
+            f'<span class="util-fill" style="width:{util:.0f}%"></span></span></div></td>'
+            f'<td class="num">{esc(waste_cell)}</td><td class="num">{v["pending"]}</td></tr>')
     window = ""
     if tw.get("first"):
         window = (f'<p class="lede">Tracking window {esc(tw["first"])} → {esc(tw["last"])} · '
                   f'{tw.get("polls",0)} polls · {tw.get("errors",0)} errors.</p>')
-    intro = ('<p class="lede">A slot is <b>wasted</b> when the last check before its start time still '
-             'showed it open — bookable inventory that expired unsold. <b>Utilisation</b> = sold ÷ '
-             '(sold + wasted).</p>')
-    table = (f'<div class="tablebox"><table><thead><tr><th>Venue</th><th>Sold</th><th>Wasted</th>'
-             f'<th>Utilisation</th><th>Wasted hrs</th><th>Open</th></tr></thead>'
+    intro = ('<p class="lede">For <b>slot venues</b>, a slot is <b>wasted</b> when the last check before '
+             'its start still showed it open. For <b>capacity venues</b> like the driving range, we track '
+             '<b>idle bays</b> per operating hour. <b>Utilisation / occupancy</b> = booked ÷ total.</p>')
+    table = (f'<div class="tablebox"><table><thead><tr><th>Venue</th><th>Utilisation</th>'
+             f'<th></th><th>Wasted / idle</th><th>Future</th></tr></thead>'
              f'<tbody>{"".join(rows)}</tbody></table></div>')
     cards = "".join(render_tracking_venue(v) for v in venues)
     return intro + window + table + cards

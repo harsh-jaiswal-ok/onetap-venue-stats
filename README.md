@@ -76,6 +76,7 @@ tells Pages to serve the files untouched.)
 | Venue | Platform | Status |
 |-------|----------|--------|
 | **Kiss My Axe** | FareHarbor | ✅ **On** — public JSON API, no login |
+| **Moore Park Driving Range** | YourGolfBooking | ✅ **On** — public API; tracked as idle bays per hour (capacity venue) |
 | Camperdown Tennis | Intrac | ⚙️ Off — needs a member login (best court story once enabled) |
 | City Community Tennis | Intrac | ⚙️ Off — needs a member login |
 | Cipher Room | Bookeo | ❌ reCAPTCHA-gated |

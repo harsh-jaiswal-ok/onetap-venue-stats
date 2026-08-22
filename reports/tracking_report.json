@@ -1,21 +1,92 @@
 {
-  "generated_at": "2026-08-21 09:43 UTC",
+  "generated_at": "2026-08-22 08:07 UTC",
   "tracking_window": {
     "first": "2026-08-21T09:37:45Z",
-    "last": "2026-08-21T09:42:48Z",
-    "polls": 2,
+    "last": "2026-08-22T08:05:01Z",
+    "polls": 3,
     "errors": 0
   },
   "venues": [
     {
       "venue_id": "kiss-my-axe",
       "venue_name": "Kiss My Axe",
+      "kind": "binary",
+      "sold": 3,
+      "wasted": 49,
+      "unobserved": 0,
+      "pending": 734,
+      "utilisation_pct": 5.8,
+      "wasted_hours": 38.0,
+      "total_units": 0,
+      "idle_unit_hours": 0.0,
+      "busy_unit_hours": 0.0,
+      "deadest_windows": [
+        {
+          "day": "Sat",
+          "hour": 10,
+          "wasted": 6
+        },
+        {
+          "day": "Sat",
+          "hour": 14,
+          "wasted": 6
+        },
+        {
+          "day": "Sat",
+          "hour": 16,
+          "wasted": 6
+        },
+        {
+          "day": "Sat",
+          "hour": 18,
+          "wasted": 5
+        },
+        {
+          "day": "Fri",
+          "hour": 20,
+          "wasted": 4
+        }
+      ],
+      "by_item": {
+        "Axe Throwing - 2-7 People": {
+          "wasted": 10,
+          "sold": 0
+        },
+        "Axe Throwing - 8+ People": {
+          "wasted": 4,
+          "sold": 1
+        },
+        "Axe Throwing Date Night - For Two": {
+          "wasted": 2,
+          "sold": 0
+        },
+        "Glow Darts - 2-12 people": {
+          "wasted": 21,
+          "sold": 0
+        },
+        "Axe Throwing & Glow Darts - 6-12 People": {
+          "wasted": 8,
+          "sold": 1
+        },
+        "Ultimate Party Package - 6+ People": {
+          "wasted": 4,
+          "sold": 1
+        }
+      }
+    },
+    {
+      "venue_id": "moore-park-range",
+      "venue_name": "Moore Park Driving Range",
+      "kind": "binary",
       "sold": 0,
       "wasted": 0,
-      "unobserved": 0,
-      "pending": 722,
+      "unobserved": 13,
+      "pending": 63,
       "utilisation_pct": 0.0,
       "wasted_hours": 0.0,
+      "total_units": 0,
+      "idle_unit_hours": 0.0,
+      "busy_unit_hours": 0.0,
       "deadest_windows": [],
       "by_item": {}
     }

@@ -82,9 +82,92 @@ def fareharbor(target: dict, session: requests.Session) -> list[Slot]:
                     slot_end_utc=_iso_utc(end),
                     slot_local=start.strftime("%Y-%m-%d %H:%M"),
                     is_available=available,
-                    capacity=a.get("approximate_available_capacity"),
+                    capacity=None,  # FareHarbor's approximate_available_capacity is unreliable (often 0)
                 ))
     return slots
+
+
+# ---------------------------------------------------------------------------
+# YourGolfBooking  (Moore Park driving range) — public API, no auth
+# ---------------------------------------------------------------------------
+# A capacity venue: instead of one bookable slot, the range has N bays. We track
+# how many bays sit idle each operating hour. The public API gives the full bay
+# list and every booked bay-slot for a day; free = total bays - bays booked in
+# that hour. is_available is True whenever any bay is free.
+
+def yourgolfbooking(target: dict, session: requests.Session) -> list[Slot]:
+    base = target.get("api_base", "https://api.yourgolfbooking.com")
+    slug = target["slug"]
+    tz = ZoneInfo(target.get("timezone", "Australia/Sydney"))
+    lookahead = int(target.get("lookahead_days", 5))
+    # Operating window per weekday (24h local). Default applies unless overridden.
+    hours = target.get("hours", {})
+    default_open, default_close = hours.get("default", [6, 22])
+    dead_statuses = {"cancelled", "canceled", "no-show", "noshow", "refunded", "abandoned"}
+
+    r = session.get(f"{base}/venue/{slug}/bays", timeout=REQUEST_TIMEOUT)
+    r.raise_for_status()
+    total_bays = sum(1 for b in r.json() if b.get("bookable"))
+    if not total_bays:
+        return []
+
+    today = datetime.now(tz).date()
+    slots: list[Slot] = []
+    for offset in range(lookahead):
+        day = today + timedelta(days=offset)
+        wk = day.strftime("%a").upper()[:3]        # MON, TUE, ...
+        day_open, day_close = hours.get(wk, [default_open, default_close])
+
+        # Bookings for this local day (API caps the range at one day).
+        day_start = datetime(day.year, day.month, day.day, 0, 0, tzinfo=tz)
+        day_end = datetime(day.year, day.month, day.day, 23, 59, tzinfo=tz)
+        try:
+            resp = session.get(
+                f"{base}/venue/{slug}/bookings/public",
+                params={"start_gte": _iso_ms(day_start), "start_lte": _iso_ms(day_end)},
+                timeout=REQUEST_TIMEOUT)
+            if resp.status_code != 200:
+                continue
+            bookings = resp.json()
+        except (requests.RequestException, ValueError):
+            continue
+
+        # Booked distinct bays per local hour.
+        booked_by_hour: dict[int, set] = {}
+        for b in bookings:
+            if str(b.get("status", "")).lower() in dead_statuses:
+                continue
+            try:
+                bs = datetime.fromisoformat(b["start"].replace("Z", "+00:00")).astimezone(tz)
+                be = datetime.fromisoformat(b["end"].replace("Z", "+00:00")).astimezone(tz)
+            except (KeyError, ValueError):
+                continue
+            h = bs.replace(minute=0, second=0, microsecond=0)
+            while h < be:
+                if h.date() == day:
+                    booked_by_hour.setdefault(h.hour, set()).add(b.get("bayId", id(b)))
+                h += timedelta(hours=1)
+
+        for hr in range(day_open, day_close):
+            start = datetime(day.year, day.month, day.day, hr, 0, tzinfo=tz)
+            end = start + timedelta(hours=1)
+            booked = len(booked_by_hour.get(hr, ()))
+            free = max(0, total_bays - booked)
+            slots.append(Slot(
+                item_id="range-bays",
+                item_name="Driving Range bays",
+                slot_start_utc=_iso_utc(start),
+                slot_end_utc=_iso_utc(end),
+                slot_local=start.strftime("%Y-%m-%d %H:%M"),
+                is_available=free > 0,
+                capacity=free,
+                capacity_total=total_bays,
+            ))
+    return slots
+
+
+def _iso_ms(dt: datetime) -> str:
+    return dt.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.000Z")
 
 
 # ---------------------------------------------------------------------------
@@ -188,6 +271,7 @@ def _intrac_time(day, time_txt: str, tz: ZoneInfo) -> datetime | None:
 ADAPTERS = {
     "fareharbor": fareharbor,
     "intrac": intrac,
+    "yourgolfbooking": yourgolfbooking,
 }
 
 

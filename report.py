@@ -41,6 +41,8 @@ class SlotOutcome:
     hour: int
     duration_h: float
     status: str              # 'wasted' | 'sold' | 'unobserved' | 'pending'
+    free_units: int | None = None    # capacity venues: free units at the last obs before start
+    total_units: int | None = None   # capacity venues: total units
 
 
 def load_outcomes(db_path=store.DEFAULT_DB, now: datetime | None = None) -> tuple[list[SlotOutcome], dict]:
@@ -51,7 +53,7 @@ def load_outcomes(db_path=store.DEFAULT_DB, now: datetime | None = None) -> tupl
     with store.connect(db_path) as conn:
         rows = conn.execute(
             "SELECT venue_id, venue_name, item_id, item_name, slot_start, slot_end, "
-            "slot_local, observed_at, is_available FROM snapshots").fetchall()
+            "slot_local, observed_at, is_available, capacity, capacity_total FROM snapshots").fetchall()
         polls = conn.execute(
             "SELECT MIN(observed_at) a, MAX(observed_at) b, COUNT(DISTINCT observed_at) n, "
             "SUM(status='error') errs FROM poll_log").fetchone()
@@ -80,6 +82,7 @@ def load_outcomes(db_path=store.DEFAULT_DB, now: datetime | None = None) -> tupl
         except ValueError:
             weekday, hour = -1, -1
 
+        free_units = total_units = None
         if start_utc > now:
             status = "pending"
         else:
@@ -87,11 +90,15 @@ def load_outcomes(db_path=store.DEFAULT_DB, now: datetime | None = None) -> tupl
             if not before:
                 status = "unobserved"
             else:
-                status = "wasted" if before[-1]["is_available"] else "sold"
+                final = before[-1]
+                status = "wasted" if final["is_available"] else "sold"
+                free_units = final["capacity"]
+                total_units = final["capacity_total"]
 
         outcomes.append(SlotOutcome(
             venue_id, first["venue_name"], item_id, first["item_name"],
-            first["slot_local"], start_utc, end_utc, weekday, hour, duration_h, status))
+            first["slot_local"], start_utc, end_utc, weekday, hour, duration_h, status,
+            free_units, total_units))
 
     return outcomes, meta
 
@@ -100,12 +107,17 @@ def load_outcomes(db_path=store.DEFAULT_DB, now: datetime | None = None) -> tupl
 class VenueStats:
     venue_id: str
     venue_name: str
+    kind: str = "binary"     # "binary" (open/taken slots) | "capacity" (idle units per hour)
     sold: int = 0
     wasted: int = 0
     unobserved: int = 0
     pending: int = 0
     wasted_hours: float = 0.0
-    heatmap: dict = field(default_factory=lambda: defaultdict(int))  # (weekday,hour) -> wasted
+    # capacity venues only:
+    idle_unit_hours: float = 0.0     # e.g. idle bay-hours
+    busy_unit_hours: float = 0.0     # e.g. booked bay-hours
+    total_units: int = 0
+    heatmap: dict = field(default_factory=lambda: defaultdict(float))  # (weekday,hour) -> waste weight
     by_item: dict = field(default_factory=lambda: defaultdict(lambda: [0, 0]))  # item -> [wasted, sold]
 
     @property
@@ -114,6 +126,9 @@ class VenueStats:
 
     @property
     def utilization(self) -> float:
+        if self.kind == "capacity":
+            total = self.idle_unit_hours + self.busy_unit_hours
+            return (self.busy_unit_hours / total * 100) if total else 0.0
         return (self.sold / self.decided * 100) if self.decided else 0.0
 
 
@@ -123,15 +138,29 @@ def aggregate(outcomes: list[SlotOutcome]) -> dict[str, VenueStats]:
         s = stats.get(o.venue_id)
         if s is None:
             s = stats[o.venue_id] = VenueStats(o.venue_id, o.venue_name)
+        is_capacity = o.total_units is not None
+        if is_capacity:
+            s.kind = "capacity"
+            s.total_units = max(s.total_units, o.total_units or 0)
+
         if o.status == "sold":
             s.sold += 1
             s.by_item[o.item_name][1] += 1
+            if is_capacity:
+                s.busy_unit_hours += (o.total_units or 0) * o.duration_h
         elif o.status == "wasted":
             s.wasted += 1
             s.wasted_hours += o.duration_h
-            if o.weekday >= 0:
-                s.heatmap[(o.weekday, o.hour)] += 1
             s.by_item[o.item_name][0] += 1
+            if is_capacity:
+                free = o.free_units or 0
+                busy = (o.total_units or 0) - free
+                s.idle_unit_hours += free * o.duration_h
+                s.busy_unit_hours += busy * o.duration_h
+                if o.weekday >= 0:
+                    s.heatmap[(o.weekday, o.hour)] += free      # weight by idle units
+            elif o.weekday >= 0:
+                s.heatmap[(o.weekday, o.hour)] += 1
         elif o.status == "unobserved":
             s.unobserved += 1
         else:
@@ -141,7 +170,7 @@ def aggregate(outcomes: list[SlotOutcome]) -> dict[str, VenueStats]:
 
 def deadest_windows(s: VenueStats, top=5):
     ranked = sorted(s.heatmap.items(), key=lambda kv: kv[1], reverse=True)[:top]
-    return [(WEEKDAYS[wd], hr, n) for (wd, hr), n in ranked if wd >= 0]
+    return [(WEEKDAYS[wd], hr, round(n)) for (wd, hr), n in ranked if wd >= 0]
 
 
 # ---------------------------------------------------------------------------
@@ -156,40 +185,57 @@ def render_markdown(stats: dict[str, VenueStats], meta: dict, generated: str) ->
         window = (f"Tracking window: {meta['first_observed']} → {meta['last_observed']} "
                   f"({meta.get('poll_count', 0)} polls, {meta.get('poll_errors', 0)} errors).")
     L += [window, "",
-          "A slot is **wasted** when the last check before its start time still showed it open "
-          "(available inventory that never sold). **Utilisation** = sold ÷ (sold + wasted).", ""]
+          "For **slot venues**, a slot is **wasted** when the last check before its start still "
+          "showed it open. For **capacity venues** (e.g. the driving range), we track **idle units** "
+          "(free bays) per operating hour. **Utilisation** = booked ÷ total.", ""]
 
-    L += ["| Venue | Sold | Wasted | Utilisation | Wasted hours | Still open (future) |",
-          "|-------|------|--------|-------------|--------------|---------------------|"]
+    L += ["| Venue | Type | Utilisation | Wasted / idle | Future |",
+          "|-------|------|-------------|---------------|--------|"]
     for s in stats.values():
-        L.append(f"| {s.venue_name} | {s.sold} | {s.wasted} | {s.utilization:.0f}% | "
-                 f"{s.wasted_hours:.0f} | {s.pending} |")
+        if s.kind == "capacity":
+            waste = f"{s.idle_unit_hours:.0f} idle bay-hrs"
+        else:
+            waste = f"{s.wasted} slots / {s.wasted_hours:.0f} hrs"
+        L.append(f"| {s.venue_name} | {s.kind} | {s.utilization:.0f}% | {waste} | {s.pending} |")
     L.append("")
 
     for s in stats.values():
         L += [f"## {s.venue_name}", ""]
-        if s.decided == 0:
-            L += [f"No slots have started yet within the tracking window "
-                  f"({s.pending} future slots being watched, {s.unobserved} started before "
-                  f"tracking began). Leave the tracker running and re-run this report.", ""]
+        decided_units = s.idle_unit_hours + s.busy_unit_hours if s.kind == "capacity" else s.decided
+        if decided_units == 0:
+            L += [f"No {'hours' if s.kind=='capacity' else 'slots'} have completed within the tracking "
+                  f"window yet ({s.pending} future being watched, {s.unobserved} began before tracking). "
+                  f"Leave the tracker running and re-run this report.", ""]
             continue
-        L += [f"- **Decided slots:** {s.decided}  ({s.sold} sold, {s.wasted} wasted)",
-              f"- **Utilisation:** {s.utilization:.0f}%",
-              f"- **Wasted session-hours:** {s.wasted_hours:.0f}",
-              f"- **Future slots still open:** {s.pending}", ""]
-        dw = deadest_windows(s)
-        if dw:
-            L += ["**Deadest windows (most wasted slots):**"]
-            for day, hr, n in dw:
-                L.append(f"- {day} {hr:02d}:00 — {n} wasted")
-            L.append("")
-        if s.by_item:
-            L += ["**By offering:**"]
-            for name, (w, sold) in sorted(s.by_item.items(), key=lambda kv: kv[1][0], reverse=True):
-                dec = w + sold
-                util = (sold / dec * 100) if dec else 0
-                L.append(f"- {name}: {w} wasted / {sold} sold ({util:.0f}% utilised)")
-            L.append("")
+        if s.kind == "capacity":
+            L += [f"- **Total bays:** {s.total_units}",
+                  f"- **Occupancy:** {s.utilization:.0f}%  (booked bay-hours ÷ total bay-hours)",
+                  f"- **Idle bay-hours:** {s.idle_unit_hours:.0f}  (booked: {s.busy_unit_hours:.0f})",
+                  f"- **Future hours still watched:** {s.pending}", ""]
+            dw = deadest_windows(s)
+            if dw:
+                L += ["**Deadest windows (most idle bays):**"]
+                for day, hr, n in dw:
+                    L.append(f"- {day} {hr:02d}:00 — ~{n} bays idle")
+                L.append("")
+        else:
+            L += [f"- **Decided slots:** {s.decided}  ({s.sold} sold, {s.wasted} wasted)",
+                  f"- **Utilisation:** {s.utilization:.0f}%",
+                  f"- **Wasted session-hours:** {s.wasted_hours:.0f}",
+                  f"- **Future slots still open:** {s.pending}", ""]
+            dw = deadest_windows(s)
+            if dw:
+                L += ["**Deadest windows (most wasted slots):**"]
+                for day, hr, n in dw:
+                    L.append(f"- {day} {hr:02d}:00 — {n} wasted")
+                L.append("")
+            if s.by_item:
+                L += ["**By offering:**"]
+                for name, (w, sold) in sorted(s.by_item.items(), key=lambda kv: kv[1][0], reverse=True):
+                    dec = w + sold
+                    util = (sold / dec * 100) if dec else 0
+                    L.append(f"- {name}: {w} wasted / {sold} sold ({util:.0f}% utilised)")
+                L.append("")
     return "\n".join(L)
 
 
@@ -199,9 +245,12 @@ def to_json(stats: dict[str, VenueStats], meta: dict, generated: str) -> dict:
         "tracking_window": {"first": meta.get("first_observed"), "last": meta.get("last_observed"),
                             "polls": meta.get("poll_count", 0), "errors": meta.get("poll_errors", 0)},
         "venues": [{
-            "venue_id": s.venue_id, "venue_name": s.venue_name,
+            "venue_id": s.venue_id, "venue_name": s.venue_name, "kind": s.kind,
             "sold": s.sold, "wasted": s.wasted, "unobserved": s.unobserved, "pending": s.pending,
             "utilisation_pct": round(s.utilization, 1), "wasted_hours": round(s.wasted_hours, 1),
+            "total_units": s.total_units,
+            "idle_unit_hours": round(s.idle_unit_hours, 1),
+            "busy_unit_hours": round(s.busy_unit_hours, 1),
             "deadest_windows": [{"day": d, "hour": h, "wasted": n} for d, h, n in deadest_windows(s)],
             "by_item": {k: {"wasted": v[0], "sold": v[1]} for k, v in s.by_item.items()},
         } for s in stats.values()],
