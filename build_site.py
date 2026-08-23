@@ -380,7 +380,11 @@ def render_intel_panel(intel):
 def build():
     intel = _load("reports/report_data.json")
     tracking = _load("reports/tracking_report.json")
+    return render_page(intel, tracking)
 
+
+def render_page(intel, tracking):
+    """Render the full dashboard HTML from data dicts (no disk reads — Lambda-safe)."""
     has_tracking = bool(tracking and any(v["sold"] + v["wasted"] > 0 for v in tracking.get("venues", [])))
     default_tab = "tracking" if has_tracking else "intel"
 

@@ -27,6 +27,31 @@ Resources:
         IgnorePublicAcls: true
         RestrictPublicBuckets: true
 
+  # Public static-website bucket that serves the dashboard.
+  SiteBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub onetap-site-${AWS::AccountId}
+      WebsiteConfiguration:
+        IndexDocument: index.html
+        ErrorDocument: index.html
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: false
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: false
+
+  SiteBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref SiteBucket
+      PolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal: "*"
+            Action: s3:GetObject
+            Resource: !Sub arn:aws:s3:::onetap-site-${AWS::AccountId}/*
+
   TrackerFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -39,6 +64,7 @@ Resources:
       Environment:
         Variables:
           REPORT_BUCKET: !Sub onetap-tracker-${AWS::AccountId}
+          SITE_BUCKET: !Sub onetap-site-${AWS::AccountId}
           DB_KEY: state/tracking.db
           POLL_MINUTES: !Ref PollMinutes
           # Add Intrac creds here (or in SSM/Secrets Manager) to enable tennis venues:
@@ -47,6 +73,8 @@ Resources:
       Policies:
         - S3CrudPolicy:
             BucketName: !Sub onetap-tracker-${AWS::AccountId}
+        - S3CrudPolicy:
+            BucketName: !Sub onetap-site-${AWS::AccountId}
       Events:
         Poll:
           Type: Schedule
@@ -78,6 +106,9 @@ Resources:
 Outputs:
   DataBucket:
     Value: !Ref DataBucket
+  SiteURL:
+    Description: Public dashboard URL
+    Value: !GetAtt SiteBucket.WebsiteURL
   TrackerFunction:
     Value: !Ref TrackerFunction
   ReportFunction:
