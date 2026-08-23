@@ -32,7 +32,7 @@ Resources:
     Properties:
       FunctionName: onetap-tracker-poll
       Handler: tracker_lambda.handler
-      Runtime: python3.12
+      Runtime: python3.13
       CodeUri: .
       MemorySize: 512
       Timeout: 300
@@ -58,7 +58,7 @@ Resources:
     Properties:
       FunctionName: onetap-tracker-report
       Handler: report_lambda.handler
-      Runtime: python3.12
+      Runtime: python3.13
       CodeUri: .
       MemorySize: 512
       Timeout: 120
