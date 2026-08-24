@@ -11,6 +11,8 @@ platform is new, an adapter function registered in ADAPTERS below.
 from __future__ import annotations
 
 import os
+import re
+import time
 from datetime import datetime, timedelta, timezone
 from zoneinfo import ZoneInfo
 
@@ -22,6 +24,7 @@ from store import Slot
 SYDNEY = ZoneInfo("Australia/Sydney")
 LOOKAHEAD_DAYS = 14           # how far forward to observe slots
 REQUEST_TIMEOUT = 20
+CRAWL_DELAY_SECONDS = 0.6     # pause between requests to small/self-hosted sites
 
 
 def _iso_utc(dt: datetime) -> str:
@@ -277,10 +280,92 @@ def _intrac_time(day, time_txt: str, tz: ZoneInfo) -> datetime | None:
     return datetime(day.year, day.month, day.day, hour, minute, tzinfo=tz)
 
 
+# ---------------------------------------------------------------------------
+# The Great Escape (custom WooCommerce theme) — nonce-gated availability AJAX
+# ---------------------------------------------------------------------------
+# The booking theme exposes each day's sessions (with seat counts + status) via
+# a single admin-ajax call, `game_overview_load`, protected by a standard
+# WordPress nonce that the site serves openly in the page. We read it exactly
+# as the booking UI does — one request per day — and treat a session that still
+# has ALL seats free at its start as "empty" (zero bookings = wasted).
+
+def greatescape(target: dict, session: requests.Session) -> list[Slot]:
+    tz = ZoneInfo(target.get("timezone", "Australia/Sydney"))
+    overview = target["overview_page"]
+    ajax = target["ajax_url"]
+    venue = target.get("venue", "sydney")
+    lookahead = int(target.get("lookahead_days", 2))
+    price = target.get("price_per_empty", 130)   # min booking value of an empty room
+
+    # 1) Fresh nonce from the overview page (nonces expire, so grab per poll).
+    page = session.get(overview, timeout=REQUEST_TIMEOUT)
+    page.raise_for_status()
+    m = re.search(r'game_overview_ajax_variable\s*=\s*\{[^}]*"ajax_nonce":"([a-z0-9]+)"', page.text)
+    if not m:
+        raise RuntimeError("Great Escape: could not read booking nonce from page")
+    nonce = m.group(1)
+
+    today = datetime.now(tz).date()
+    slots: list[Slot] = []
+    for offset in range(lookahead):
+        day = today + timedelta(days=offset)
+        try:
+            r = session.post(ajax, timeout=REQUEST_TIMEOUT, data={
+                "action": "game_overview_load", "security": nonce, "layout_column": "3",
+                "date": day.isoformat(), "venue": venue, "sortby": "", "sortby_order": ""})
+            if r.status_code != 200:
+                continue
+            posts = r.json().get("data", {}).get("posts", "")
+        except (requests.RequestException, ValueError):
+            continue
+        soup = BeautifulSoup(posts, "html.parser")
+        for row in soup.select(".game-list-row"):
+            room = row.get("data-product-name") or ""
+            if not room:
+                h = row.select_one("h2, h3, .game-list-row-title, a")
+                room = h.get_text(strip=True) if h else "Escape Room"
+            try:
+                maxp = int(row.get("data-maximum-players") or 0)
+            except ValueError:
+                maxp = 0
+            for sp in row.select(".time-slot"):
+                start_s = sp.get("data-eventstarttime")
+                end_s = sp.get("data-eventendtime")
+                if not start_s:
+                    continue
+                try:
+                    start = datetime.fromisoformat(start_s)
+                    end = datetime.fromisoformat(end_s) if end_s else start + timedelta(hours=1)
+                except ValueError:
+                    continue
+                if start.tzinfo is None:
+                    start = start.replace(tzinfo=tz)
+                    end = end.replace(tzinfo=tz)
+                try:
+                    seats = int(sp.get("data-numseatsavailable") or 0)
+                except ValueError:
+                    seats = 0
+                status = (sp.get("data-localstatus") or "").lower()
+                # Empty (zero bookings) = all seats still free and bookable.
+                empty = status == "available" and (maxp == 0 or seats >= maxp)
+                slots.append(Slot(
+                    item_id=room or "escape-room",
+                    item_name=room or "Escape Room",
+                    slot_start_utc=_iso_utc(start),
+                    slot_end_utc=_iso_utc(end),
+                    slot_local=start.astimezone(tz).strftime("%Y-%m-%d %H:%M"),
+                    is_available=empty,
+                    price=price,
+                ))
+        time.sleep(CRAWL_DELAY_SECONDS)   # be gentle on their WordPress
+    return slots
+
+
 ADAPTERS = {
     "fareharbor": fareharbor,
     "intrac": intrac,
     "yourgolfbooking": yourgolfbooking,
+    "greatescape": greatescape,
 }
 
 

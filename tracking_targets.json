@@ -37,6 +37,19 @@
     "note": "Capacity venue: 58 bays booked by the half-hour via YourGolfBooking (venue slug moore-park-golf). We track idle bays per operating hour. Hours approximate published times (6am-10pm; Mon from 10am)."
   },
   {
+    "venue_id": "great-escape",
+    "venue_name": "The Great Escape",
+    "platform": "greatescape",
+    "overview_page": "https://greatescapeau.com/sydney/game-overview/",
+    "ajax_url": "https://greatescapeau.com/sydney/wp-admin/admin-ajax.php",
+    "venue": "sydney",
+    "timezone": "Australia/Sydney",
+    "enabled": true,
+    "lookahead_days": 2,
+    "price_per_empty": 130,
+    "note": "Escape rooms (Redfern/Sydney). Custom WooCommerce theme; reads each day's sessions via the game_overview_load AJAX (nonce served openly). Wasted = a session still fully open at start. Polled gently: 1 request/day of lookahead. price_per_empty = min booking value (2 x $65)."
+  },
+  {
     "venue_id": "camperdown-tennis",
     "venue_name": "Camperdown Tennis",
     "platform": "intrac",

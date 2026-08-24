@@ -1,25 +1,25 @@
 {
-  "generated_at": "2026-08-23 15:32 AEST",
+  "generated_at": "2026-08-24 17:14 AEST",
   "tracking_window": {
     "first": "2026-08-22 19:21 AEST",
-    "last": "2026-08-23 15:31 AEST",
-    "polls": 6,
+    "last": "2026-08-24 17:14 AEST",
+    "polls": 8,
     "errors": 0
   },
-  "total_wasted_money": 22428.0,
+  "total_wasted_money": 48713.0,
   "currency": "AUD",
   "venues": [
     {
       "venue_id": "kiss-my-axe",
       "venue_name": "Kiss My Axe",
       "kind": "binary",
-      "sold": 3,
-      "wasted": 33,
+      "sold": 9,
+      "wasted": 65,
       "unobserved": 0,
-      "pending": 127,
-      "utilisation_pct": 8.3,
-      "wasted_hours": 22.8,
-      "wasted_money": 6126.0,
+      "pending": 148,
+      "utilisation_pct": 12.2,
+      "wasted_hours": 56.2,
+      "wasted_money": 15273.0,
       "total_units": 0,
       "idle_unit_hours": 0.0,
       "busy_unit_hours": 0.0,
@@ -36,39 +36,43 @@
         },
         {
           "day": "Sun",
-          "hour": 11,
-          "wasted": 4
-        },
-        {
-          "day": "Sun",
-          "hour": 13,
-          "wasted": 4
+          "hour": 18,
+          "wasted": 6
         },
         {
           "day": "Sun",
           "hour": 14,
-          "wasted": 4
+          "wasted": 5
+        },
+        {
+          "day": "Sun",
+          "hour": 16,
+          "wasted": 5
         }
       ],
       "by_item": {
         "Axe Throwing - 2-7 People": {
-          "wasted": 5,
-          "sold": 2
+          "wasted": 9,
+          "sold": 4
         },
         "Axe Throwing - 8+ People": {
-          "wasted": 2,
-          "sold": 1
+          "wasted": 7,
+          "sold": 3
+        },
+        "Axe Throwing Date Night - For Two": {
+          "wasted": 1,
+          "sold": 2
         },
         "Glow Darts - 2-12 people": {
-          "wasted": 17,
+          "wasted": 27,
           "sold": 0
         },
         "Axe Throwing & Glow Darts - 6-12 People": {
-          "wasted": 6,
+          "wasted": 11,
           "sold": 0
         },
         "Ultimate Party Package - 6+ People": {
-          "wasted": 3,
+          "wasted": 10,
           "sold": 0
         }
       },
@@ -254,10 +258,22 @@
           "cost": 414.0
         },
         {
+          "when": "Sun 23 Aug, 2:00pm",
+          "item": "Ultimate Party Package - 6+ People",
+          "idle": null,
+          "cost": 654.0
+        },
+        {
           "when": "Sun 23 Aug, 2:30pm",
           "item": "Glow Darts - 2-12 people",
           "idle": null,
           "cost": 30.0
+        },
+        {
+          "when": "Sun 23 Aug, 3:00pm",
+          "item": "Axe Throwing - 2-7 People",
+          "idle": null,
+          "cost": 90.0
         },
         {
           "when": "Sun 23 Aug, 3:00pm",
@@ -266,7 +282,187 @@
           "cost": 30.0
         },
         {
+          "when": "Sun 23 Aug, 3:00pm",
+          "item": "Axe Throwing & Glow Darts - 6-12 People",
+          "idle": null,
+          "cost": 414.0
+        },
+        {
           "when": "Sun 23 Aug, 3:30pm",
+          "item": "Glow Darts - 2-12 people",
+          "idle": null,
+          "cost": 30.0
+        },
+        {
+          "when": "Sun 23 Aug, 4:00pm",
+          "item": "Axe Throwing - 8+ People",
+          "idle": null,
+          "cost": 360.0
+        },
+        {
+          "when": "Sun 23 Aug, 4:00pm",
+          "item": "Glow Darts - 2-12 people",
+          "idle": null,
+          "cost": 30.0
+        },
+        {
+          "when": "Sun 23 Aug, 4:00pm",
+          "item": "Axe Throwing & Glow Darts - 6-12 People",
+          "idle": null,
+          "cost": 414.0
+        },
+        {
+          "when": "Sun 23 Aug, 4:00pm",
+          "item": "Ultimate Party Package - 6+ People",
+          "idle": null,
+          "cost": 654.0
+        },
+        {
+          "when": "Sun 23 Aug, 4:30pm",
+          "item": "Glow Darts - 2-12 people",
+          "idle": null,
+          "cost": 30.0
+        },
+        {
+          "when": "Sun 23 Aug, 5:00pm",
+          "item": "Axe Throwing - 2-7 People",
+          "idle": null,
+          "cost": 90.0
+        },
+        {
+          "when": "Sun 23 Aug, 5:00pm",
+          "item": "Glow Darts - 2-12 people",
+          "idle": null,
+          "cost": 30.0
+        },
+        {
+          "when": "Sun 23 Aug, 5:00pm",
+          "item": "Axe Throwing & Glow Darts - 6-12 People",
+          "idle": null,
+          "cost": 414.0
+        },
+        {
+          "when": "Sun 23 Aug, 5:30pm",
+          "item": "Glow Darts - 2-12 people",
+          "idle": null,
+          "cost": 30.0
+        },
+        {
+          "when": "Sun 23 Aug, 6:00pm",
+          "item": "Axe Throwing - 8+ People",
+          "idle": null,
+          "cost": 360.0
+        },
+        {
+          "when": "Sun 23 Aug, 6:00pm",
+          "item": "Axe Throwing Date Night - For Two",
+          "idle": null,
+          "cost": 39.0
+        },
+        {
+          "when": "Sun 23 Aug, 6:00pm",
+          "item": "Glow Darts - 2-12 people",
+          "idle": null,
+          "cost": 30.0
+        },
+        {
+          "when": "Sun 23 Aug, 6:00pm",
+          "item": "Axe Throwing & Glow Darts - 6-12 People",
+          "idle": null,
+          "cost": 414.0
+        },
+        {
+          "when": "Sun 23 Aug, 6:00pm",
+          "item": "Ultimate Party Package - 6+ People",
+          "idle": null,
+          "cost": 654.0
+        },
+        {
+          "when": "Sun 23 Aug, 6:30pm",
+          "item": "Glow Darts - 2-12 people",
+          "idle": null,
+          "cost": 30.0
+        },
+        {
+          "when": "Sun 23 Aug, 7:00pm",
+          "item": "Axe Throwing - 2-7 People",
+          "idle": null,
+          "cost": 90.0
+        },
+        {
+          "when": "Sun 23 Aug, 7:00pm",
+          "item": "Glow Darts - 2-12 people",
+          "idle": null,
+          "cost": 30.0
+        },
+        {
+          "when": "Sun 23 Aug, 7:00pm",
+          "item": "Axe Throwing & Glow Darts - 6-12 People",
+          "idle": null,
+          "cost": 414.0
+        },
+        {
+          "when": "Sun 23 Aug, 8:00pm",
+          "item": "Ultimate Party Package - 6+ People",
+          "idle": null,
+          "cost": 654.0
+        },
+        {
+          "when": "Mon 24 Aug, 10:00am",
+          "item": "Axe Throwing - 8+ People",
+          "idle": null,
+          "cost": 360.0
+        },
+        {
+          "when": "Mon 24 Aug, 10:00am",
+          "item": "Ultimate Party Package - 6+ People",
+          "idle": null,
+          "cost": 654.0
+        },
+        {
+          "when": "Mon 24 Aug, 12:00pm",
+          "item": "Axe Throwing - 8+ People",
+          "idle": null,
+          "cost": 360.0
+        },
+        {
+          "when": "Mon 24 Aug, 12:00pm",
+          "item": "Ultimate Party Package - 6+ People",
+          "idle": null,
+          "cost": 654.0
+        },
+        {
+          "when": "Mon 24 Aug, 2:00pm",
+          "item": "Axe Throwing - 8+ People",
+          "idle": null,
+          "cost": 360.0
+        },
+        {
+          "when": "Mon 24 Aug, 2:00pm",
+          "item": "Ultimate Party Package - 6+ People",
+          "idle": null,
+          "cost": 654.0
+        },
+        {
+          "when": "Mon 24 Aug, 4:00pm",
+          "item": "Axe Throwing - 2-7 People",
+          "idle": null,
+          "cost": 90.0
+        },
+        {
+          "when": "Mon 24 Aug, 4:00pm",
+          "item": "Glow Darts - 2-12 people",
+          "idle": null,
+          "cost": 30.0
+        },
+        {
+          "when": "Mon 24 Aug, 4:30pm",
+          "item": "Glow Darts - 2-12 people",
+          "idle": null,
+          "cost": 30.0
+        },
+        {
+          "when": "Mon 24 Aug, 5:00pm",
           "item": "Glow Darts - 2-12 people",
           "idle": null,
           "cost": 30.0
@@ -278,16 +474,31 @@
       "venue_name": "Moore Park Driving Range",
       "kind": "capacity",
       "sold": 1,
-      "wasted": 24,
+      "wasted": 38,
       "unobserved": 0,
-      "pending": 67,
-      "utilisation_pct": 70.4,
-      "wasted_hours": 24.0,
-      "wasted_money": 16302.0,
+      "pending": 69,
+      "utilisation_pct": 61.1,
+      "wasted_hours": 38.0,
+      "wasted_money": 33440.0,
       "total_units": 58,
-      "idle_unit_hours": 429.0,
-      "busy_unit_hours": 1021.0,
+      "idle_unit_hours": 880.0,
+      "busy_unit_hours": 1382.0,
       "deadest_windows": [
+        {
+          "day": "Sun",
+          "hour": 21,
+          "wasted": 58
+        },
+        {
+          "day": "Sun",
+          "hour": 20,
+          "wasted": 55
+        },
+        {
+          "day": "Sun",
+          "hour": 19,
+          "wasted": 49
+        },
         {
           "day": "Sat",
           "hour": 6,
@@ -295,28 +506,13 @@
         },
         {
           "day": "Sun",
-          "hour": 7,
-          "wasted": 38
-        },
-        {
-          "day": "Sat",
-          "hour": 7,
-          "wasted": 37
-        },
-        {
-          "day": "Sun",
-          "hour": 6,
-          "wasted": 37
-        },
-        {
-          "day": "Sun",
-          "hour": 8,
-          "wasted": 37
+          "hour": 18,
+          "wasted": 41
         }
       ],
       "by_item": {
         "Driving Range bays": {
-          "wasted": 24,
+          "wasted": 38,
           "sold": 1
         }
       },
@@ -464,8 +660,110 @@
           "item": "Driving Range bays",
           "idle": 10,
           "cost": 380.0
+        },
+        {
+          "when": "Sun 23 Aug, 3:00pm",
+          "item": "Driving Range bays",
+          "idle": 11,
+          "cost": 418.0
+        },
+        {
+          "when": "Sun 23 Aug, 4:00pm",
+          "item": "Driving Range bays",
+          "idle": 11,
+          "cost": 418.0
+        },
+        {
+          "when": "Sun 23 Aug, 5:00pm",
+          "item": "Driving Range bays",
+          "idle": 28,
+          "cost": 1064.0
+        },
+        {
+          "when": "Sun 23 Aug, 6:00pm",
+          "item": "Driving Range bays",
+          "idle": 41,
+          "cost": 1558.0
+        },
+        {
+          "when": "Sun 23 Aug, 7:00pm",
+          "item": "Driving Range bays",
+          "idle": 49,
+          "cost": 1862.0
+        },
+        {
+          "when": "Sun 23 Aug, 8:00pm",
+          "item": "Driving Range bays",
+          "idle": 55,
+          "cost": 2090.0
+        },
+        {
+          "when": "Sun 23 Aug, 9:00pm",
+          "item": "Driving Range bays",
+          "idle": 58,
+          "cost": 2204.0
+        },
+        {
+          "when": "Mon 24 Aug, 10:00am",
+          "item": "Driving Range bays",
+          "idle": 30,
+          "cost": 1140.0
+        },
+        {
+          "when": "Mon 24 Aug, 11:00am",
+          "item": "Driving Range bays",
+          "idle": 29,
+          "cost": 1102.0
+        },
+        {
+          "when": "Mon 24 Aug, 12:00pm",
+          "item": "Driving Range bays",
+          "idle": 29,
+          "cost": 1102.0
+        },
+        {
+          "when": "Mon 24 Aug, 1:00pm",
+          "item": "Driving Range bays",
+          "idle": 27,
+          "cost": 1026.0
+        },
+        {
+          "when": "Mon 24 Aug, 2:00pm",
+          "item": "Driving Range bays",
+          "idle": 27,
+          "cost": 1026.0
+        },
+        {
+          "when": "Mon 24 Aug, 3:00pm",
+          "item": "Driving Range bays",
+          "idle": 29,
+          "cost": 1102.0
+        },
+        {
+          "when": "Mon 24 Aug, 4:00pm",
+          "item": "Driving Range bays",
+          "idle": 27,
+          "cost": 1026.0
         }
       ]
+    },
+    {
+      "venue_id": "great-escape",
+      "venue_name": "The Great Escape",
+      "kind": "binary",
+      "sold": 0,
+      "wasted": 0,
+      "unobserved": 0,
+      "pending": 17,
+      "utilisation_pct": 0.0,
+      "wasted_hours": 0.0,
+      "wasted_money": 0.0,
+      "total_units": 0,
+      "idle_unit_hours": 0.0,
+      "busy_unit_hours": 0.0,
+      "deadest_windows": [],
+      "by_item": {},
+      "wasted_timeline": []
     }
   ]
 }
