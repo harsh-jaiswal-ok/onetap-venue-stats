@@ -1,43 +1,44 @@
 # OneTap — Wasted-Slot Report
 
-_Generated 2026-08-24 17:14 AEST._
+_Generated 2026-08-24 18:06 AEST._
 
-Tracking window: 2026-08-22 19:21 AEST → 2026-08-24 17:14 AEST (8 polls, 0 errors).
+Tracking window: 2026-08-22 19:21 AEST → 2026-08-24 18:05 AEST (9 polls, 0 errors).
 
-## 💸 Total wasted so far: **$48,713 AUD**  *(estimated lost revenue)*
+## 💸 Total wasted so far: **$50,786 AUD**  *(estimated lost revenue)*
 
 For **slot venues**, a slot is **wasted** when the last check before its start still showed it open. For **capacity venues** (e.g. the driving range), we track **idle units** (free bays) per operating hour. **Utilisation** = booked ÷ total. Dollar figures are estimated lost revenue from configurable per-slot / per-bay-hour prices.
 
 | Venue | Type | Utilisation | Wasted / idle | Lost revenue | Future |
 |-------|------|-------------|---------------|--------------|--------|
-| Kiss My Axe | binary | 12% | 65 slots / 56 hrs | $15,273 | 148 |
-| Moore Park Driving Range | capacity | 61% | 880 idle bay-hrs | $33,440 | 69 |
+| Kiss My Axe | binary | 11% | 72 slots / 63 hrs | $16,890 | 141 |
+| Moore Park Driving Range | capacity | 62% | 892 idle bay-hrs | $33,896 | 68 |
 | The Great Escape | binary | 0% | 0 slots / 0 hrs | $0 | 17 |
+| NBC Badminton Alexandria | capacity | 100% | 0 idle bay-hrs | $0 | 31 |
 
 ## Kiss My Axe
 
-- **Decided slots:** 74  (9 sold, 65 wasted)
-- **Utilisation:** 12%
-- **Wasted session-hours:** 56
-- **Estimated lost revenue:** $15,273
-- **Future slots still open:** 148
+- **Decided slots:** 81  (9 sold, 72 wasted)
+- **Utilisation:** 11%
+- **Wasted session-hours:** 63
+- **Estimated lost revenue:** $16,890
+- **Future slots still open:** 141
 
 **Deadest windows (most wasted slots):**
 - Sun 10:00 — 6 wasted
 - Sun 12:00 — 6 wasted
+- Mon 16:00 — 6 wasted
 - Sun 18:00 — 6 wasted
 - Sun 14:00 — 5 wasted
-- Sun 16:00 — 5 wasted
 
 **By offering:**
-- Glow Darts - 2-12 people: 27 wasted / 0 sold (0% utilised)
-- Axe Throwing & Glow Darts - 6-12 People: 11 wasted / 0 sold (0% utilised)
-- Ultimate Party Package - 6+ People: 10 wasted / 0 sold (0% utilised)
-- Axe Throwing - 2-7 People: 9 wasted / 4 sold (31% utilised)
-- Axe Throwing - 8+ People: 7 wasted / 3 sold (30% utilised)
-- Axe Throwing Date Night - For Two: 1 wasted / 2 sold (67% utilised)
+- Glow Darts - 2-12 people: 29 wasted / 0 sold (0% utilised)
+- Axe Throwing & Glow Darts - 6-12 People: 12 wasted / 0 sold (0% utilised)
+- Ultimate Party Package - 6+ People: 11 wasted / 0 sold (0% utilised)
+- Axe Throwing - 2-7 People: 10 wasted / 4 sold (29% utilised)
+- Axe Throwing - 8+ People: 8 wasted / 3 sold (27% utilised)
+- Axe Throwing Date Night - For Two: 2 wasted / 2 sold (50% utilised)
 
-**Every wasted slot, in order (65 wasted slots, $15,273 lost):**
+**Every wasted slot, in order (72 wasted slots, $16,890 lost):**
 - Sat 22 Aug, 7:30pm — Glow Darts - 2-12 people — **$30**
 - Sat 22 Aug, 8:00pm — Glow Darts - 2-12 people — **$30**
 - Sat 22 Aug, 8:00pm — Axe Throwing & Glow Darts - 6-12 People — **$414**
@@ -100,17 +101,24 @@ For **slot venues**, a slot is **wasted** when the last check before its start s
 - Mon 24 Aug, 2:00pm — Axe Throwing - 8+ People — **$360**
 - Mon 24 Aug, 2:00pm — Ultimate Party Package - 6+ People — **$654**
 - Mon 24 Aug, 4:00pm — Axe Throwing - 2-7 People — **$90**
+- Mon 24 Aug, 4:00pm — Axe Throwing - 8+ People — **$360**
 - Mon 24 Aug, 4:00pm — Glow Darts - 2-12 people — **$30**
+- Mon 24 Aug, 4:00pm — Axe Throwing & Glow Darts - 6-12 People — **$414**
+- Mon 24 Aug, 4:00pm — Ultimate Party Package - 6+ People — **$654**
 - Mon 24 Aug, 4:30pm — Glow Darts - 2-12 people — **$30**
+- Mon 24 Aug, 5:00pm — Axe Throwing - 2-7 People — **$90**
+- Mon 24 Aug, 5:00pm — Axe Throwing Date Night - For Two — **$39**
 - Mon 24 Aug, 5:00pm — Glow Darts - 2-12 people — **$30**
+- Mon 24 Aug, 5:30pm — Glow Darts - 2-12 people — **$30**
+- Mon 24 Aug, 6:00pm — Glow Darts - 2-12 people — **$30**
 
 ## Moore Park Driving Range
 
 - **Total bays:** 58
-- **Occupancy:** 61%  (booked bay-hours ÷ total bay-hours)
-- **Idle bay-hours:** 880  (booked: 1382)
-- **Estimated lost revenue:** $33,440
-- **Future hours still watched:** 69
+- **Occupancy:** 62%  (booked bay-hours ÷ total bay-hours)
+- **Idle bay-hours:** 892  (booked: 1428)
+- **Estimated lost revenue:** $33,896
+- **Future hours still watched:** 68
 
 **Deadest windows (most idle bays):**
 - Sun 21:00 — ~58 bays idle
@@ -119,7 +127,7 @@ For **slot venues**, a slot is **wasted** when the last check before its start s
 - Sat 06:00 — ~48 bays idle
 - Sun 18:00 — ~41 bays idle
 
-**Every wasted slot, in order (38 idle-bay hours, $33,440 lost):**
+**Every wasted slot, in order (39 idle-bay hours, $33,896 lost):**
 - Sat 22 Aug, 6:00am — 48 bays idle — **$1,824**
 - Sat 22 Aug, 7:00am — 37 bays idle — **$1,406**
 - Sat 22 Aug, 8:00am — 25 bays idle — **$950**
@@ -158,7 +166,16 @@ For **slot venues**, a slot is **wasted** when the last check before its start s
 - Mon 24 Aug, 2:00pm — 27 bays idle — **$1,026**
 - Mon 24 Aug, 3:00pm — 29 bays idle — **$1,102**
 - Mon 24 Aug, 4:00pm — 27 bays idle — **$1,026**
+- Mon 24 Aug, 5:00pm — 12 bays idle — **$456**
 
 ## The Great Escape
 
 No slots have completed within the tracking window yet (17 future being watched, 0 began before tracking). Leave the tracker running and re-run this report.
+
+## NBC Badminton Alexandria
+
+- **Total bays:** 18
+- **Occupancy:** 100%  (booked bay-hours ÷ total bay-hours)
+- **Idle bay-hours:** 0  (booked: 117)
+- **Estimated lost revenue:** $0
+- **Future hours still watched:** 31

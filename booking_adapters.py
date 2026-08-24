@@ -361,11 +361,103 @@ def greatescape(target: dict, session: requests.Session) -> list[Slot]:
     return slots
 
 
+# ---------------------------------------------------------------------------
+# Yepbooking (NBC Badminton — Alexandria) — public court grid, no login
+# ---------------------------------------------------------------------------
+# A capacity venue like the driving range: N courts booked by the hour. The
+# schedule grid is served openly via ajax.schema.php per day/location; each cell
+# shows Available or Booked. We count free courts per operating hour.
+
+def _yep_hour(label: str):
+    m = re.match(r"(\d{1,2}):(\d{2})\s*([ap]m)", label, re.I)
+    if not m:
+        return None
+    h, mm, ap = int(m.group(1)), int(m.group(2)), m.group(3).lower()
+    if ap == "pm" and h != 12:
+        h += 12
+    elif ap == "am" and h == 12:
+        h = 0
+    return h, mm
+
+
+def yepbooking(target: dict, session: requests.Session) -> list[Slot]:
+    tz = ZoneInfo(target.get("timezone", "Australia/Sydney"))
+    base = target["base"].rstrip("/")
+    id_sport = str(target["id_sport"])
+    price = target.get("price_per_unit_hour", 30)
+    lookahead = int(target.get("lookahead_days", 3))
+    item_name = target.get("court_label", "Courts")
+
+    session.get(base + "/", timeout=REQUEST_TIMEOUT)   # establish session cookie
+    today = datetime.now(tz).date()
+    slots: list[Slot] = []
+    for offset in range(lookahead):
+        day = today + timedelta(days=offset)
+        try:
+            r = session.post(base + "/ajax/ajax.schema.php", timeout=REQUEST_TIMEOUT, data={
+                "id_sport": id_sport, "day": str(day.day), "month": str(day.month),
+                "year": str(day.year), "event": "", "timetableWidth": "1200",
+                "arLabelId": "", "noticeCheckRequested": "1"})
+            if r.status_code != 200 or not r.text.strip():
+                continue
+        except requests.RequestException:
+            continue
+        soup = BeautifulSoup(r.text, "html.parser")
+        # per court row -> per start-hour state (Booked wins over Available)
+        free: dict[str, int] = {}
+        booked: dict[str, int] = {}
+        for tr in soup.select("tr[class*=trSchemaLane]"):
+            per_hour: dict[str, str] = {}
+            for el in tr.find_all(["td", "a"]):
+                title = el.get("title")
+                if not title or " - " not in title:
+                    continue
+                state = title.rsplit(" - ", 1)[-1]
+                if state not in ("Available", "Booked"):
+                    continue
+                hm = re.match(r"(\d{1,2}:\d{2}\s*[ap]m)", title, re.I)
+                if not hm:
+                    continue
+                hr = hm.group(1).replace(" ", "")
+                if hr not in per_hour or state == "Booked":
+                    per_hour[hr] = state
+            for hr, st in per_hour.items():
+                if st == "Available":
+                    free[hr] = free.get(hr, 0) + 1
+                else:
+                    booked[hr] = booked.get(hr, 0) + 1
+
+        for hr in sorted(set(free) | set(booked)):
+            hp = _yep_hour(hr)
+            if hp is None:
+                continue
+            f = free.get(hr, 0)
+            total = f + booked.get(hr, 0)
+            if total == 0:
+                continue
+            start = datetime(day.year, day.month, day.day, hp[0], hp[1], tzinfo=tz)
+            end = start + timedelta(hours=1)
+            slots.append(Slot(
+                item_id="courts",
+                item_name=item_name,
+                slot_start_utc=_iso_utc(start),
+                slot_end_utc=_iso_utc(end),
+                slot_local=start.strftime("%Y-%m-%d %H:%M"),
+                is_available=f > 0,
+                capacity=f,
+                capacity_total=total,
+                price=price,
+            ))
+        time.sleep(CRAWL_DELAY_SECONDS)
+    return slots
+
+
 ADAPTERS = {
     "fareharbor": fareharbor,
     "intrac": intrac,
     "yourgolfbooking": yourgolfbooking,
     "greatescape": greatescape,
+    "yepbooking": yepbooking,
 }
 
 

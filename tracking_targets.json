@@ -37,6 +37,19 @@
     "note": "Capacity venue: 58 bays booked by the half-hour via YourGolfBooking (venue slug moore-park-golf). We track idle bays per operating hour. Hours approximate published times (6am-10pm; Mon from 10am)."
   },
   {
+    "venue_id": "nbc-alexandria",
+    "venue_name": "NBC Badminton Alexandria",
+    "platform": "yepbooking",
+    "base": "https://nbc.yepbooking.com.au",
+    "id_sport": 6,
+    "court_label": "Badminton courts",
+    "timezone": "Australia/Sydney",
+    "enabled": true,
+    "lookahead_days": 3,
+    "price_per_unit_hour": 30,
+    "note": "NBC Badminton Alexandria (18 courts) via Yepbooking. Capacity venue: free courts per operating hour. Availability is public (no login). id_sport=6 is the Alexandria tab. Court hire is $28 day / $38 evening; price_per_unit_hour is a blended estimate. Polled gently: 1 request/day of lookahead."
+  },
+  {
     "venue_id": "great-escape",
     "venue_name": "The Great Escape",
     "platform": "greatescape",

@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-08-24 17:14 AEST",
+  "generated_at": "2026-08-24 18:06 AEST",
   "tracking_window": {
     "first": "2026-08-22 19:21 AEST",
-    "last": "2026-08-24 17:14 AEST",
-    "polls": 8,
+    "last": "2026-08-24 18:05 AEST",
+    "polls": 9,
     "errors": 0
   },
-  "total_wasted_money": 48713.0,
+  "total_wasted_money": 50786.0,
   "currency": "AUD",
   "venues": [
     {
@@ -14,12 +14,12 @@
       "venue_name": "Kiss My Axe",
       "kind": "binary",
       "sold": 9,
-      "wasted": 65,
+      "wasted": 72,
       "unobserved": 0,
-      "pending": 148,
-      "utilisation_pct": 12.2,
-      "wasted_hours": 56.2,
-      "wasted_money": 15273.0,
+      "pending": 141,
+      "utilisation_pct": 11.1,
+      "wasted_hours": 63.2,
+      "wasted_money": 16890.0,
       "total_units": 0,
       "idle_unit_hours": 0.0,
       "busy_unit_hours": 0.0,
@@ -35,6 +35,11 @@
           "wasted": 6
         },
         {
+          "day": "Mon",
+          "hour": 16,
+          "wasted": 6
+        },
+        {
           "day": "Sun",
           "hour": 18,
           "wasted": 6
@@ -43,36 +48,31 @@
           "day": "Sun",
           "hour": 14,
           "wasted": 5
-        },
-        {
-          "day": "Sun",
-          "hour": 16,
-          "wasted": 5
         }
       ],
       "by_item": {
         "Axe Throwing - 2-7 People": {
-          "wasted": 9,
+          "wasted": 10,
           "sold": 4
         },
         "Axe Throwing - 8+ People": {
-          "wasted": 7,
+          "wasted": 8,
           "sold": 3
         },
         "Axe Throwing Date Night - For Two": {
-          "wasted": 1,
+          "wasted": 2,
           "sold": 2
         },
         "Glow Darts - 2-12 people": {
-          "wasted": 27,
+          "wasted": 29,
           "sold": 0
         },
         "Axe Throwing & Glow Darts - 6-12 People": {
-          "wasted": 11,
+          "wasted": 12,
           "sold": 0
         },
         "Ultimate Party Package - 6+ People": {
-          "wasted": 10,
+          "wasted": 11,
           "sold": 0
         }
       },
@@ -451,9 +451,27 @@
         },
         {
           "when": "Mon 24 Aug, 4:00pm",
+          "item": "Axe Throwing - 8+ People",
+          "idle": null,
+          "cost": 360.0
+        },
+        {
+          "when": "Mon 24 Aug, 4:00pm",
           "item": "Glow Darts - 2-12 people",
           "idle": null,
           "cost": 30.0
+        },
+        {
+          "when": "Mon 24 Aug, 4:00pm",
+          "item": "Axe Throwing & Glow Darts - 6-12 People",
+          "idle": null,
+          "cost": 414.0
+        },
+        {
+          "when": "Mon 24 Aug, 4:00pm",
+          "item": "Ultimate Party Package - 6+ People",
+          "idle": null,
+          "cost": 654.0
         },
         {
           "when": "Mon 24 Aug, 4:30pm",
@@ -463,6 +481,30 @@
         },
         {
           "when": "Mon 24 Aug, 5:00pm",
+          "item": "Axe Throwing - 2-7 People",
+          "idle": null,
+          "cost": 90.0
+        },
+        {
+          "when": "Mon 24 Aug, 5:00pm",
+          "item": "Axe Throwing Date Night - For Two",
+          "idle": null,
+          "cost": 39.0
+        },
+        {
+          "when": "Mon 24 Aug, 5:00pm",
+          "item": "Glow Darts - 2-12 people",
+          "idle": null,
+          "cost": 30.0
+        },
+        {
+          "when": "Mon 24 Aug, 5:30pm",
+          "item": "Glow Darts - 2-12 people",
+          "idle": null,
+          "cost": 30.0
+        },
+        {
+          "when": "Mon 24 Aug, 6:00pm",
           "item": "Glow Darts - 2-12 people",
           "idle": null,
           "cost": 30.0
@@ -474,15 +516,15 @@
       "venue_name": "Moore Park Driving Range",
       "kind": "capacity",
       "sold": 1,
-      "wasted": 38,
+      "wasted": 39,
       "unobserved": 0,
-      "pending": 69,
-      "utilisation_pct": 61.1,
-      "wasted_hours": 38.0,
-      "wasted_money": 33440.0,
+      "pending": 68,
+      "utilisation_pct": 61.6,
+      "wasted_hours": 39.0,
+      "wasted_money": 33896.0,
       "total_units": 58,
-      "idle_unit_hours": 880.0,
-      "busy_unit_hours": 1382.0,
+      "idle_unit_hours": 892.0,
+      "busy_unit_hours": 1428.0,
       "deadest_windows": [
         {
           "day": "Sun",
@@ -512,7 +554,7 @@
       ],
       "by_item": {
         "Driving Range bays": {
-          "wasted": 38,
+          "wasted": 39,
           "sold": 1
         }
       },
@@ -744,6 +786,12 @@
           "item": "Driving Range bays",
           "idle": 27,
           "cost": 1026.0
+        },
+        {
+          "when": "Mon 24 Aug, 5:00pm",
+          "item": "Driving Range bays",
+          "idle": 12,
+          "cost": 456.0
         }
       ]
     },
@@ -763,6 +811,29 @@
       "busy_unit_hours": 0.0,
       "deadest_windows": [],
       "by_item": {},
+      "wasted_timeline": []
+    },
+    {
+      "venue_id": "nbc-alexandria",
+      "venue_name": "NBC Badminton Alexandria",
+      "kind": "capacity",
+      "sold": 8,
+      "wasted": 0,
+      "unobserved": 0,
+      "pending": 31,
+      "utilisation_pct": 100.0,
+      "wasted_hours": 0.0,
+      "wasted_money": 0.0,
+      "total_units": 18,
+      "idle_unit_hours": 0.0,
+      "busy_unit_hours": 117.0,
+      "deadest_windows": [],
+      "by_item": {
+        "Badminton courts": {
+          "wasted": 0,
+          "sold": 8
+        }
+      },
       "wasted_timeline": []
     }
   ]
