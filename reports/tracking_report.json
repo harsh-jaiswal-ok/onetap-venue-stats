@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-08-24 18:15 AEST",
+  "generated_at": "2026-08-24 18:30 AEST",
   "tracking_window": {
     "first": "2026-08-22 19:21 AEST",
     "last": "2026-08-24 18:15 AEST",
     "polls": 10,
     "errors": 0
   },
-  "total_wasted_money": 51596.0,
+  "total_wasted_money": 51230.0,
   "currency": "AUD",
   "venues": [
     {
@@ -14,12 +14,12 @@
       "venue_name": "Kiss My Axe",
       "kind": "binary",
       "sold": 9,
-      "wasted": 72,
+      "wasted": 74,
       "unobserved": 0,
-      "pending": 141,
-      "utilisation_pct": 11.1,
-      "wasted_hours": 63.2,
-      "wasted_money": 16890.0,
+      "pending": 139,
+      "utilisation_pct": 10.8,
+      "wasted_hours": 64.8,
+      "wasted_money": 17334.0,
       "total_units": 0,
       "idle_unit_hours": 0.0,
       "busy_unit_hours": 0.0,
@@ -64,11 +64,11 @@
           "sold": 2
         },
         "Glow Darts - 2-12 people": {
-          "wasted": 29,
+          "wasted": 30,
           "sold": 0
         },
         "Axe Throwing & Glow Darts - 6-12 People": {
-          "wasted": 12,
+          "wasted": 13,
           "sold": 0
         },
         "Ultimate Party Package - 6+ People": {
@@ -498,6 +498,12 @@
           "cost": 30.0
         },
         {
+          "when": "Mon 24 Aug, 5:00pm",
+          "item": "Axe Throwing & Glow Darts - 6-12 People",
+          "idle": null,
+          "cost": 414.0
+        },
+        {
           "when": "Mon 24 Aug, 5:30pm",
           "item": "Glow Darts - 2-12 people",
           "idle": null,
@@ -505,6 +511,12 @@
         },
         {
           "when": "Mon 24 Aug, 6:00pm",
+          "item": "Glow Darts - 2-12 people",
+          "idle": null,
+          "cost": 30.0
+        },
+        {
+          "when": "Mon 24 Aug, 6:30pm",
           "item": "Glow Darts - 2-12 people",
           "idle": null,
           "cost": 30.0
@@ -812,86 +824,6 @@
       "deadest_windows": [],
       "by_item": {},
       "wasted_timeline": []
-    },
-    {
-      "venue_id": "nbc-alexandria",
-      "venue_name": "NBC Badminton Alexandria",
-      "kind": "capacity",
-      "sold": 3,
-      "wasted": 5,
-      "unobserved": 0,
-      "pending": 31,
-      "utilisation_pct": 81.2,
-      "wasted_hours": 5.0,
-      "wasted_money": 810.0,
-      "total_units": 18,
-      "idle_unit_hours": 27.0,
-      "busy_unit_hours": 117.0,
-      "deadest_windows": [
-        {
-          "day": "Mon",
-          "hour": 12,
-          "wasted": 12
-        },
-        {
-          "day": "Mon",
-          "hour": 10,
-          "wasted": 6
-        },
-        {
-          "day": "Mon",
-          "hour": 11,
-          "wasted": 5
-        },
-        {
-          "day": "Mon",
-          "hour": 13,
-          "wasted": 2
-        },
-        {
-          "day": "Mon",
-          "hour": 16,
-          "wasted": 2
-        }
-      ],
-      "by_item": {
-        "Badminton courts": {
-          "wasted": 5,
-          "sold": 3
-        }
-      },
-      "wasted_timeline": [
-        {
-          "when": "Mon 24 Aug, 10:00am",
-          "item": "Badminton courts",
-          "idle": 6,
-          "cost": 180.0
-        },
-        {
-          "when": "Mon 24 Aug, 11:00am",
-          "item": "Badminton courts",
-          "idle": 5,
-          "cost": 150.0
-        },
-        {
-          "when": "Mon 24 Aug, 12:00pm",
-          "item": "Badminton courts",
-          "idle": 12,
-          "cost": 360.0
-        },
-        {
-          "when": "Mon 24 Aug, 1:00pm",
-          "item": "Badminton courts",
-          "idle": 2,
-          "cost": 60.0
-        },
-        {
-          "when": "Mon 24 Aug, 4:00pm",
-          "item": "Badminton courts",
-          "idle": 2,
-          "cost": 60.0
-        }
-      ]
     }
   ]
 }

@@ -44,7 +44,7 @@
     "id_sport": 6,
     "court_label": "Badminton courts",
     "timezone": "Australia/Sydney",
-    "enabled": true,
+    "enabled": false,
     "lookahead_days": 3,
     "price_per_unit_hour": 30,
     "note": "NBC Badminton Alexandria (18 courts) via Yepbooking. Capacity venue: free courts per operating hour. Availability is public (no login). id_sport=6 is the Alexandria tab. Court hire is $28 day / $38 evening; price_per_unit_hour is a blended estimate. Polled gently: 1 request/day of lookahead."

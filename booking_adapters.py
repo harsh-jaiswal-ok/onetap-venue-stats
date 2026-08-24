@@ -403,46 +403,52 @@ def yepbooking(target: dict, session: requests.Session) -> list[Slot]:
         except requests.RequestException:
             continue
         soup = BeautifulSoup(r.text, "html.parser")
-        # per court row -> per start-hour state (Booked wins over Available)
-        free: dict[str, int] = {}
-        booked: dict[str, int] = {}
+        # Per court, work out which hours are booked vs empty. A booking's title
+        # spans its FULL range (e.g. 10am–12pm), so it covers every hour in that
+        # range. Empty/past hours are marked by the atomic 1-hour anchor. Booked
+        # wins over empty. Keyed by hour-of-day (int).
+        free: dict[int, int] = {}
+        booked: dict[int, int] = {}
         for tr in soup.select("tr[class*=trSchemaLane]"):
-            per_hour: dict[str, str] = {}
+            booked_h: set[int] = set()
+            empty_h: set[int] = set()
             for el in tr.find_all(["td", "a"]):
                 title = el.get("title")
                 if not title or " - " not in title:
                     continue
-                state = title.rsplit(" - ", 1)[-1]
-                # "Can't book in the past" = a past court that was never booked = it
-                # ran empty. Yepbooking keeps this signal for the current day, so we
-                # can recover today's already-wasted courts, not just future ones.
-                if state == "Booked":
-                    norm = "booked"
-                elif state == "Available" or "past" in state.lower():
-                    norm = "empty"
-                else:
+                timepart, state = title.rsplit(" - ", 1)
+                times = timepart.split("–")           # en-dash between start/end
+                if len(times) != 2:
                     continue
-                hm = re.match(r"(\d{1,2}:\d{2}\s*[ap]m)", title, re.I)
-                if not hm:
+                sh, eh = _yep_hour(times[0].strip()), _yep_hour(times[1].strip())
+                if not sh or not eh:
                     continue
-                hr = hm.group(1).replace(" ", "")
-                if hr not in per_hour or norm == "booked":
-                    per_hour[hr] = norm
-            for hr, st in per_hour.items():
-                if st == "empty":
-                    free[hr] = free.get(hr, 0) + 1
-                else:
-                    booked[hr] = booked.get(hr, 0) + 1
+                start_h, end_h = sh[0], eh[0]
+                if end_h - start_h != 1:             # atomic 1-hour cells only
+                    continue
+                classes = el.get("class", [])
+                # Each hour is one <td>: a real booking is <td class="booked">; a past
+                # court that ran empty is <td class="old"> ("Can't book in the past");
+                # a future free hour is an <a class="empty"> ("Available"). The other
+                # <a> options (some marked "Booked") are just bookable durations, not
+                # real state — ignore them. Sets dedupe the grid's duplicate cell rows.
+                if el.name == "td" and "booked" in classes and state == "Booked":
+                    booked_h.add(start_h)
+                elif el.name == "td" and "old" in classes:
+                    empty_h.add(start_h)              # past court that ran empty
+                elif el.name == "a" and "empty" in classes and state == "Available":
+                    empty_h.add(start_h)             # future free hour
+            for h in booked_h:
+                booked[h] = booked.get(h, 0) + 1
+            for h in empty_h - booked_h:
+                free[h] = free.get(h, 0) + 1
 
-        for hr in sorted(set(free) | set(booked)):
-            hp = _yep_hour(hr)
-            if hp is None:
-                continue
-            f = free.get(hr, 0)
-            total = f + booked.get(hr, 0)
+        for h in sorted(set(free) | set(booked)):
+            f = free.get(h, 0)
+            total = f + booked.get(h, 0)
             if total == 0:
                 continue
-            start = datetime(day.year, day.month, day.day, hp[0], hp[1], tzinfo=tz)
+            start = datetime(day.year, day.month, day.day, h, 0, tzinfo=tz)
             end = start + timedelta(hours=1)
             slots.append(Slot(
                 item_id="courts",
