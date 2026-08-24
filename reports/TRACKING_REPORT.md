@@ -1,10 +1,10 @@
 # OneTap — Wasted-Slot Report
 
-_Generated 2026-08-24 18:06 AEST._
+_Generated 2026-08-24 18:15 AEST._
 
-Tracking window: 2026-08-22 19:21 AEST → 2026-08-24 18:05 AEST (9 polls, 0 errors).
+Tracking window: 2026-08-22 19:21 AEST → 2026-08-24 18:15 AEST (10 polls, 0 errors).
 
-## 💸 Total wasted so far: **$50,786 AUD**  *(estimated lost revenue)*
+## 💸 Total wasted so far: **$51,596 AUD**  *(estimated lost revenue)*
 
 For **slot venues**, a slot is **wasted** when the last check before its start still showed it open. For **capacity venues** (e.g. the driving range), we track **idle units** (free bays) per operating hour. **Utilisation** = booked ÷ total. Dollar figures are estimated lost revenue from configurable per-slot / per-bay-hour prices.
 
@@ -13,7 +13,7 @@ For **slot venues**, a slot is **wasted** when the last check before its start s
 | Kiss My Axe | binary | 11% | 72 slots / 63 hrs | $16,890 | 141 |
 | Moore Park Driving Range | capacity | 62% | 892 idle bay-hrs | $33,896 | 68 |
 | The Great Escape | binary | 0% | 0 slots / 0 hrs | $0 | 17 |
-| NBC Badminton Alexandria | capacity | 100% | 0 idle bay-hrs | $0 | 31 |
+| NBC Badminton Alexandria | capacity | 81% | 27 idle bay-hrs | $810 | 31 |
 
 ## Kiss My Axe
 
@@ -175,7 +175,21 @@ No slots have completed within the tracking window yet (17 future being watched,
 ## NBC Badminton Alexandria
 
 - **Total bays:** 18
-- **Occupancy:** 100%  (booked bay-hours ÷ total bay-hours)
-- **Idle bay-hours:** 0  (booked: 117)
-- **Estimated lost revenue:** $0
+- **Occupancy:** 81%  (booked bay-hours ÷ total bay-hours)
+- **Idle bay-hours:** 27  (booked: 117)
+- **Estimated lost revenue:** $810
 - **Future hours still watched:** 31
+
+**Deadest windows (most idle bays):**
+- Mon 12:00 — ~12 bays idle
+- Mon 10:00 — ~6 bays idle
+- Mon 11:00 — ~5 bays idle
+- Mon 13:00 — ~2 bays idle
+- Mon 16:00 — ~2 bays idle
+
+**Every wasted slot, in order (5 idle-bay hours, $810 lost):**
+- Mon 24 Aug, 10:00am — 6 bays idle — **$180**
+- Mon 24 Aug, 11:00am — 5 bays idle — **$150**
+- Mon 24 Aug, 12:00pm — 12 bays idle — **$360**
+- Mon 24 Aug, 1:00pm — 2 bays idle — **$60**
+- Mon 24 Aug, 4:00pm — 2 bays idle — **$60**

@@ -413,16 +413,23 @@ def yepbooking(target: dict, session: requests.Session) -> list[Slot]:
                 if not title or " - " not in title:
                     continue
                 state = title.rsplit(" - ", 1)[-1]
-                if state not in ("Available", "Booked"):
+                # "Can't book in the past" = a past court that was never booked = it
+                # ran empty. Yepbooking keeps this signal for the current day, so we
+                # can recover today's already-wasted courts, not just future ones.
+                if state == "Booked":
+                    norm = "booked"
+                elif state == "Available" or "past" in state.lower():
+                    norm = "empty"
+                else:
                     continue
                 hm = re.match(r"(\d{1,2}:\d{2}\s*[ap]m)", title, re.I)
                 if not hm:
                     continue
                 hr = hm.group(1).replace(" ", "")
-                if hr not in per_hour or state == "Booked":
-                    per_hour[hr] = state
+                if hr not in per_hour or norm == "booked":
+                    per_hour[hr] = norm
             for hr, st in per_hour.items():
-                if st == "Available":
+                if st == "empty":
                     free[hr] = free.get(hr, 0) + 1
                 else:
                     booked[hr] = booked.get(hr, 0) + 1
