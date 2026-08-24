@@ -412,32 +412,34 @@ def yepbooking(target: dict, session: requests.Session) -> list[Slot]:
         for tr in soup.select("tr[class*=trSchemaLane]"):
             booked_h: set[int] = set()
             empty_h: set[int] = set()
-            for el in tr.find_all(["td", "a"]):
-                title = el.get("title")
+            # Only the DIRECT-child cells are the real per-hour grid; each carries a
+            # tooltip with its hour. (find_all would recurse into the nested
+            # multi-duration booking anchors and corrupt the counts.)
+            for td in tr.find_all("td", recursive=False):
+                classes = td.get("class", [])
+                title = td.get("title") or td.get("data-tooltip")
+                if not title:
+                    a = td.find("a")
+                    if a:
+                        title = a.get("title") or a.get("data-tooltip")
                 if not title or " - " not in title:
                     continue
                 timepart, state = title.rsplit(" - ", 1)
-                times = timepart.split("–")           # en-dash between start/end
+                times = timepart.split("–")
                 if len(times) != 2:
                     continue
-                sh, eh = _yep_hour(times[0].strip()), _yep_hour(times[1].strip())
-                if not sh or not eh:
+                sh = _yep_hour(times[0].strip())
+                if not sh:
                     continue
-                start_h, end_h = sh[0], eh[0]
-                if end_h - start_h != 1:             # atomic 1-hour cells only
-                    continue
-                classes = el.get("class", [])
-                # Each hour is one <td>: a real booking is <td class="booked">; a past
-                # court that ran empty is <td class="old"> ("Can't book in the past");
-                # a future free hour is an <a class="empty"> ("Available"). The other
-                # <a> options (some marked "Booked") are just bookable durations, not
-                # real state — ignore them. Sets dedupe the grid's duplicate cell rows.
-                if el.name == "td" and "booked" in classes and state == "Booked":
-                    booked_h.add(start_h)
-                elif el.name == "td" and "old" in classes:
-                    empty_h.add(start_h)              # past court that ran empty
-                elif el.name == "a" and "empty" in classes and state == "Available":
-                    empty_h.add(start_h)             # future free hour
+                h = sh[0]
+                # td.booked = a real booking; td.old = a past court that ran empty;
+                # otherwise a future free hour ("Available").
+                if "booked" in classes:
+                    booked_h.add(h)
+                elif "old" in classes:
+                    empty_h.add(h)                    # past court, ran empty
+                elif state.strip() == "Available":
+                    empty_h.add(h)                    # future free hour
             for h in booked_h:
                 booked[h] = booked.get(h, 0) + 1
             for h in empty_h - booked_h:

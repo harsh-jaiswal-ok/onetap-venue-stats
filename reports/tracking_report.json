@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-08-24 18:30 AEST",
+  "generated_at": "2026-08-24 18:38 AEST",
   "tracking_window": {
     "first": "2026-08-22 19:21 AEST",
-    "last": "2026-08-24 18:15 AEST",
-    "polls": 10,
+    "last": "2026-08-24 18:37 AEST",
+    "polls": 11,
     "errors": 0
   },
-  "total_wasted_money": 51230.0,
+  "total_wasted_money": 54260.0,
   "currency": "AUD",
   "venues": [
     {
@@ -824,6 +824,98 @@
       "deadest_windows": [],
       "by_item": {},
       "wasted_timeline": []
+    },
+    {
+      "venue_id": "nbc-alexandria",
+      "venue_name": "NBC Badminton Alexandria",
+      "kind": "capacity",
+      "sold": 1,
+      "wasted": 7,
+      "unobserved": 0,
+      "pending": 31,
+      "utilisation_pct": 29.9,
+      "wasted_hours": 7.0,
+      "wasted_money": 3030.0,
+      "total_units": 18,
+      "idle_unit_hours": 101.0,
+      "busy_unit_hours": 43.0,
+      "deadest_windows": [
+        {
+          "day": "Mon",
+          "hour": 12,
+          "wasted": 17
+        },
+        {
+          "day": "Mon",
+          "hour": 13,
+          "wasted": 17
+        },
+        {
+          "day": "Mon",
+          "hour": 10,
+          "wasted": 16
+        },
+        {
+          "day": "Mon",
+          "hour": 11,
+          "wasted": 15
+        },
+        {
+          "day": "Mon",
+          "hour": 15,
+          "wasted": 13
+        }
+      ],
+      "by_item": {
+        "Badminton courts": {
+          "wasted": 7,
+          "sold": 1
+        }
+      },
+      "wasted_timeline": [
+        {
+          "when": "Mon 24 Aug, 10:00am",
+          "item": "Badminton courts",
+          "idle": 16,
+          "cost": 480.0
+        },
+        {
+          "when": "Mon 24 Aug, 11:00am",
+          "item": "Badminton courts",
+          "idle": 15,
+          "cost": 450.0
+        },
+        {
+          "when": "Mon 24 Aug, 12:00pm",
+          "item": "Badminton courts",
+          "idle": 17,
+          "cost": 510.0
+        },
+        {
+          "when": "Mon 24 Aug, 1:00pm",
+          "item": "Badminton courts",
+          "idle": 17,
+          "cost": 510.0
+        },
+        {
+          "when": "Mon 24 Aug, 2:00pm",
+          "item": "Badminton courts",
+          "idle": 10,
+          "cost": 300.0
+        },
+        {
+          "when": "Mon 24 Aug, 3:00pm",
+          "item": "Badminton courts",
+          "idle": 13,
+          "cost": 390.0
+        },
+        {
+          "when": "Mon 24 Aug, 4:00pm",
+          "item": "Badminton courts",
+          "idle": 13,
+          "cost": 390.0
+        }
+      ]
     }
   ]
 }

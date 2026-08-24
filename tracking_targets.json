@@ -8,13 +8,41 @@
     "enabled": true,
     "lookahead_days": 3,
     "items": [
-      {"id": "278080", "name": "Axe Throwing - 2-7 People", "price": 90},
-      {"id": "250776", "name": "Axe Throwing - 8+ People", "price": 360},
-      {"id": "250781", "name": "Axe Throwing - Two for Tuesday", "price": 39},
-      {"id": "265350", "name": "Axe Throwing Date Night - For Two", "price": 39},
-      {"id": "435685", "name": "Glow Darts - 2-12 people", "price": 30},
-      {"id": "686668", "name": "Axe Throwing & Glow Darts - 6-12 People", "price": 414},
-      {"id": "680256", "name": "Ultimate Party Package - 6+ People", "price": 654}
+      {
+        "id": "278080",
+        "name": "Axe Throwing - 2-7 People",
+        "price": 90
+      },
+      {
+        "id": "250776",
+        "name": "Axe Throwing - 8+ People",
+        "price": 360
+      },
+      {
+        "id": "250781",
+        "name": "Axe Throwing - Two for Tuesday",
+        "price": 39
+      },
+      {
+        "id": "265350",
+        "name": "Axe Throwing Date Night - For Two",
+        "price": 39
+      },
+      {
+        "id": "435685",
+        "name": "Glow Darts - 2-12 people",
+        "price": 30
+      },
+      {
+        "id": "686668",
+        "name": "Axe Throwing & Glow Darts - 6-12 People",
+        "price": 414
+      },
+      {
+        "id": "680256",
+        "name": "Ultimate Party Package - 6+ People",
+        "price": 654
+      }
     ],
     "default_price": 90,
     "price_note": "Estimated minimum booking value per session (from-price x minimum party size, from the site's published rates). Kiss My Axe hides live prices from its API, so edit these to taste."
@@ -31,8 +59,14 @@
     "price_per_unit_hour": 38,
     "price_note": "A$38 = the published 60-minute bay rate. Each idle bay-hour counts as ~$38 of unsold range time.",
     "hours": {
-      "default": [6, 22],
-      "MON": [10, 22]
+      "default": [
+        6,
+        22
+      ],
+      "MON": [
+        10,
+        22
+      ]
     },
     "note": "Capacity venue: 58 bays booked by the half-hour via YourGolfBooking (venue slug moore-park-golf). We track idle bays per operating hour. Hours approximate published times (6am-10pm; Mon from 10am)."
   },
@@ -44,7 +78,7 @@
     "id_sport": 6,
     "court_label": "Badminton courts",
     "timezone": "Australia/Sydney",
-    "enabled": false,
+    "enabled": true,
     "lookahead_days": 3,
     "price_per_unit_hour": 30,
     "note": "NBC Badminton Alexandria (18 courts) via Yepbooking. Capacity venue: free courts per operating hour. Availability is public (no login). id_sport=6 is the Alexandria tab. Court hire is $28 day / $38 evening; price_per_unit_hour is a blended estimate. Polled gently: 1 request/day of lookahead."
