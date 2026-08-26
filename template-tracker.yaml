@@ -52,6 +52,31 @@ Resources:
             Action: s3:GetObject
             Resource: !Sub arn:aws:s3:::onetap-site-${AWS::AccountId}/*
 
+  # CloudFront in front of the S3 website bucket -> HTTPS with the free
+  # *.cloudfront.net cert. Caching disabled so the 30-min dashboard rebuilds
+  # show up immediately without invalidations.
+  SiteDistribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Enabled: true
+        Comment: OneTap dashboard HTTPS
+        DefaultRootObject: index.html
+        PriceClass: PriceClass_100
+        Origins:
+          - Id: SiteS3Website
+            DomainName: !Sub onetap-site-${AWS::AccountId}.s3-website-${AWS::Region}.amazonaws.com
+            CustomOriginConfig:
+              OriginProtocolPolicy: http-only
+              HTTPPort: 80
+        DefaultCacheBehavior:
+          TargetOriginId: SiteS3Website
+          ViewerProtocolPolicy: redirect-to-https
+          AllowedMethods: [GET, HEAD]
+          CachePolicyId: 4135ea2d-6df8-44a3-9df3-4b5a84be39ad   # Managed-CachingDisabled
+        ViewerCertificate:
+          CloudFrontDefaultCertificate: true
+
   TrackerFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -107,8 +132,11 @@ Outputs:
   DataBucket:
     Value: !Ref DataBucket
   SiteURL:
-    Description: Public dashboard URL
+    Description: Public dashboard URL (HTTP, S3 website)
     Value: !GetAtt SiteBucket.WebsiteURL
+  SiteHttpsURL:
+    Description: Public dashboard URL (HTTPS, via CloudFront)
+    Value: !Sub https://${SiteDistribution.DomainName}
   TrackerFunction:
     Value: !Ref TrackerFunction
   ReportFunction:
