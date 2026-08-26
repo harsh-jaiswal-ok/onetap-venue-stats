@@ -97,6 +97,21 @@
     "note": "Escape rooms (Redfern/Sydney). Custom WooCommerce theme; reads each day's sessions via the game_overview_load AJAX (nonce served openly). Wasted = a session still fully open at start. Polled gently: 1 request/day of lookahead. price_per_empty = min booking value (2 x $65)."
   },
   {
+    "venue_id": "house-of-pickle-darling-harbour",
+    "venue_name": "House of Pickle — Darling Harbour",
+    "platform": "podplay",
+    "tenant": "houseofpickle",
+    "pod_id": "582a1846-0a56-414d-99a5-bcccc310a4e7",
+    "firebase_api_key": "AIzaSyDn5Xd_pCHSQSSv12_dS9s5msdvEHvdJUA",
+    "timezone": "Australia/Sydney",
+    "enabled": true,
+    "lookahead_days": 3,
+    "total_courts": 8,
+    "court_label": "Pickleball Courts",
+    "price_per_unit_hour": 16,
+    "price_note": "PLACEHOLDER rate per idle court-hour. House of Pickle is membership-priced (members book free; guests pay day-pass fees of $0/$2.50/$5/$7.50 by party size), so there is no clean court-hire price — replace 16 with the real casual court-hire rate, or set to 0 to report occupancy only. Capacity venue: 8 courts (C1-C8) booked by the half-hour via Podplay; availability is public behind an anonymous Firebase token (no login)."
+  },
+  {
     "venue_id": "camperdown-tennis",
     "venue_name": "Camperdown Tennis",
     "platform": "intrac",

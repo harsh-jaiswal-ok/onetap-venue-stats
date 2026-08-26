@@ -467,12 +467,89 @@ def yepbooking(target: dict, session: requests.Session) -> list[Slot]:
     return slots
 
 
+# ---------------------------------------------------------------------------
+# Podplay  (House of Pickle)  — public availability behind an anonymous
+# Firebase token (no account needed). The /sessions grid hands us `tablesLeft`
+# per 30-min slot directly, so this is a capacity venue like the courts above.
+# ---------------------------------------------------------------------------
+def _podplay_token(session: requests.Session, api_key: str) -> str:
+    """Mint an anonymous Firebase ID token (no credentials)."""
+    r = session.post(
+        f"https://identitytoolkit.googleapis.com/v1/accounts:signUp?key={api_key}",
+        json={"returnSecureToken": True}, timeout=REQUEST_TIMEOUT)
+    r.raise_for_status()
+    return r.json()["idToken"]
+
+
+def podplay(target: dict, session: requests.Session) -> list[Slot]:
+    tz = ZoneInfo(target.get("timezone", "Australia/Sydney"))
+    tenant = target["tenant"]
+    pod_id = target["pod_id"]
+    api_base = f"https://{tenant}.podplay.app/apis/v2"
+    lookahead = int(target.get("lookahead_days", 3))
+    price_per_hour = target.get("price_per_unit_hour")   # per court-hour; may be None
+    item_name = target.get("court_label", "Courts")
+
+    id_token = _podplay_token(session, target["firebase_api_key"])
+    headers = {"authorization": f"Bearer {id_token}", "accept-language": "en"}
+
+    total_courts = target.get("total_courts")
+    if not total_courts:
+        try:
+            tabs = session.get(f"{api_base}/pods/{pod_id}/tables", headers=headers,
+                               timeout=REQUEST_TIMEOUT).json().get("items", [])
+            total_courts = len([t for t in tabs if t.get("status") == "AVAILABLE"]) \
+                or len(tabs) or None
+        except requests.RequestException:
+            total_courts = None
+
+    fmt = "%Y-%m-%dT%H:%M:%S.000Z"
+    today = datetime.now(tz).date()
+    slots: list[Slot] = []
+    for offset in range(lookahead):
+        day = today + timedelta(days=offset)
+        start = datetime(day.year, day.month, day.day, 0, 0, tzinfo=tz)
+        end = start + timedelta(days=1)
+        try:
+            r = session.get(f"{api_base}/sessions", headers=headers,
+                            timeout=REQUEST_TIMEOUT, params={
+                                "startTime": start.astimezone(timezone.utc).strftime(fmt),
+                                "endTime": end.astimezone(timezone.utc).strftime(fmt),
+                                "podId": pod_id})
+            if r.status_code != 200:
+                continue
+            items = r.json().get("items", [])
+        except requests.RequestException:
+            continue
+        for it in items:
+            st = datetime.fromisoformat(it["startTime"].replace("Z", "+00:00"))
+            et = datetime.fromisoformat(it["endTime"].replace("Z", "+00:00"))
+            local = st.astimezone(tz)
+            if local.date() != day:                     # guard boundary bleed
+                continue
+            left = int(it.get("tablesLeft", 0))
+            slots.append(Slot(
+                item_id="courts",
+                item_name=item_name,
+                slot_start_utc=_iso_utc(st),
+                slot_end_utc=_iso_utc(et),
+                slot_local=local.strftime("%Y-%m-%d %H:%M"),
+                is_available=left > 0,
+                capacity=left,
+                capacity_total=total_courts,
+                price=price_per_hour,                    # report does free*price*duration_h
+            ))
+        time.sleep(CRAWL_DELAY_SECONDS)
+    return slots
+
+
 ADAPTERS = {
     "fareharbor": fareharbor,
     "intrac": intrac,
     "yourgolfbooking": yourgolfbooking,
     "greatescape": greatescape,
     "yepbooking": yepbooking,
+    "podplay": podplay,
 }
 
 

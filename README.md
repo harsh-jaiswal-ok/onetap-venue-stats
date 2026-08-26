@@ -77,6 +77,7 @@ tells Pages to serve the files untouched.)
 |-------|----------|--------|
 | **Kiss My Axe** (Alexandria) | FareHarbor | ✅ **On** — public JSON API, no login |
 | **Moore Park Driving Range** | YourGolfBooking | ✅ **On** — public API; tracked as idle bays per hour (capacity venue) |
+| **House of Pickle** (Darling Harbour) | Podplay | ✅ **On** — 8 courts, idle courts per 30-min slot; availability public behind an anonymous Firebase token (no login) |
 | Camperdown Tennis | Intrac | ⚙️ Off — needs a member login (best court story once enabled) |
 | City Community Tennis | Intrac | ⚙️ Off — needs a member login |
 | Cipher Room | Bookeo | ❌ reCAPTCHA-gated |
