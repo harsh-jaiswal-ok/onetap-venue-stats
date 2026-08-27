@@ -39,11 +39,6 @@ CSS = """
   --pill-bg:#DDEFE2; --warn:#C25B3A; --warn-bg:#F3E1D9; --warn-ink:#8A4A2E;
   --line:#D8D2BE; --bar-bg:#E4DFCD;
 }
-@media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){
-  --paper:#0F1712; --panel:#16211A; --row:#1B281F; --ink:#E9E6D5; --muted:#93A398;
-  --deep:#0D3B2A; --deep-ink:#F2EFDF; --green:#4CC98A; --green-bright:#2BB673;
-  --pill-bg:#1E3A2B; --warn:#E08763; --warn-bg:#3A2418; --warn-ink:#E0B678;
-  --line:#2A3A30; --bar-bg:#22301F; }}
 :root[data-theme="dark"]{
   --paper:#0F1712; --panel:#16211A; --row:#1B281F; --ink:#E9E6D5; --muted:#93A398;
   --deep:#0D3B2A; --deep-ink:#F2EFDF; --green:#4CC98A; --green-bright:#2BB673;
@@ -454,7 +449,7 @@ def render_page(intel, tracking):
   try{{apply(localStorage.getItem('onetap-theme'));}}catch(e){{}}
   btn.addEventListener('click',function(){{
     var cur=root.getAttribute('data-theme');
-    var dark=cur? cur==='dark' : window.matchMedia('(prefers-color-scheme:dark)').matches;
+    var dark=cur==='dark';
     var next=dark?'light':'dark'; apply(next);
     try{{localStorage.setItem('onetap-theme',next);}}catch(e){{}}
   }});
