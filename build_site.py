@@ -385,11 +385,7 @@ def build():
 
 def render_page(intel, tracking):
     """Render the full dashboard HTML from data dicts (no disk reads — Lambda-safe)."""
-    has_tracking = bool(tracking and any(v["sold"] + v["wasted"] > 0 for v in tracking.get("venues", [])))
-    default_tab = "tracking" if has_tracking else "intel"
-
     # summary tiles
-    n_venues = len(intel["venues"]) if intel else 0
     total_sold = sum(v["sold"] for v in tracking["venues"]) if tracking else 0
     total_wasted = sum(v["wasted"] for v in tracking["venues"]) if tracking else 0
     total_open = sum(v["pending"] for v in tracking["venues"]) if tracking else 0
@@ -399,7 +395,6 @@ def render_page(intel, tracking):
     tracked_venues = sum(1 for v in (tracking["venues"] if tracking else []))
 
     tiles = [
-        (str(n_venues), "Target venues", ""),
         (str(tracked_venues), "Venues tracked", ""),
         (f"{total_wasted}", "Wasted slots", "warn") if decided else (f"{total_open}", "Slots watched", ""),
         (f"{util:.0f}%", "Utilisation", "good") if decided else (str(total_sold), "Sold so far", "good"),
@@ -423,7 +418,7 @@ def render_page(intel, tracking):
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>OneTap Venue Stats</title>
-<meta name="description" content="Booking intelligence and idle-inventory tracking for the OneTap founding-venue targets.">
+<meta name="description" content="Idle-inventory tracking for the OneTap founding-venue targets.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><text y='14' font-size='14'>🎯</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;700;800&family=IBM+Plex+Mono:wght@400;600;700&display=swap">
@@ -435,9 +430,9 @@ def render_page(intel, tracking):
     <div>
       <div class="brand">One<span class="t">Tap</span></div>
       <div class="eyebrow">Founding venue targets · stats</div>
-      <h1>Who they book with, and what they waste.</h1>
-      <p class="lede">Booking intelligence for all ten target venues, plus live idle-inventory
-      tracking of the ones with an open availability feed.{(' Last updated ' + esc(generated) + '.') if generated else ''}</p>
+      <h1>What they waste.</h1>
+      <p class="lede">Live idle-inventory tracking of venues with an open availability feed —
+      which slots go unsold, and when.{(' Last updated ' + esc(generated) + '.') if generated else ''}</p>
     </div>
     <button class="themebtn" id="themebtn" type="button">◐ Theme</button>
   </header>
@@ -446,33 +441,13 @@ def render_page(intel, tracking):
 
   <div class="tiles">{tiles_html}</div>
 
-  <div class="tabs" role="tablist">
-    <button class="tab" role="tab" id="tab-tracking" aria-controls="panel-tracking"
-      aria-selected="{str(default_tab=='tracking').lower()}">Idle inventory</button>
-    <button class="tab" role="tab" id="tab-intel" aria-controls="panel-intel"
-      aria-selected="{str(default_tab=='intel').lower()}">Venue intelligence</button>
-  </div>
-
-  <div class="panel" id="panel-tracking" role="tabpanel" aria-labelledby="tab-tracking"
-    {'hidden' if default_tab!='tracking' else ''}>{render_tracking_panel(tracking)}</div>
-  <div class="panel" id="panel-intel" role="tabpanel" aria-labelledby="tab-intel"
-    {'hidden' if default_tab!='intel' else ''}>{render_intel_panel(intel)}</div>
+  <div id="panel-tracking">{render_tracking_panel(tracking)}</div>
 
   <footer><span>OneTap · founding venue stats</span>
   <span>{('Updated ' + esc(generated)) if generated else 'Static site · GitHub Pages'}</span></footer>
 </div>
 <script>
 (function(){{
-  var tabs=[document.getElementById('tab-tracking'),document.getElementById('tab-intel')];
-  var panels={{tracking:document.getElementById('panel-tracking'),intel:document.getElementById('panel-intel')}};
-  function select(key){{
-    tabs.forEach(function(t){{t.setAttribute('aria-selected', t.id==='tab-'+key);}});
-    Object.keys(panels).forEach(function(k){{panels[k].hidden = (k!==key);}});
-    try{{localStorage.setItem('onetap-tab',key);}}catch(e){{}}
-  }}
-  tabs.forEach(function(t){{t.addEventListener('click',function(){{select(t.id.replace('tab-',''));}});}});
-  try{{var saved=localStorage.getItem('onetap-tab'); if(saved&&panels[saved]) select(saved);}}catch(e){{}}
-
   var btn=document.getElementById('themebtn');
   var root=document.documentElement;
   function apply(t){{ if(t) root.setAttribute('data-theme',t); }}
