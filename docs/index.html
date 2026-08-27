@@ -1,180 +1,531 @@
 <!doctype html>
-<html lang="en">
+<html lang="en-AU">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>OneTap Venue Stats</title>
-<meta name="description" content="Idle-inventory tracking for the OneTap founding-venue targets.">
+<title>OneTap — venue waste report</title>
+<meta name="description" content="Unsold slots and idle bays across Sydney venues, read straight off their booking feeds.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><text y='14' font-size='14'>🎯</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;700;800&family=IBM+Plex+Mono:wght@400;600;700&display=swap">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --paper:#F6F3E8; --panel:#FDFBF3; --row:#ECE8D9; --ink:#17251D; --muted:#5B6B60;
-  --deep:#0D3B2A; --deep-ink:#F2EFDF; --green:#1E8A56; --green-bright:#2BB673;
-  --pill-bg:#DDEFE2; --warn:#C25B3A; --warn-bg:#F3E1D9; --warn-ink:#8A4A2E;
-  --line:#D8D2BE; --bar-bg:#E4DFCD;
+  --bg:#E6E8EA;
+  --panel:#F2F3F4;
+  --ink:#15181C;
+  --ink-2:#59616A;
+  --ink-3:#8E969E;
+  --rule:#C4CACE;
+  --rule-soft:#D6DADD;
+  --mark:#E2FB3C;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --sans:"Archivo",system-ui,-apple-system,Segoe UI,sans-serif;
+  --pad:clamp(20px,5vw,64px);
 }
-:root[data-theme="dark"]{
-  --paper:#0F1712; --panel:#16211A; --row:#1B281F; --ink:#E9E6D5; --muted:#93A398;
-  --deep:#0D3B2A; --deep-ink:#F2EFDF; --green:#4CC98A; --green-bright:#2BB673;
-  --pill-bg:#1E3A2B; --warn:#E08763; --warn-bg:#3A2418; --warn-ink:#E0B678;
-  --line:#2A3A30; --bar-bg:#22301F; }
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{background:var(--paper);color:var(--ink);margin:0;line-height:1.55;
-  font-family:'Archivo','Helvetica Neue',Arial,sans-serif}
-.mono{font-family:'IBM Plex Mono',ui-monospace,Menlo,monospace}
-.num{font-variant-numeric:tabular-nums}
-.wrap{max-width:64rem;margin:0 auto;padding:2.5rem 1.25rem 4rem}
-a{color:var(--green)}
-header.mast{border-bottom:3px solid var(--deep);padding-bottom:1.5rem;margin-bottom:1.5rem;
-  display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;flex-wrap:wrap}
-.brand{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:1rem}.brand .t{color:var(--green)}
-.eyebrow{font-family:'IBM Plex Mono',monospace;font-size:.68rem;font-weight:600;letter-spacing:.18em;
-  text-transform:uppercase;color:var(--green);margin:.5rem 0 .75rem}
-h1{font-size:clamp(1.9rem,5vw,2.9rem);font-weight:800;letter-spacing:-.025em;margin:0 0 .5rem;text-wrap:balance}
-.lede{color:var(--muted);max-width:44rem;margin:0}
-.themebtn{font-family:'IBM Plex Mono',monospace;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;
-  background:transparent;color:var(--muted);border:1px solid var(--line);padding:.45rem .7rem;cursor:pointer}
-.themebtn:hover{color:var(--green);border-color:var(--green)}
-/* summary tiles */
-.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(9rem,1fr));gap:.75rem;margin:1.5rem 0}
-.tile{background:var(--panel);border:1px solid var(--line);padding:1rem 1.1rem}
-.tile .n{font-size:1.9rem;font-weight:800;font-variant-numeric:tabular-nums;line-height:1}
-.tile .n.warn{color:var(--warn)}.tile .n.good{color:var(--green)}
-.tile .k{font-family:'IBM Plex Mono',monospace;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;
-  color:var(--muted);margin-top:.4rem}
-.moneybar{background:var(--deep);color:var(--deep-ink);padding:1.5rem 1.75rem;margin:1.5rem 0 0;
-  border-radius:2px}
-.moneybar .ml{font-family:'IBM Plex Mono',monospace;font-size:.68rem;letter-spacing:.16em;
-  text-transform:uppercase;color:var(--green-bright);margin-bottom:.3rem}
-.moneybar .mv{font-size:clamp(2.4rem,7vw,3.8rem);font-weight:800;line-height:1;letter-spacing:-.02em;
-  font-variant-numeric:tabular-nums}
-.moneybar .mc{font-size:1rem;font-weight:600;color:var(--green-bright)}
-.moneybar .mn{font-size:.82rem;color:var(--deep-ink);opacity:.7;margin-top:.5rem}
-.money,td.money{color:var(--warn);font-weight:600}
-/* tabs */
-.tabs{display:flex;gap:.25rem;border-bottom:1px solid var(--line);margin:2rem 0 1.5rem;flex-wrap:wrap}
-.tab{font-family:'IBM Plex Mono',monospace;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;
-  font-weight:600;background:transparent;border:none;border-bottom:2px solid transparent;color:var(--muted);
-  padding:.7rem 1rem;cursor:pointer;margin-bottom:-1px}
-.tab[aria-selected="true"]{color:var(--green);border-bottom-color:var(--green)}
-.panel[hidden]{display:none}
-/* tables */
-.tablebox{overflow-x:auto;border:1px solid var(--line);margin:1.25rem 0}
-table{border-collapse:collapse;width:100%;font-size:.85rem;min-width:40rem}
-thead th{background:var(--deep);color:var(--deep-ink);text-align:left;font-family:'IBM Plex Mono',monospace;
-  font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;padding:.6rem .75rem;white-space:nowrap}
-tbody td{padding:.6rem .75rem;border-top:1px solid var(--line);vertical-align:top}
-tbody tr:nth-child(even){background:var(--row)}
-.util-cell{display:flex;align-items:center;gap:.5rem;min-width:8rem}
-.util-track{flex:1;height:7px;background:var(--bar-bg);position:relative;overflow:hidden;min-width:3rem}
-.util-fill{position:absolute;inset:0 auto 0 0;background:var(--green)}
-/* venue cards */
-.card{border:1px solid var(--line);background:var(--panel);margin-bottom:1.5rem;padding:1.25rem}
-.card h2,.card h3.vt{margin:0;font-size:1.3rem;font-weight:800;letter-spacing:-.01em}
-.vhead{display:flex;align-items:baseline;gap:.75rem;flex-wrap:wrap;margin-bottom:.15rem}
-.vnum{font-family:'IBM Plex Mono',monospace;color:var(--green);font-weight:700}
-.suburb{color:var(--muted);font-size:.88rem}
-.pill{font-family:'IBM Plex Mono',monospace;font-size:.62rem;font-weight:600;letter-spacing:.08em;
-  text-transform:uppercase;padding:.22rem .55rem;background:var(--pill-bg);color:var(--green);white-space:nowrap}
-.pill.warn{background:var(--warn-bg);color:var(--warn-ink)}.pill.star{background:var(--deep);color:var(--deep-ink)}
-.statrow{display:flex;flex-wrap:wrap;gap:1.4rem;margin:.8rem 0 1rem}
-.stat .n{font-size:1.5rem;font-weight:800;font-variant-numeric:tabular-nums}
-.stat .n.warn{color:var(--warn)}.stat .n.good{color:var(--green)}
-.stat .k{font-family:'IBM Plex Mono',monospace;font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
-.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(14rem,1fr));gap:.5rem 1.4rem;margin:.5rem 0 .5rem}
-.fact .k{font-family:'IBM Plex Mono',monospace;font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
-.fact .v{font-size:.88rem}
-.block h4{font-family:'IBM Plex Mono',monospace;font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;
-  color:var(--green);margin:1rem 0 .5rem;border-top:1px solid var(--line);padding-top:.7rem}
-.chips{display:flex;flex-wrap:wrap;gap:.35rem}
-.chip{font-size:.76rem;padding:.22rem .55rem;border:1px solid var(--line);background:var(--row)}
-ul.data{list-style:none;margin:0;padding:0;display:grid;gap:.25rem}
-ul.data li{font-family:'IBM Plex Mono',monospace;font-size:.76rem;padding-left:1rem;position:relative}
-ul.data li::before{content:"·";position:absolute;left:0;color:var(--green);font-weight:700}
-.note{background:var(--warn-bg);color:var(--warn-ink);padding:.65rem .9rem;font-size:.84rem;margin:.5rem 0}
-.empty{color:var(--muted);font-size:.9rem}
-details summary{cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:.62rem;letter-spacing:.12em;
-  text-transform:uppercase;color:var(--muted)}
-details ul{margin:.4rem 0 0;padding-left:1.1rem}details a{word-break:break-all}
-.heat{overflow-x:auto;margin-top:.4rem}
-.heat table{min-width:32rem;font-size:.7rem}
-.heat th,.heat td{border:1px solid var(--line);padding:.28rem;text-align:center;font-variant-numeric:tabular-nums}
-.heat th{background:transparent;color:var(--muted);font-family:'IBM Plex Mono',monospace;font-weight:600;letter-spacing:normal;text-transform:none}
-.itemgrid{display:grid;gap:.4rem}
-.item{display:grid;grid-template-columns:1fr auto;gap:.4rem .5rem;align-items:center;font-size:.84rem}
-.item .bar{grid-column:1/-1;height:6px;background:var(--bar-bg);position:relative;overflow:hidden}
-.item .bar i{position:absolute;inset:0 auto 0 0;background:var(--green)}
-.timeline{max-height:20rem;overflow-y:auto;border:1px solid var(--line)}
-.timeline table{min-width:0;width:100%;font-size:.82rem}
-.timeline td{padding:.35rem .7rem;border-top:1px solid var(--line)}
-.timeline tr:first-child td{border-top:none}
-.timeline tr:nth-child(even){background:var(--row)}
-.timeline td:first-child{white-space:nowrap;color:var(--muted)}
-.rule{background:var(--green-bright);color:#0B2417;padding:.8rem 1rem;font-size:.85rem;margin:1.5rem 0}
-.rule strong{font-weight:800}
-footer{margin-top:3rem;border-top:1px solid var(--line);padding-top:1rem;display:flex;justify-content:space-between;
-  gap:1rem;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:.64rem;letter-spacing:.1em;
-  text-transform:uppercase;color:var(--muted)}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:var(--sans);font-size:16px;line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1180px;margin:0 auto;padding:0 var(--pad)}
+
+/* ---------- masthead ---------- */
+.masthead{
+  position:sticky;top:0;z-index:40;background:var(--bg);
+  border-bottom:1px solid var(--ink);
+}
+.masthead .wrap{
+  display:flex;align-items:baseline;justify-content:space-between;
+  gap:16px;padding-top:12px;padding-bottom:11px;
+}
+.wordmark{font-weight:700;letter-spacing:-.03em;font-size:17px}
+.stamp{
+  font-family:var(--mono);font-size:11px;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--ink-2);text-align:right;
+}
+.stamp b{font-weight:500;color:var(--ink)}
+
+/* ---------- hero ---------- */
+.hero{padding-top:clamp(48px,9vw,104px);padding-bottom:clamp(40px,7vw,72px)}
+.eyebrow{
+  font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--ink-2);margin:0 0 clamp(20px,3vw,32px)
+}
+.figure{
+  font-family:var(--mono);font-weight:600;
+  font-size:clamp(62px,15.5vw,188px);line-height:.86;letter-spacing:-.045em;
+  margin:0;position:relative;display:inline-block;
+}
+.lede{
+  font-size:clamp(18px,2.1vw,25px);line-height:1.32;letter-spacing:-.018em;
+  max-width:22ch;margin:clamp(24px,3.5vw,38px) 0 0;font-weight:500;
+}
+.lede em{font-style:normal;color:var(--ink-2)}
+.provenance{
+  font-family:var(--mono);font-size:11.5px;line-height:1.75;color:var(--ink-2);
+  margin:clamp(28px,4vw,44px) 0 0;padding-top:14px;
+  border-top:1px solid var(--rule);max-width:56ch;
+}
+
+/* ---------- section furniture ---------- */
+.section{padding-top:clamp(44px,6vw,80px)}
+.rule-top{border-top:1px solid var(--ink)}
+.shead{display:flex;flex-wrap:wrap;gap:8px 28px;align-items:baseline;margin-bottom:clamp(24px,3vw,36px)}
+.shead h2{
+  font-size:clamp(21px,2.4vw,30px);letter-spacing:-.03em;font-weight:600;margin:0;
+}
+.shead p{font-size:14.5px;color:var(--ink-2);margin:0;max-width:52ch;line-height:1.45}
+
+/* ---------- small multiples ---------- */
+.multiples{
+  display:grid;gap:clamp(20px,2.6vw,34px);
+  grid-template-columns:repeat(auto-fit,minmax(228px,1fr));
+}
+.mpanel{min-width:0}
+.mpanel h3{
+  font-size:14px;font-weight:600;letter-spacing:-.01em;margin:0 0 2px;
+}
+.mpanel .mmeta{
+  font-family:var(--mono);font-size:11px;color:var(--ink-2);margin:0 0 12px;
+}
+.cal{display:grid;grid-template-columns:22px 1fr;gap:0 6px;align-items:stretch}
+.cal-days{display:grid;gap:2px;grid-auto-rows:1fr}
+.cal-day{
+  font-family:var(--mono);font-size:9.5px;color:var(--ink-3);line-height:1;
+  display:flex;align-items:center;justify-content:flex-end;
+}
+.cal-rows{display:grid;gap:2px;min-width:0}
+.cal-row{display:grid;gap:2px;min-width:0}
+.cell{
+  aspect-ratio:1;border:1px solid var(--rule-soft);background:transparent;
+  position:relative;min-width:0;
+}
+.cell[data-v]{border-color:transparent}
+.cell.peak{
+  outline:2px solid var(--mark);outline-offset:0;
+  border-color:transparent;z-index:2;
+}
+.cal-hours{
+  grid-column:2;display:flex;justify-content:space-between;
+  font-family:var(--mono);font-size:9.5px;color:var(--ink-3);margin-top:6px;
+}
+.legend{
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+  font-family:var(--mono);font-size:11px;color:var(--ink-2);
+  margin-top:clamp(22px,3vw,32px);padding-top:12px;border-top:1px solid var(--rule);
+}
+.ramp{display:flex;gap:2px}
+.ramp i{width:13px;height:13px;display:block;border:1px solid var(--rule-soft)}
+.ramp i.peak-swatch{outline:2px solid var(--mark);outline-offset:-2px;border-color:transparent}
+
+/* ---------- ledger table ---------- */
+.ledger{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:13px}
+.ledger th{
+  text-align:left;font-weight:500;font-size:10.5px;letter-spacing:.11em;
+  text-transform:uppercase;color:var(--ink-2);
+  padding:0 12px 10px 0;border-bottom:1px solid var(--ink);white-space:nowrap;
+}
+.ledger td{padding:13px 12px 13px 0;border-bottom:1px solid var(--rule-soft);vertical-align:baseline}
+.ledger tr:last-child td{border-bottom:1px solid var(--ink)}
+.ledger .num{text-align:right;font-variant-numeric:tabular-nums}
+.ledger .vname{font-family:var(--sans);font-weight:600;font-size:15px;letter-spacing:-.015em}
+.ledger a{color:inherit;text-decoration:none;border-bottom:1px solid var(--rule)}
+.ledger a:hover{border-bottom-color:var(--ink)}
+.ledger .lost{font-weight:600}
+.bar{position:relative;height:7px;background:var(--rule-soft);min-width:64px;margin-top:5px;display:block}
+.bar i{position:absolute;inset:0 auto 0 0;background:var(--ink);display:block}
+.note{
+  font-family:var(--mono);font-size:11.5px;line-height:1.7;color:var(--ink-2);
+  margin:18px 0 0;max-width:74ch;
+}
+.note b{color:var(--ink);font-weight:500}
+
+/* ---------- venue detail ---------- */
+.venue{padding-top:clamp(52px,7vw,92px)}
+.vhead{
+  display:flex;flex-wrap:wrap;gap:6px 24px;align-items:flex-end;
+  justify-content:space-between;
+  border-bottom:1px solid var(--ink);padding-bottom:14px;margin-bottom:clamp(24px,3vw,34px);
+}
+.vhead h2{font-size:clamp(24px,3.4vw,42px);letter-spacing:-.035em;font-weight:600;margin:0}
+.vhead .vkind{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);display:block;margin-bottom:6px}
+.vlost{font-family:var(--mono);font-size:clamp(24px,3.2vw,38px);font-weight:600;letter-spacing:-.03em;white-space:nowrap}
+.vgrid{display:grid;grid-template-columns:minmax(0,280px) minmax(0,1fr);gap:clamp(26px,4vw,56px)}
+dl.stats{margin:0;font-family:var(--mono);font-size:13px}
+dl.stats div{display:flex;justify-content:space-between;gap:16px;padding:9px 0;border-bottom:1px solid var(--rule-soft)}
+dl.stats div:first-child{border-top:1px solid var(--rule-soft)}
+dl.stats dt{color:var(--ink-2);font-size:11.5px;letter-spacing:.04em}
+dl.stats dd{margin:0;font-weight:600;font-variant-numeric:tabular-nums}
+.subhead{
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--ink-2);margin:clamp(26px,3vw,34px) 0 12px;font-weight:500;
+}
+.vgrid .subhead:first-child{margin-top:0}
+.offer{margin-top:11px}
+.offer-top{display:flex;justify-content:space-between;gap:12px;align-items:baseline}
+.offer-name{font-size:13.5px;letter-spacing:-.01em;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.offer-fig{font-family:var(--mono);font-size:11px;color:var(--ink-2);white-space:nowrap}
+.offer-bar{display:flex;height:8px;margin-top:5px;background:var(--rule-soft)}
+.offer-bar .w{background:var(--ink)}
+.offer-bar .s{background:var(--mark)}
+
+/* big calendar */
+.bigcal .cal{grid-template-columns:30px 1fr;gap:0 8px}
+.bigcal .cal-day{font-size:11px}
+.bigcal .cal-hours{font-size:10px}
+.bigcal .cell{border-radius:1px}
+
+/* log */
+.log{margin-top:clamp(28px,3.5vw,40px)}
+.logbox{
+  max-height:340px;overflow:auto;border-top:1px solid var(--ink);
+  border-bottom:1px solid var(--ink);background:var(--panel);
+}
+.logtable{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:12.5px}
+.logtable td{padding:7px 14px;border-bottom:1px solid var(--rule-soft);white-space:nowrap}
+.logtable tr:last-child td{border-bottom:0}
+.logtable td:nth-child(2){white-space:normal;color:var(--ink-2);width:99%}
+.logtable td:last-child{text-align:right;font-variant-numeric:tabular-nums;font-weight:500}
+.logtable tr:hover td{background:var(--bg)}
+
+footer{
+  margin-top:clamp(56px,8vw,110px);border-top:1px solid var(--ink);
+  padding:16px 0 40px;
+  display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px 24px;
+  font-family:var(--mono);font-size:11px;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--ink-2);
+}
+
+/* tooltip */
+#tip{
+  position:fixed;z-index:80;pointer-events:none;opacity:0;
+  background:var(--ink);color:var(--bg);
+  font-family:var(--mono);font-size:11.5px;line-height:1.45;
+  padding:7px 10px;white-space:nowrap;transform:translate(-50%,-134%);
+  transition:opacity .09s linear;
+}
+#tip.on{opacity:1}
+
+:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+
+@media (max-width:880px){
+  .vgrid{grid-template-columns:1fr}
+  .ledger .hide-sm{display:none}
+}
+
+@keyframes riseIn{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:none}}
+.cell{animation:riseIn .28s ease-out backwards}
+@media (prefers-reduced-motion:reduce){
+  .cell{animation:none}
+  *{transition-duration:.001ms!important}
+}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header class="mast">
-    <div>
-      <div class="brand">One<span class="t">Tap</span></div>
-      <div class="eyebrow">Founding venue targets · stats</div>
-      <h1>What they waste.</h1>
-      <p class="lede">Live idle-inventory tracking of venues with an open availability feed —
-      which slots go unsold, and when. Last updated 2026-08-24 18:38 AEST.</p>
+
+<header class="masthead">
+  <div class="wrap">
+    <span class="wordmark">OneTap</span>
+    <span class="stamp">Venue waste report<br><b id="stamp-date"></b></span>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="hero">
+    <p class="eyebrow">Founding-venue targets — idle inventory</p>
+    <h1 class="figure"><span id="hero-total"></span></h1>
+    <p class="lede">walked out the door unsold. <em>4 Sydney venues over 3 days, read straight off their own booking feeds.</em></p>
+    <p class="provenance" id="provenance"></p>
+  </section>
+
+  <section class="section rule-top">
+    <div class="shead">
+      <h2>Where the empty hours sit</h2>
+      <p>One block per venue. Rows are days, columns are opening hours. Darker means more inventory went unsold in that hour; the boxed cell is each venue's single worst hour of the week.</p>
     </div>
-    <button class="themebtn" id="themebtn" type="button">◐ Theme</button>
-  </header>
+    <div class="multiples" id="multiples"></div>
+    <div class="legend">
+      <span>none</span>
+      <span class="ramp" id="ramp"></span>
+      <span>most wasted</span>
+      <span class="ramp"><i class="peak-swatch" style="background:rgba(21,24,28,.95);border-color:transparent"></i></span>
+      <span>worst hour of the week</span>
+    </div>
+  </section>
 
-  <div class="moneybar"><div class="ml">Estimated revenue wasted so far</div><div class="mv">$54,260<span class="mc"> AUD</span></div><div class="mn">across 4 tracked venue(s) · estimated lost revenue from unsold slots &amp; idle bays</div></div>
+  <section class="section rule-top">
+    <div class="shead">
+      <h2>The ledger</h2>
+    </div>
+    <table class="ledger">
+      <thead>
+        <tr>
+          <th>Venue</th>
+          <th class="num">Lost revenue</th>
+          <th class="hide-sm">Utilisation</th>
+          <th class="num hide-sm">Wasted</th>
+          <th class="num">Still open</th>
+        </tr>
+      </thead>
+      <tbody id="ledger-body"></tbody>
+    </table>
+    <p class="note">
+      For venues that sell fixed sessions — Kiss My Axe, The Great Escape, a slot counts as <b>wasted</b> when its start time passed with zero bookings on it. For venues that sell bays or courts by the hour, we read the live booking count and total the <b>units sitting empty</b> each operating hour. Lost revenue applies each venue's own list price and takes no view on discounts.
+    </p>
+  </section>
 
-  <div class="tiles"><div class="tile"><div class="n ">4</div><div class="k">Venues tracked</div></div><div class="tile"><div class="n warn">120</div><div class="k">Wasted slots</div></div><div class="tile"><div class="n good">8%</div><div class="k">Utilisation</div></div></div>
+  <div id="venues"></div>
 
-  <div id="panel-tracking"><p class="lede">For <b>slot venues</b> (Kiss My Axe), a slot is <b>wasted</b> when it had <b>zero bookings</b> by its start time — a session that ran empty. For <b>capacity venues</b> (the driving range) we read the <b>actual bookings</b> and count <b>idle bays</b> per operating hour. <b>Lost revenue</b> is estimated from configurable prices.</p><p class="lede">Tracking window 2026-08-22 19:21 AEST → 2026-08-24 18:37 AEST · 11 polls · 0 errors.</p><div class="tablebox"><table><thead><tr><th>Venue</th><th>Lost revenue</th><th>Utilisation</th><th></th><th>Wasted / idle</th><th>Future</th></tr></thead><tbody><tr><td><b>Kiss My Axe</b></td><td class="num money">$17,334</td><td class="num">11%<br><span class="suburb">utilisation</span></td><td><div class="util-cell"><span class="util-track"><span class="util-fill" style="width:11%"></span></span></div></td><td class="num">74 / 65 hrs</td><td class="num">139</td></tr><tr><td><b>Moore Park Driving Range</b></td><td class="num money">$33,896</td><td class="num">62%<br><span class="suburb">occupancy</span></td><td><div class="util-cell"><span class="util-track"><span class="util-fill" style="width:62%"></span></span></div></td><td class="num">892 idle bay-hrs</td><td class="num">68</td></tr><tr><td><b>The Great Escape</b></td><td class="num money">$0</td><td class="num">0%<br><span class="suburb">utilisation</span></td><td><div class="util-cell"><span class="util-track"><span class="util-fill" style="width:0%"></span></span></div></td><td class="num">0 / 0 hrs</td><td class="num">17</td></tr><tr><td><b>NBC Badminton Alexandria</b></td><td class="num money">$3,030</td><td class="num">30%<br><span class="suburb">occupancy</span></td><td><div class="util-cell"><span class="util-track"><span class="util-fill" style="width:30%"></span></span></div></td><td class="num">101 idle bay-hrs</td><td class="num">31</td></tr></tbody></table></div><div class="card"><h2>Kiss My Axe</h2>
-      <div class="suburb">83 decided slots tracked</div>
-      <div class="statrow">
-      <div class="stat"><div class="n warn num">$17,334</div><div class="k">Lost revenue</div></div>
-      <div class="stat"><div class="n warn num">74</div><div class="k">Wasted slots</div></div>
-      <div class="stat"><div class="n good num">9</div><div class="k">Sold slots</div></div>
-      <div class="stat"><div class="n num">11%</div><div class="k">Utilisation</div></div>
-      <div class="stat"><div class="n num">139</div><div class="k">Open (future)</div></div></div><div class="block"><h4>Deadest windows · wasted slots by day &amp; hour</h4><div class="heat"><table><thead><tr><th></th><th>10</th><th>12</th><th>14</th><th>16</th><th>18</th></tr></thead><tbody><tr><th>Mon</th><td style="background:transparent"></td><td style="background:transparent"></td><td style="background:transparent"></td><td style="background:color-mix(in srgb, var(--warn) 100%, transparent)">6</td><td style="background:transparent"></td></tr><tr><th>Sun</th><td style="background:color-mix(in srgb, var(--warn) 100%, transparent)">6</td><td style="background:color-mix(in srgb, var(--warn) 100%, transparent)">6</td><td style="background:color-mix(in srgb, var(--warn) 85%, transparent)">5</td><td style="background:transparent"></td><td style="background:color-mix(in srgb, var(--warn) 100%, transparent)">6</td></tr></tbody></table></div></div><div class="block"><h4>By offering</h4><div class="itemgrid"><div class="item"><span>Glow Darts - 2-12 people</span><span class="mono num">30 wasted · 0 sold · 0%</span><span class="bar"><i style="width:100%"></i></span></div><div class="item"><span>Axe Throwing &amp; Glow Darts - 6-12 People</span><span class="mono num">13 wasted · 0 sold · 0%</span><span class="bar"><i style="width:43%"></i></span></div><div class="item"><span>Ultimate Party Package - 6+ People</span><span class="mono num">11 wasted · 0 sold · 0%</span><span class="bar"><i style="width:37%"></i></span></div><div class="item"><span>Axe Throwing - 2-7 People</span><span class="mono num">10 wasted · 4 sold · 29%</span><span class="bar"><i style="width:33%"></i></span></div><div class="item"><span>Axe Throwing - 8+ People</span><span class="mono num">8 wasted · 3 sold · 27%</span><span class="bar"><i style="width:27%"></i></span></div><div class="item"><span>Axe Throwing Date Night - For Two</span><span class="mono num">2 wasted · 2 sold · 50%</span><span class="bar"><i style="width:7%"></i></span></div></div></div><div class="block"><h4>Every wasted slot, in order (74 wasted slots · $17,334 lost)</h4><div class="timeline"><table><tbody><tr><td class="mono">Sat 22 Aug, 7:30pm</td><td>Glow Darts - 2-12 people</td><td class="num money">$30</td></tr><tr><td class="mono">Sat 22 Aug, 8:00pm</td><td>Glow Darts - 2-12 people</td><td class="num money">$30</td></tr><tr><td class="mono">Sat 22 Aug, 8:00pm</td><td>Axe Throwing &amp; Glow Darts - 6-12 People</td><td class="num money">$414</td></tr><tr><td class="mono">Sat 22 Aug, 8:00pm</td><td>Ultimate Party Package - 6+ People</td><td class="num money">$654</td></tr><tr><td class="mono">Sat 22 Aug, 8:30pm</td><td>Glow Darts - 2-12 people</td><td class="num money">$30</td></tr><tr><td class="mono">Sat 22 Aug, 9:00pm</td><td>Glow Darts - 2-12 people</td><td class="num money">$30</td></tr><tr><td class="mono">Sat 22 Aug, 9:30pm</td><td>Glow Darts - 2-12 people</td><td class="num money">$30</td></tr><tr><td class="mono">Sun 23 Aug, 10:00am</td><td>Axe Throwing - 2-7 People</td><td class="num money">$90</td></tr><tr><td class="mono">Sun 23 Aug, 10:00am</td><td>Axe Throwing - 8+ People</td><td class="num money">$360</td></tr><tr><td class="mono">Sun 23 Aug, 10:00am</td><td>Glow Darts - 2-12 people</td><td class="num money">$30</td></tr><tr><td class="mono">Sun 23 Aug, 10:00am</td><td>Axe Throwing &amp; Glow Darts - 6-12 People</td><td class="num money">$414</td></tr><tr><td class="mono">Sun 23 Aug, 10:00am</td><td>Ultimate Party Package - 6+ People</td><td class="num money">$654</td></tr><tr><td class="mono">Sun 23 Aug, 10:30am</td><td>Glow Darts - 2-12 people</td><td class="num money">$30</td></tr><tr><td class="mono">Sun 23 Aug, 11:00am</td><td>Axe Throwing - 2-7 People</td><td class="num money">$90</td></tr><tr><td class="mono">Sun 23 Aug, 11:00am</td><td>Glow Darts - 2-12 people</td><td class="num money">$30</td></tr><tr><td class="mono">Sun 23 Aug, 11:00am</td><td>Axe Throwing &amp; Glow Darts - 6-12 People</td><td class="num money">$414</td></tr><tr><td class="mono">Sun 23 Aug, 11:30am</td><td>Glow Darts - 2-12 people</td><td class="num money">$30</td></tr><tr><td class="mono">Sun 23 Aug, 12:00pm</td><td>Axe Throwing - 2-7 People</td><td class="num money">$90</td></tr><tr><td class="mono">Sun 23 Aug, 12:00pm</td><td>Axe Throwing - 8+ People</td><td class="num money">$360</td></tr><tr><td class="mono">Sun 23 Aug, 12:00pm</td><td>Glow Darts - 2-12 people</td><td class="num money">$30</td></tr><tr><td class="mono">Sun 23 Aug, 12:00pm</td><td>Axe Throwing &amp; Glow Darts - 6-12 People</td><td class="num money">$414</td></tr><tr><td class="mono">Sun 23 Aug, 12:00pm</td><td>Ultimate Party Package - 6+ People</td><td class="num money">$654</td></tr><tr><td class="mono">Sun 23 Aug, 12:30pm</td><td>Glow Darts - 2-12 people</td><td class="num money">$30</td></tr><tr><td class="mono">Sun 23 Aug, 1:00pm</td><td>Axe Throwing - 2-7 People</td><td class="num money">$90</td></tr><tr><td class="mono">Sun 23 Aug, 1:00pm</td><td>Glow Darts - 2-12 people</td><td class="num money">$30</td></tr><tr><td class="mono">Sun 23 Aug, 1:00pm</td><td>Axe Throwing &amp; Glow Darts - 6-12 People</td><td class="num money">$414</td></tr><tr><td class="mono">Sun 23 Aug, 1:30pm</td><td>Glow Darts - 2-12 people</td><td class="num money">$30</td></tr><tr><td class="mono">Sun 23 Aug, 2:00pm</td><td>Axe Throwing - 2-7 People</td><td class="num money">$90</td></tr><tr><td class="mono">Sun 23 Aug, 2:00pm</td><td>Glow Darts - 2-12 people</td><td class="num money">$30</td></tr><tr><td class="mono">Sun 23 Aug, 2:00pm</td><td>Axe Throwing &amp; Glow Darts - 6-12 People</td><td class="num money">$414</td></tr><tr><td class="mono">Sun 23 Aug, 2:00pm</td><td>Ultimate Party Package - 6+ People</td><td class="num money">$654</td></tr><tr><td class="mono">Sun 23 Aug, 2:30pm</td><td>Glow Darts - 2-12 people</td><td class="num money">$30</td></tr><tr><td class="mono">Sun 23 Aug, 3:00pm</td><td>Axe Throwing - 2-7 People</td><td class="num money">$90</td></tr><tr><td class="mono">Sun 23 Aug, 3:00pm</td><td>Glow Darts - 2-12 people</td><td class="num money">$30</td></tr><tr><td class="mono">Sun 23 Aug, 3:00pm</td><td>Axe Throwing &amp; Glow Darts - 6-12 People</td><td class="num money">$414</td></tr><tr><td class="mono">Sun 23 Aug, 3:30pm</td><td>Glow Darts - 2-12 people</td><td class="num money">$30</td></tr><tr><td class="mono">Sun 23 Aug, 4:00pm</td><td>Axe Throwing - 8+ People</td><td class="num money">$360</td></tr><tr><td class="mono">Sun 23 Aug, 4:00pm</td><td>Glow Darts - 2-12 people</td><td class="num money">$30</td></tr><tr><td class="mono">Sun 23 Aug, 4:00pm</td><td>Axe Throwing &amp; Glow Darts - 6-12 People</td><td class="num money">$414</td></tr><tr><td class="mono">Sun 23 Aug, 4:00pm</td><td>Ultimate Party Package - 6+ People</td><td class="num money">$654</td></tr><tr><td class="mono">Sun 23 Aug, 4:30pm</td><td>Glow Darts - 2-12 people</td><td class="num money">$30</td></tr><tr><td class="mono">Sun 23 Aug, 5:00pm</td><td>Axe Throwing - 2-7 People</td><td class="num money">$90</td></tr><tr><td class="mono">Sun 23 Aug, 5:00pm</td><td>Glow Darts - 2-12 people</td><td class="num money">$30</td></tr><tr><td class="mono">Sun 23 Aug, 5:00pm</td><td>Axe Throwing &amp; Glow Darts - 6-12 People</td><td class="num money">$414</td></tr><tr><td class="mono">Sun 23 Aug, 5:30pm</td><td>Glow Darts - 2-12 people</td><td class="num money">$30</td></tr><tr><td class="mono">Sun 23 Aug, 6:00pm</td><td>Axe Throwing - 8+ People</td><td class="num money">$360</td></tr><tr><td class="mono">Sun 23 Aug, 6:00pm</td><td>Axe Throwing Date Night - For Two</td><td class="num money">$39</td></tr><tr><td class="mono">Sun 23 Aug, 6:00pm</td><td>Glow Darts - 2-12 people</td><td class="num money">$30</td></tr><tr><td class="mono">Sun 23 Aug, 6:00pm</td><td>Axe Throwing &amp; Glow Darts - 6-12 People</td><td class="num money">$414</td></tr><tr><td class="mono">Sun 23 Aug, 6:00pm</td><td>Ultimate Party Package - 6+ People</td><td class="num money">$654</td></tr><tr><td class="mono">Sun 23 Aug, 6:30pm</td><td>Glow Darts - 2-12 people</td><td class="num money">$30</td></tr><tr><td class="mono">Sun 23 Aug, 7:00pm</td><td>Axe Throwing - 2-7 People</td><td class="num money">$90</td></tr><tr><td class="mono">Sun 23 Aug, 7:00pm</td><td>Glow Darts - 2-12 people</td><td class="num money">$30</td></tr><tr><td class="mono">Sun 23 Aug, 7:00pm</td><td>Axe Throwing &amp; Glow Darts - 6-12 People</td><td class="num money">$414</td></tr><tr><td class="mono">Sun 23 Aug, 8:00pm</td><td>Ultimate Party Package - 6+ People</td><td class="num money">$654</td></tr><tr><td class="mono">Mon 24 Aug, 10:00am</td><td>Axe Throwing - 8+ People</td><td class="num money">$360</td></tr><tr><td class="mono">Mon 24 Aug, 10:00am</td><td>Ultimate Party Package - 6+ People</td><td class="num money">$654</td></tr><tr><td class="mono">Mon 24 Aug, 12:00pm</td><td>Axe Throwing - 8+ People</td><td class="num money">$360</td></tr><tr><td class="mono">Mon 24 Aug, 12:00pm</td><td>Ultimate Party Package - 6+ People</td><td class="num money">$654</td></tr><tr><td class="mono">Mon 24 Aug, 2:00pm</td><td>Axe Throwing - 8+ People</td><td class="num money">$360</td></tr><tr><td class="mono">Mon 24 Aug, 2:00pm</td><td>Ultimate Party Package - 6+ People</td><td class="num money">$654</td></tr><tr><td class="mono">Mon 24 Aug, 4:00pm</td><td>Axe Throwing - 2-7 People</td><td class="num money">$90</td></tr><tr><td class="mono">Mon 24 Aug, 4:00pm</td><td>Axe Throwing - 8+ People</td><td class="num money">$360</td></tr><tr><td class="mono">Mon 24 Aug, 4:00pm</td><td>Glow Darts - 2-12 people</td><td class="num money">$30</td></tr><tr><td class="mono">Mon 24 Aug, 4:00pm</td><td>Axe Throwing &amp; Glow Darts - 6-12 People</td><td class="num money">$414</td></tr><tr><td class="mono">Mon 24 Aug, 4:00pm</td><td>Ultimate Party Package - 6+ People</td><td class="num money">$654</td></tr><tr><td class="mono">Mon 24 Aug, 4:30pm</td><td>Glow Darts - 2-12 people</td><td class="num money">$30</td></tr><tr><td class="mono">Mon 24 Aug, 5:00pm</td><td>Axe Throwing - 2-7 People</td><td class="num money">$90</td></tr><tr><td class="mono">Mon 24 Aug, 5:00pm</td><td>Axe Throwing Date Night - For Two</td><td class="num money">$39</td></tr><tr><td class="mono">Mon 24 Aug, 5:00pm</td><td>Glow Darts - 2-12 people</td><td class="num money">$30</td></tr><tr><td class="mono">Mon 24 Aug, 5:00pm</td><td>Axe Throwing &amp; Glow Darts - 6-12 People</td><td class="num money">$414</td></tr><tr><td class="mono">Mon 24 Aug, 5:30pm</td><td>Glow Darts - 2-12 people</td><td class="num money">$30</td></tr><tr><td class="mono">Mon 24 Aug, 6:00pm</td><td>Glow Darts - 2-12 people</td><td class="num money">$30</td></tr><tr><td class="mono">Mon 24 Aug, 6:30pm</td><td>Glow Darts - 2-12 people</td><td class="num money">$30</td></tr></tbody></table></div></div></div><div class="card"><h2>Moore Park Driving Range</h2>
-          <div class="suburb">58 bays · idle-inventory tracking</div>
-          <div class="statrow">
-          <div class="stat"><div class="n warn num">$33,896</div><div class="k">Lost revenue</div></div>
-          <div class="stat"><div class="n warn num">892</div><div class="k">Idle bay-hours</div></div>
-          <div class="stat"><div class="n num">62%</div><div class="k">Occupancy</div></div>
-          <div class="stat"><div class="n good num">1428</div><div class="k">Booked bay-hours</div></div>
-          <div class="stat"><div class="n num">68</div><div class="k">Hours ahead</div></div></div><div class="block"><h4>Deadest windows · idle bays by day &amp; hour</h4><div class="heat"><table><thead><tr><th></th><th>06</th><th>18</th><th>19</th><th>20</th><th>21</th></tr></thead><tbody><tr><th>Sat</th><td style="background:color-mix(in srgb, var(--warn) 85%, transparent)">48</td><td style="background:transparent"></td><td style="background:transparent"></td><td style="background:transparent"></td><td style="background:transparent"></td></tr><tr><th>Sun</th><td style="background:transparent"></td><td style="background:color-mix(in srgb, var(--warn) 75%, transparent)">41</td><td style="background:color-mix(in srgb, var(--warn) 86%, transparent)">49</td><td style="background:color-mix(in srgb, var(--warn) 95%, transparent)">55</td><td style="background:color-mix(in srgb, var(--warn) 100%, transparent)">58</td></tr></tbody></table></div></div><div class="block"><h4>Every wasted slot, in order (39 idle-bay hours · $33,896 lost)</h4><div class="timeline"><table><tbody><tr><td class="mono">Sat 22 Aug, 6:00am</td><td>48 bays idle</td><td class="num money">$1,824</td></tr><tr><td class="mono">Sat 22 Aug, 7:00am</td><td>37 bays idle</td><td class="num money">$1,406</td></tr><tr><td class="mono">Sat 22 Aug, 8:00am</td><td>25 bays idle</td><td class="num money">$950</td></tr><tr><td class="mono">Sat 22 Aug, 9:00am</td><td>12 bays idle</td><td class="num money">$456</td></tr><tr><td class="mono">Sat 22 Aug, 10:00am</td><td>11 bays idle</td><td class="num money">$418</td></tr><tr><td class="mono">Sat 22 Aug, 11:00am</td><td>10 bays idle</td><td class="num money">$380</td></tr><tr><td class="mono">Sat 22 Aug, 12:00pm</td><td>11 bays idle</td><td class="num money">$418</td></tr><tr><td class="mono">Sat 22 Aug, 1:00pm</td><td>10 bays idle</td><td class="num money">$380</td></tr><tr><td class="mono">Sat 22 Aug, 2:00pm</td><td>10 bays idle</td><td class="num money">$380</td></tr><tr><td class="mono">Sat 22 Aug, 3:00pm</td><td>10 bays idle</td><td class="num money">$380</td></tr><tr><td class="mono">Sat 22 Aug, 4:00pm</td><td>10 bays idle</td><td class="num money">$380</td></tr><tr><td class="mono">Sat 22 Aug, 5:00pm</td><td>10 bays idle</td><td class="num money">$380</td></tr><tr><td class="mono">Sat 22 Aug, 7:00pm</td><td>1 bays idle</td><td class="num money">$38</td></tr><tr><td class="mono">Sat 22 Aug, 8:00pm</td><td>6 bays idle</td><td class="num money">$228</td></tr><tr><td class="mono">Sat 22 Aug, 9:00pm</td><td>33 bays idle</td><td class="num money">$1,254</td></tr><tr><td class="mono">Sun 23 Aug, 6:00am</td><td>37 bays idle</td><td class="num money">$1,406</td></tr><tr><td class="mono">Sun 23 Aug, 7:00am</td><td>38 bays idle</td><td class="num money">$1,444</td></tr><tr><td class="mono">Sun 23 Aug, 8:00am</td><td>37 bays idle</td><td class="num money">$1,406</td></tr><tr><td class="mono">Sun 23 Aug, 9:00am</td><td>21 bays idle</td><td class="num money">$798</td></tr><tr><td class="mono">Sun 23 Aug, 10:00am</td><td>10 bays idle</td><td class="num money">$380</td></tr><tr><td class="mono">Sun 23 Aug, 11:00am</td><td>11 bays idle</td><td class="num money">$418</td></tr><tr><td class="mono">Sun 23 Aug, 12:00pm</td><td>10 bays idle</td><td class="num money">$380</td></tr><tr><td class="mono">Sun 23 Aug, 1:00pm</td><td>11 bays idle</td><td class="num money">$418</td></tr><tr><td class="mono">Sun 23 Aug, 2:00pm</td><td>10 bays idle</td><td class="num money">$380</td></tr><tr><td class="mono">Sun 23 Aug, 3:00pm</td><td>11 bays idle</td><td class="num money">$418</td></tr><tr><td class="mono">Sun 23 Aug, 4:00pm</td><td>11 bays idle</td><td class="num money">$418</td></tr><tr><td class="mono">Sun 23 Aug, 5:00pm</td><td>28 bays idle</td><td class="num money">$1,064</td></tr><tr><td class="mono">Sun 23 Aug, 6:00pm</td><td>41 bays idle</td><td class="num money">$1,558</td></tr><tr><td class="mono">Sun 23 Aug, 7:00pm</td><td>49 bays idle</td><td class="num money">$1,862</td></tr><tr><td class="mono">Sun 23 Aug, 8:00pm</td><td>55 bays idle</td><td class="num money">$2,090</td></tr><tr><td class="mono">Sun 23 Aug, 9:00pm</td><td>58 bays idle</td><td class="num money">$2,204</td></tr><tr><td class="mono">Mon 24 Aug, 10:00am</td><td>30 bays idle</td><td class="num money">$1,140</td></tr><tr><td class="mono">Mon 24 Aug, 11:00am</td><td>29 bays idle</td><td class="num money">$1,102</td></tr><tr><td class="mono">Mon 24 Aug, 12:00pm</td><td>29 bays idle</td><td class="num money">$1,102</td></tr><tr><td class="mono">Mon 24 Aug, 1:00pm</td><td>27 bays idle</td><td class="num money">$1,026</td></tr><tr><td class="mono">Mon 24 Aug, 2:00pm</td><td>27 bays idle</td><td class="num money">$1,026</td></tr><tr><td class="mono">Mon 24 Aug, 3:00pm</td><td>29 bays idle</td><td class="num money">$1,102</td></tr><tr><td class="mono">Mon 24 Aug, 4:00pm</td><td>27 bays idle</td><td class="num money">$1,026</td></tr><tr><td class="mono">Mon 24 Aug, 5:00pm</td><td>12 bays idle</td><td class="num money">$456</td></tr></tbody></table></div></div></div><div class="card"><h2>The Great Escape</h2><p class="empty">No slots have finished within the tracking window yet — 17 future slots are being watched. Leave the tracker running and rebuild.</p></div><div class="card"><h2>NBC Badminton Alexandria</h2>
-          <div class="suburb">18 bays · idle-inventory tracking</div>
-          <div class="statrow">
-          <div class="stat"><div class="n warn num">$3,030</div><div class="k">Lost revenue</div></div>
-          <div class="stat"><div class="n warn num">101</div><div class="k">Idle bay-hours</div></div>
-          <div class="stat"><div class="n num">30%</div><div class="k">Occupancy</div></div>
-          <div class="stat"><div class="n good num">43</div><div class="k">Booked bay-hours</div></div>
-          <div class="stat"><div class="n num">31</div><div class="k">Hours ahead</div></div></div><div class="block"><h4>Deadest windows · idle bays by day &amp; hour</h4><div class="heat"><table><thead><tr><th></th><th>10</th><th>11</th><th>12</th><th>13</th><th>15</th></tr></thead><tbody><tr><th>Mon</th><td style="background:color-mix(in srgb, var(--warn) 95%, transparent)">16</td><td style="background:color-mix(in srgb, var(--warn) 90%, transparent)">15</td><td style="background:color-mix(in srgb, var(--warn) 100%, transparent)">17</td><td style="background:color-mix(in srgb, var(--warn) 100%, transparent)">17</td><td style="background:color-mix(in srgb, var(--warn) 80%, transparent)">13</td></tr></tbody></table></div></div><div class="block"><h4>Every wasted slot, in order (7 idle-bay hours · $3,030 lost)</h4><div class="timeline"><table><tbody><tr><td class="mono">Mon 24 Aug, 10:00am</td><td>16 bays idle</td><td class="num money">$480</td></tr><tr><td class="mono">Mon 24 Aug, 11:00am</td><td>15 bays idle</td><td class="num money">$450</td></tr><tr><td class="mono">Mon 24 Aug, 12:00pm</td><td>17 bays idle</td><td class="num money">$510</td></tr><tr><td class="mono">Mon 24 Aug, 1:00pm</td><td>17 bays idle</td><td class="num money">$510</td></tr><tr><td class="mono">Mon 24 Aug, 2:00pm</td><td>10 bays idle</td><td class="num money">$300</td></tr><tr><td class="mono">Mon 24 Aug, 3:00pm</td><td>13 bays idle</td><td class="num money">$390</td></tr><tr><td class="mono">Mon 24 Aug, 4:00pm</td><td>13 bays idle</td><td class="num money">$390</td></tr></tbody></table></div></div></div></div>
+</main>
 
-  <footer><span>OneTap · founding venue stats</span>
-  <span>Updated 2026-08-24 18:38 AEST</span></footer>
-</div>
+<footer class="wrap">
+  <span>OneTap — founding venue stats</span>
+  <span id="foot-date"></span>
+</footer>
+
+<div id="tip" role="status" aria-live="polite"></div>
+
+<script id="payload" type="application/json">{"totalLost": 54260, "venueCount": 4, "wastedSlots": 120, "utilisation": 8, "windowStart": "22 Aug, 7:21pm", "windowEnd": "24 Aug, 6:37pm", "polls": 11, "errors": 0, "updated": "24 Aug 2026, 6:38pm AEST", "days": ["Sat 22", "Sun 23", "Mon 24"], "daysFull": ["Sat 22 Aug", "Sun 23 Aug", "Mon 24 Aug"], "hours": [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21], "venues": [{"name": "Kiss My Axe", "kind": "slots", "lost": 17334, "grid": [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 4, 2], [0, 0, 0, 0, 6, 4, 6, 4, 5, 4, 5, 4, 6, 3, 1, 0], [0, 0, 0, 0, 2, 0, 2, 0, 2, 0, 6, 5, 2, 0, 0, 0]], "gridMoney": [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30, 1128, 60], [0, 0, 0, 0, 1578, 564, 1578, 564, 1218, 564, 1488, 564, 1527, 534, 654, 0], [0, 0, 0, 0, 1014, 0, 1014, 0, 1014, 0, 1578, 603, 60, 0, 0, 0]], "gridMax": 6, "log": [[0, "7:30pm", "Glow Darts - 2-12 people", 30], [0, "8:00pm", "Glow Darts - 2-12 people", 30], [0, "8:00pm", "Axe Throwing & Glow Darts - 6-12 People", 414], [0, "8:00pm", "Ultimate Party Package - 6+ People", 654], [0, "8:30pm", "Glow Darts - 2-12 people", 30], [0, "9:00pm", "Glow Darts - 2-12 people", 30], [0, "9:30pm", "Glow Darts - 2-12 people", 30], [1, "10:00am", "Axe Throwing - 2-7 People", 90], [1, "10:00am", "Axe Throwing - 8+ People", 360], [1, "10:00am", "Glow Darts - 2-12 people", 30], [1, "10:00am", "Axe Throwing & Glow Darts - 6-12 People", 414], [1, "10:00am", "Ultimate Party Package - 6+ People", 654], [1, "10:30am", "Glow Darts - 2-12 people", 30], [1, "11:00am", "Axe Throwing - 2-7 People", 90], [1, "11:00am", "Glow Darts - 2-12 people", 30], [1, "11:00am", "Axe Throwing & Glow Darts - 6-12 People", 414], [1, "11:30am", "Glow Darts - 2-12 people", 30], [1, "12:00pm", "Axe Throwing - 2-7 People", 90], [1, "12:00pm", "Axe Throwing - 8+ People", 360], [1, "12:00pm", "Glow Darts - 2-12 people", 30], [1, "12:00pm", "Axe Throwing & Glow Darts - 6-12 People", 414], [1, "12:00pm", "Ultimate Party Package - 6+ People", 654], [1, "12:30pm", "Glow Darts - 2-12 people", 30], [1, "1:00pm", "Axe Throwing - 2-7 People", 90], [1, "1:00pm", "Glow Darts - 2-12 people", 30], [1, "1:00pm", "Axe Throwing & Glow Darts - 6-12 People", 414], [1, "1:30pm", "Glow Darts - 2-12 people", 30], [1, "2:00pm", "Axe Throwing - 2-7 People", 90], [1, "2:00pm", "Glow Darts - 2-12 people", 30], [1, "2:00pm", "Axe Throwing & Glow Darts - 6-12 People", 414], [1, "2:00pm", "Ultimate Party Package - 6+ People", 654], [1, "2:30pm", "Glow Darts - 2-12 people", 30], [1, "3:00pm", "Axe Throwing - 2-7 People", 90], [1, "3:00pm", "Glow Darts - 2-12 people", 30], [1, "3:00pm", "Axe Throwing & Glow Darts - 6-12 People", 414], [1, "3:30pm", "Glow Darts - 2-12 people", 30], [1, "4:00pm", "Axe Throwing - 8+ People", 360], [1, "4:00pm", "Glow Darts - 2-12 people", 30], [1, "4:00pm", "Axe Throwing & Glow Darts - 6-12 People", 414], [1, "4:00pm", "Ultimate Party Package - 6+ People", 654], [1, "4:30pm", "Glow Darts - 2-12 people", 30], [1, "5:00pm", "Axe Throwing - 2-7 People", 90], [1, "5:00pm", "Glow Darts - 2-12 people", 30], [1, "5:00pm", "Axe Throwing & Glow Darts - 6-12 People", 414], [1, "5:30pm", "Glow Darts - 2-12 people", 30], [1, "6:00pm", "Axe Throwing - 8+ People", 360], [1, "6:00pm", "Axe Throwing Date Night - For Two", 39], [1, "6:00pm", "Glow Darts - 2-12 people", 30], [1, "6:00pm", "Axe Throwing & Glow Darts - 6-12 People", 414], [1, "6:00pm", "Ultimate Party Package - 6+ People", 654], [1, "6:30pm", "Glow Darts - 2-12 people", 30], [1, "7:00pm", "Axe Throwing - 2-7 People", 90], [1, "7:00pm", "Glow Darts - 2-12 people", 30], [1, "7:00pm", "Axe Throwing & Glow Darts - 6-12 People", 414], [1, "8:00pm", "Ultimate Party Package - 6+ People", 654], [2, "10:00am", "Axe Throwing - 8+ People", 360], [2, "10:00am", "Ultimate Party Package - 6+ People", 654], [2, "12:00pm", "Axe Throwing - 8+ People", 360], [2, "12:00pm", "Ultimate Party Package - 6+ People", 654], [2, "2:00pm", "Axe Throwing - 8+ People", 360], [2, "2:00pm", "Ultimate Party Package - 6+ People", 654], [2, "4:00pm", "Axe Throwing - 2-7 People", 90], [2, "4:00pm", "Axe Throwing - 8+ People", 360], [2, "4:00pm", "Glow Darts - 2-12 people", 30], [2, "4:00pm", "Axe Throwing & Glow Darts - 6-12 People", 414], [2, "4:00pm", "Ultimate Party Package - 6+ People", 654], [2, "4:30pm", "Glow Darts - 2-12 people", 30], [2, "5:00pm", "Axe Throwing - 2-7 People", 90], [2, "5:00pm", "Axe Throwing Date Night - For Two", 39], [2, "5:00pm", "Glow Darts - 2-12 people", 30], [2, "5:00pm", "Axe Throwing & Glow Darts - 6-12 People", 414], [2, "5:30pm", "Glow Darts - 2-12 people", 30], [2, "6:00pm", "Glow Darts - 2-12 people", 30], [2, "6:30pm", "Glow Darts - 2-12 people", 30]], "util": 11, "wasted": 74, "sold": 9, "future": 139, "decided": 83, "offerings": [{"name": "Glow Darts - 2-12 people", "wasted": 30, "sold": 0}, {"name": "Axe Throwing & Glow Darts - 6-12 People", "wasted": 13, "sold": 0}, {"name": "Ultimate Party Package - 6+ People", "wasted": 11, "sold": 0}, {"name": "Axe Throwing - 2-7 People", "wasted": 10, "sold": 4}, {"name": "Axe Throwing - 8+ People", "wasted": 8, "sold": 3}, {"name": "Axe Throwing Date Night - For Two", "wasted": 2, "sold": 2}]}, {"name": "Moore Park Driving Range", "kind": "capacity", "lost": 33896, "grid": [[48, 37, 25, 12, 11, 10, 11, 10, 10, 10, 10, 10, 0, 1, 6, 33], [37, 38, 37, 21, 10, 11, 10, 11, 10, 11, 11, 28, 41, 49, 55, 58], [0, 0, 0, 0, 30, 29, 29, 27, 27, 29, 27, 12, 0, 0, 0, 0]], "gridMoney": [[1824, 1406, 950, 456, 418, 380, 418, 380, 380, 380, 380, 380, 0, 38, 228, 1254], [1406, 1444, 1406, 798, 380, 418, 380, 418, 380, 418, 418, 1064, 1558, 1862, 2090, 2204], [0, 0, 0, 0, 1140, 1102, 1102, 1026, 1026, 1102, 1026, 456, 0, 0, 0, 0]], "gridMax": 58, "log": [[0, "6:00am", "48", 1824], [0, "7:00am", "37", 1406], [0, "8:00am", "25", 950], [0, "9:00am", "12", 456], [0, "10:00am", "11", 418], [0, "11:00am", "10", 380], [0, "12:00pm", "11", 418], [0, "1:00pm", "10", 380], [0, "2:00pm", "10", 380], [0, "3:00pm", "10", 380], [0, "4:00pm", "10", 380], [0, "5:00pm", "10", 380], [0, "7:00pm", "1", 38], [0, "8:00pm", "6", 228], [0, "9:00pm", "33", 1254], [1, "6:00am", "37", 1406], [1, "7:00am", "38", 1444], [1, "8:00am", "37", 1406], [1, "9:00am", "21", 798], [1, "10:00am", "10", 380], [1, "11:00am", "11", 418], [1, "12:00pm", "10", 380], [1, "1:00pm", "11", 418], [1, "2:00pm", "10", 380], [1, "3:00pm", "11", 418], [1, "4:00pm", "11", 418], [1, "5:00pm", "28", 1064], [1, "6:00pm", "41", 1558], [1, "7:00pm", "49", 1862], [1, "8:00pm", "55", 2090], [1, "9:00pm", "58", 2204], [2, "10:00am", "30", 1140], [2, "11:00am", "29", 1102], [2, "12:00pm", "29", 1102], [2, "1:00pm", "27", 1026], [2, "2:00pm", "27", 1026], [2, "3:00pm", "29", 1102], [2, "4:00pm", "27", 1026], [2, "5:00pm", "12", 456]], "occ": 62, "idle": 892, "booked": 1428, "ahead": 68, "bays": 58, "offerings": []}, {"name": "The Great Escape", "kind": "slots", "lost": 0, "grid": [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]], "gridMoney": [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]], "gridMax": 1, "log": [], "util": 0, "wasted": 0, "sold": 0, "future": 17, "decided": 0, "offerings": []}, {"name": "NBC Badminton Alexandria", "kind": "capacity", "lost": 3030, "grid": [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 16, 15, 17, 17, 10, 13, 13, 0, 0, 0, 0, 0]], "gridMoney": [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 480, 450, 510, 510, 300, 390, 390, 0, 0, 0, 0, 0]], "gridMax": 17, "log": [[2, "10:00am", "16", 480], [2, "11:00am", "15", 450], [2, "12:00pm", "17", 510], [2, "1:00pm", "17", 510], [2, "2:00pm", "10", 300], [2, "3:00pm", "13", 390], [2, "4:00pm", "13", 390]], "occ": 30, "idle": 101, "booked": 43, "ahead": 31, "bays": 18, "offerings": []}]}</script>
 <script>
 (function(){
-  var btn=document.getElementById('themebtn');
-  var root=document.documentElement;
-  function apply(t){ if(t) root.setAttribute('data-theme',t); }
-  try{apply(localStorage.getItem('onetap-theme'));}catch(e){}
-  btn.addEventListener('click',function(){
-    var cur=root.getAttribute('data-theme');
-    var dark=cur==='dark';
-    var next=dark?'light':'dark'; apply(next);
-    try{localStorage.setItem('onetap-theme',next);}catch(e){}
+  var D = JSON.parse(document.getElementById('payload').textContent);
+  var money = function(n){ return '$' + n.toLocaleString('en-AU'); };
+  var HOURS = D.hours;
+
+  document.getElementById('stamp-date').textContent = D.updated;
+  document.getElementById('foot-date').textContent = 'Updated ' + D.updated;
+  document.getElementById('hero-total').textContent = money(D.totalLost);
+  document.getElementById('provenance').textContent =
+    'Watching since ' + D.windowStart + '. Last read ' + D.windowEnd + '. ' +
+    D.polls + ' polls, ' + D.errors + ' failed. ' +
+    D.wastedSlots + ' wasted slots across ' + D.venueCount + ' venues, ' +
+    D.utilisation + '% of tracked inventory sold.';
+
+  // colour ramp
+  function shade(v, max){
+    if(!v) return null;
+    var t = Math.pow(v / max, 0.62);
+    return 'rgba(21,24,28,' + (0.13 + 0.82 * t).toFixed(3) + ')';
+  }
+
+  var ramp = document.getElementById('ramp');
+  [0.12,0.3,0.5,0.72,1].forEach(function(t){
+    var i = document.createElement('i');
+    i.style.background = shade(t, 1);
+    i.style.borderColor = 'transparent';
+    ramp.appendChild(i);
   });
+
+  var tip = document.getElementById('tip');
+  function showTip(e, text){
+    tip.textContent = text;
+    tip.classList.add('on');
+    var r = e.currentTarget.getBoundingClientRect();
+    tip.style.left = (r.left + r.width/2) + 'px';
+    tip.style.top = r.top + 'px';
+  }
+  function hideTip(){ tip.classList.remove('on'); }
+
+  function unitFor(v){ return v.kind === 'capacity' ? 'units idle' : 'slots unsold'; }
+
+  function buildCal(v, opts){
+    opts = opts || {};
+    var peak = {d:-1,h:-1,val:0};
+    v.grid.forEach(function(row,d){
+      row.forEach(function(val,h){ if(val > peak.val) peak = {d:d,h:h,val:val}; });
+    });
+
+    var cal = document.createElement('div');
+    cal.className = 'cal';
+
+    var days = document.createElement('div');
+    days.className = 'cal-days';
+    D.days.forEach(function(name){
+      var el = document.createElement('div');
+      el.className = 'cal-day';
+      el.textContent = opts.big ? name : name.slice(0,3);
+      days.appendChild(el);
+    });
+
+    var rows = document.createElement('div');
+    rows.className = 'cal-rows';
+    var n = 0;
+    v.grid.forEach(function(row, d){
+      var r = document.createElement('div');
+      r.className = 'cal-row';
+      r.style.gridTemplateColumns = 'repeat(' + HOURS.length + ',minmax(0,1fr))';
+      row.forEach(function(val, h){
+        var c = document.createElement('div');
+        c.className = 'cell';
+        c.style.animationDelay = (n++ * 3.5) + 'ms';
+        if(val){
+          c.dataset.v = val;
+          c.style.background = shade(val, v.gridMax);
+          if(d === peak.d && h === peak.h) c.className += ' peak';
+          var hr = HOURS[h];
+          var label = D.daysFull[d] + ', ' + ((hr % 12) || 12) + (hr < 12 ? 'am' : 'pm') +
+                      ' — ' + val + ' ' + unitFor(v) + ', ' + money(v.gridMoney[d][h]);
+          c.tabIndex = 0;
+          c.setAttribute('role','img');
+          c.setAttribute('aria-label', label);
+          c.addEventListener('mouseenter', function(e){ showTip(e, label); });
+          c.addEventListener('focus', function(e){ showTip(e, label); });
+          c.addEventListener('mouseleave', hideTip);
+          c.addEventListener('blur', hideTip);
+        }
+        r.appendChild(c);
+      });
+      rows.appendChild(r);
+    });
+
+    var hoursRow = document.createElement('div');
+    hoursRow.className = 'cal-hours';
+    [HOURS[0], HOURS[Math.floor(HOURS.length/2)], HOURS[HOURS.length-1]].forEach(function(h){
+      var s = document.createElement('span');
+      s.textContent = ((h % 12) || 12) + (h < 12 ? 'am' : 'pm');
+      hoursRow.appendChild(s);
+    });
+
+    cal.appendChild(days);
+    cal.appendChild(rows);
+    cal.appendChild(hoursRow);
+    return cal;
+  }
+
+  function slug(name){ return name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''); }
+
+  // --- small multiples
+  var mult = document.getElementById('multiples');
+  D.venues.forEach(function(v){
+    var p = document.createElement('section');
+    p.className = 'mpanel';
+    var h = document.createElement('h3');
+    h.textContent = v.name;
+    var m = document.createElement('p');
+    m.className = 'mmeta';
+    m.textContent = money(v.lost) + ' — ' +
+      (v.kind === 'capacity' ? v.idle + ' idle unit-hours' : v.wasted + ' wasted slots');
+    p.appendChild(h); p.appendChild(m);
+    p.appendChild(buildCal(v, {}));
+    mult.appendChild(p);
+  });
+
+  // --- ledger
+  var tb = document.getElementById('ledger-body');
+  D.venues.forEach(function(v){
+    var pct = v.kind === 'capacity' ? v.occ : v.util;
+    var tr = document.createElement('tr');
+    tr.innerHTML =
+      '<td><a class="vname" href="#' + slug(v.name) + '">' + v.name + '</a></td>' +
+      '<td class="num lost">' + money(v.lost) + '</td>' +
+      '<td class="hide-sm">' + pct + '% ' + (v.kind === 'capacity' ? 'occupancy' : 'utilisation') +
+        '<span class="bar"><i style="width:' + pct + '%"></i></span></td>' +
+      '<td class="num hide-sm">' + (v.kind === 'capacity' ? v.idle + ' unit-hrs' : v.wasted + ' slots') + '</td>' +
+      '<td class="num">' + (v.kind === 'capacity' ? v.ahead + ' hrs' : v.future + ' slots') + '</td>';
+    tb.appendChild(tr);
+  });
+
+  // --- venue detail
+  var host = document.getElementById('venues');
+  D.venues.forEach(function(v){
+    var sec = document.createElement('section');
+    sec.className = 'venue';
+    sec.id = slug(v.name);
+
+    var head = document.createElement('div');
+    head.className = 'vhead';
+    head.innerHTML =
+      '<div><span class="vkind">' +
+        (v.kind === 'capacity' ? v.bays + ' units, sold by the hour' : v.decided + ' sessions decided so far') +
+      '</span><h2>' + v.name + '</h2></div>' +
+      '<div class="vlost">' + money(v.lost) + ' lost</div>';
+    sec.appendChild(head);
+
+    var grid = document.createElement('div');
+    grid.className = 'vgrid';
+
+    // left column
+    var left = document.createElement('div');
+    var pairs = v.kind === 'capacity'
+      ? [['Idle unit-hours', v.idle], ['Booked unit-hours', v.booked], ['Occupancy', v.occ + '%'], ['Hours ahead', v.ahead]]
+      : [['Wasted slots', v.wasted], ['Sold slots', v.sold], ['Utilisation', v.util + '%'], ['Open ahead', v.future]];
+    var dl = '<dl class="stats">';
+    pairs.forEach(function(p){ dl += '<div><dt>' + p[0] + '</dt><dd>' + p[1] + '</dd></div>'; });
+    dl += '</dl>';
+    left.innerHTML = dl;
+
+    if(v.offerings && v.offerings.length){
+      var oh = document.createElement('p');
+      oh.className = 'subhead';
+      oh.textContent = 'By offering';
+      left.appendChild(oh);
+      v.offerings.forEach(function(o){
+        var total = o.wasted + o.sold || 1;
+        var pct = Math.round(o.sold / total * 100);
+        var d = document.createElement('div');
+        d.className = 'offer';
+        d.innerHTML =
+          '<div class="offer-top"><span class="offer-name"></span>' +
+          '<span class="offer-fig">' + pct + '% sold</span></div>' +
+          '<div class="offer-bar"><span class="w" style="flex:' + o.wasted + '"></span>' +
+          '<span class="s" style="flex:' + o.sold + '"></span></div>';
+        var nameEl = d.querySelector('.offer-name');
+        nameEl.textContent = o.name;
+        nameEl.title = o.name;
+        left.appendChild(d);
+      });
+    }
+
+    // right column
+    var right = document.createElement('div');
+    right.className = 'bigcal';
+    var rh = document.createElement('p');
+    rh.className = 'subhead';
+    rh.textContent = v.kind === 'capacity' ? 'Idle units by day and hour' : 'Unsold slots by day and hour';
+    right.appendChild(rh);
+    right.appendChild(buildCal(v, {big:true}));
+
+    grid.appendChild(left);
+    grid.appendChild(right);
+    sec.appendChild(grid);
+
+    // log
+    if(v.log.length){
+      var log = document.createElement('div');
+      log.className = 'log';
+      var lh = document.createElement('p');
+      lh.className = 'subhead';
+      lh.textContent = 'Every empty hour, in order — ' + v.log.length + ' entries';
+      log.appendChild(lh);
+      var box = document.createElement('div');
+      box.className = 'logbox';
+      var table = document.createElement('table');
+      table.className = 'logtable';
+      var tbody = document.createElement('tbody');
+      v.log.forEach(function(r){
+        var tr = document.createElement('tr');
+        var what = v.kind === 'capacity' ? r[2] + ' units idle' : r[2];
+        [D.daysFull[r[0]] + ', ' + r[1], what, money(r[3])].forEach(function(t){
+          var td = document.createElement('td');
+          td.textContent = t;
+          tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
+      });
+      table.appendChild(tbody);
+      box.appendChild(table);
+      log.appendChild(box);
+      sec.appendChild(log);
+    }
+
+    host.appendChild(sec);
+  });
+
+  window.addEventListener('scroll', hideTip, {passive:true});
 })();
 </script>
 </body>
